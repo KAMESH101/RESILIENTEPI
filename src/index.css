@@ -1,0 +1,161 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+
+/*
+ * ResilientEpi design tokens (prompt §5.2). Light theme only — no dark mode.
+ * Raw brand tokens live on :root; shadcn semantic variables are mapped onto them.
+ */
+:root {
+  --navy-900: #0f2a4a;
+  --navy-700: #1f4470;
+  --teal-600: #0e8a8a;
+  --cyan-50: #ecf8fa;
+  --app-bg: #f6f8fb;
+  --surface: #ffffff;
+  --line: #e2e8f0;
+  --ink: #0f172a;
+  --ink-muted: #475569;
+
+  --risk-low: #2e7d32;
+  --risk-moderate: #f2b705;
+  --risk-high: #e8710a;
+  --risk-veryhigh: #c62828;
+  --nodata: #94a3b8;
+
+  /* shadcn semantic mapping */
+  --background: var(--app-bg);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--navy-900);
+  --primary-foreground: #ffffff;
+  --secondary: #eef2f7;
+  --secondary-foreground: var(--navy-900);
+  --muted: #eef2f7;
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--cyan-50);
+  --accent-foreground: var(--navy-900);
+  --destructive: var(--risk-veryhigh);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--teal-600);
+  --radius: 0.5rem;
+
+  --sidebar: var(--navy-900);
+  --sidebar-foreground: #e2e8f0;
+  --sidebar-primary: var(--teal-600);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--navy-700);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 0.1);
+  --sidebar-ring: var(--teal-600);
+}
+
+@theme inline {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+
+  --color-navy-900: var(--navy-900);
+  --color-navy-700: var(--navy-700);
+  --color-teal-600: var(--teal-600);
+  --color-cyan-50: var(--cyan-50);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-risk-low: var(--risk-low);
+  --color-risk-moderate: var(--risk-moderate);
+  --color-risk-high: var(--risk-high);
+  --color-risk-veryhigh: var(--risk-veryhigh);
+  --color-nodata: var(--nodata);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  /* Buttons 8px (rounded-lg), cards 12px (rounded-xl). */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+
+  /* Single soft shadow level. */
+  --shadow-card: 0 1px 2px rgb(15 42 74 / 0.06), 0 2px 8px rgb(15 42 74 / 0.06);
+
+  --ease-ui: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground text-sm antialiased md:text-base;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-teal-600;
+  }
+}
+
+@layer utilities {
+  /* Experimental / blind-spot: navy diagonal hatch. */
+  .pattern-hatch {
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--navy-900) 0 2px,
+      transparent 2px 6px
+    );
+  }
+  /* No data: grey dotted pattern — never rendered as 0 or Low. */
+  .pattern-nodata {
+    background-color: #f1f5f9;
+    background-image: radial-gradient(var(--nodata) 1px, transparent 1.2px);
+    background-size: 6px 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

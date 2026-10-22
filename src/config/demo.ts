@@ -2,10 +2,13 @@ import type { YearMonth } from '@/types'
 
 export type ApiMode = 'mock' | 'live'
 
-/** The only switch needed to move from mock data to the real backend. */
-export const API_MODE: ApiMode = import.meta.env.VITE_API_MODE === 'live' ? 'live' : 'mock'
+// `?? {}` lets scripts (e.g. data checks run with tsx) import config outside Vite.
+const env: Partial<ImportMetaEnv> = import.meta.env ?? {}
 
-export const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? '/api/v1'
+/** The only switch needed to move from mock data to the real backend. */
+export const API_MODE: ApiMode = env.VITE_API_MODE === 'live' ? 'live' : 'mock'
+
+export const API_BASE_URL: string = env.VITE_API_BASE_URL ?? '/api/v1'
 
 function currentMonth(): YearMonth {
   const d = new Date()
@@ -13,8 +16,8 @@ function currentMonth(): YearMonth {
 }
 
 /** Demo "as-of" month. Defaults to the current month; override with VITE_DEMO_AS_OF=YYYY-MM. */
-export const DEMO_AS_OF: YearMonth = /^\d{4}-\d{2}$/.test(import.meta.env.VITE_DEMO_AS_OF ?? '')
-  ? (import.meta.env.VITE_DEMO_AS_OF as YearMonth)
+export const DEMO_AS_OF: YearMonth = /^\d{4}-\d{2}$/.test(env.VITE_DEMO_AS_OF ?? '')
+  ? (env.VITE_DEMO_AS_OF as YearMonth)
   : currentMonth()
 
 /** Synthetic monthly series start here. */

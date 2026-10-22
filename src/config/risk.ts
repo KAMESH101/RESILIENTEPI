@@ -3,33 +3,46 @@ import type { RiskCategory } from '@/types'
 /** Outbreak = cases above the district's seasonal Nth percentile for that calendar month. */
 export const OUTBREAK_PERCENTILE = 75
 
-/** Lower bound (inclusive) of each category's probability band (prompt §2). */
-export const RISK_THRESHOLDS: Record<RiskCategory, number> = {
-  low: 0,
-  moderate: 0.25,
-  high: 0.5,
-  very_high: 0.75,
+export interface RiskBand {
+  category: RiskCategory
+  /** Inclusive lower bound of the probability band. */
+  min: number
+  /** Exclusive upper bound (1 is inclusive for the top band). */
+  max: number
+  label: string
+  /** Plain-language likelihood word shown with the percentage: "Likely (62%)". */
+  word: string
 }
 
-export const RISK_ORDER: readonly RiskCategory[] = ['low', 'moderate', 'high', 'very_high']
+/** Single source of truth for risk categories and likelihood words (prompt §2). */
+export const RISK_BANDS: readonly RiskBand[] = [
+  { category: 'low', min: 0, max: 0.25, label: 'Low', word: 'Unlikely' },
+  { category: 'moderate', min: 0.25, max: 0.5, label: 'Moderate', word: 'Possible' },
+  { category: 'high', min: 0.5, max: 0.75, label: 'High', word: 'Likely' },
+  { category: 'very_high', min: 0.75, max: 1, label: 'Very High', word: 'Very likely' },
+]
+
+export const RISK_ORDER: readonly RiskCategory[] = RISK_BANDS.map((b) => b.category)
+
+export function riskBandForProbability(probability: number): RiskBand {
+  const p = Math.min(1, Math.max(0, probability))
+  return RISK_BANDS.find((b) => p >= b.min && (p < b.max || b.max === 1)) ?? RISK_BANDS[0]!
+}
+
+export function riskBand(category: RiskCategory): RiskBand {
+  return RISK_BANDS.find((b) => b.category === category) ?? RISK_BANDS[0]!
+}
 
 export function categorize(probability: number): RiskCategory {
-  if (probability >= RISK_THRESHOLDS.very_high) return 'very_high'
-  if (probability >= RISK_THRESHOLDS.high) return 'high'
-  if (probability >= RISK_THRESHOLDS.moderate) return 'moderate'
-  return 'low'
+  return riskBandForProbability(probability).category
+}
+
+export function likelihoodWord(probability: number): string {
+  return riskBandForProbability(probability).word
 }
 
 export function isHighOrAbove(category: RiskCategory): boolean {
-  return category === 'high' || category === 'very_high'
-}
-
-/** Plain-language likelihood word shown next to a probability: "Likely (62%)". */
-export function likelihoodWord(probability: number): string {
-  if (probability >= 0.75) return 'Very likely'
-  if (probability >= 0.5) return 'Likely'
-  if (probability >= 0.25) return 'Possible'
-  return 'Unlikely'
+  return RISK_ORDER.indexOf(category) >= RISK_ORDER.indexOf('high')
 }
 
 /** Data older than this many months is shown as "Low confidence". */

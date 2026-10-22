@@ -1,0 +1,57 @@
+import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
+import { configureApi } from '@/services/api'
+import type { Role } from '@/types'
+
+export type UiLanguage = 'en' | 'hi'
+
+interface SessionState {
+  /** Not persisted: the app always opens as a District Officer. */
+  role: Role
+  language: UiLanguage
+  sidebarCollapsed: boolean
+  tourOpen: boolean
+  tourStep: number
+  setRole: (role: Role) => void
+  setLanguage: (language: UiLanguage) => void
+  toggleSidebar: () => void
+  openTour: () => void
+  closeTour: () => void
+  setTourStep: (step: number) => void
+}
+
+export const useSession = create<SessionState>()(
+  persist(
+    (set) => ({
+      role: 'district_officer',
+      language: 'en',
+      sidebarCollapsed: false,
+      tourOpen: false,
+      tourStep: 0,
+      setRole: (role) => set({ role }),
+      setLanguage: (language) => set({ language }),
+      toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+      openTour: () => set({ tourOpen: true }),
+      closeTour: () => set({ tourOpen: false }),
+      setTourStep: (tourStep) => set({ tourStep }),
+    }),
+    {
+      name: 'resilientepi-session',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (s) => ({ language: s.language, sidebarCollapsed: s.sidebarCollapsed }),
+    },
+  ),
+)
+
+configureApi({ getRole: () => useSession.getState().role })
+
+export const ROLE_LABELS: Record<Role, string> = {
+  district_officer: 'District Officer',
+  evaluator: 'Evaluator',
+}
+
+export function useCanEdit(): boolean {
+  return useSession((s) => s.role === 'district_officer')
+}
+
+export const READ_ONLY_REASON = 'Evaluators have read-only access. Switch role in the profile menu to make changes.'

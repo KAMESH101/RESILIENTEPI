@@ -24,6 +24,21 @@ npm run dev
 | `VITE_API_BASE_URL` | `/api/v1` | backend base URL (live mode) |
 | `VITE_DEMO_AS_OF` | current month | pin the demo "as-of" month (`YYYY-MM`) |
 
-> Status: Phase 1 scaffolding. Full documentation (live API switch, boundary
-> file, LGD CSV, backend plan) is added as the phases complete. See `CLAUDE.md`
-> and `docs/PROMPT.md`.
+## Quality checks
+
+```bash
+npm run build && npm run lint
+npx playwright install chromium   # first time only
+npm run qa:screens                # screenshots at 375/768/1440 px + behaviour flows
+```
+
+## Boundary file
+
+The map uses only a team-supplied file in `public/geo/` (planned: DataMeet
+district boundaries with attribution, LGD codes joined during preprocessing).
+Without it, the app shows a labelled schematic view plus a table. See
+[`scripts/simplify-boundaries.md`](scripts/simplify-boundaries.md).
+
+> Status: Phase 1 (app shell, seeded mock API, Overview) complete. Full
+> documentation (live API switch, LGD CSV, backend plan) is added as the phases
+> complete. See `CLAUDE.md` and `docs/PROMPT.md`.

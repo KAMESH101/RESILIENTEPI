@@ -1,6 +1,7 @@
 /**
  * zod schemas for every request body / form the UI submits (prompt §9:
  * "Validate all form input with zod"). Request types are inferred from these.
+ * Optional text fields accept null so parsed output can be re-validated by the API.
  */
 import { z } from 'zod'
 
@@ -8,7 +9,7 @@ const optionalReason = z
   .string()
   .trim()
   .max(500, 'Keep the reason under 500 characters')
-  .optional()
+  .nullish()
   .transform((v) => (v ? v : null))
 
 /** POST /blind-spots/{id}/review */
@@ -31,8 +32,8 @@ export const createActionSchema = z.object({
     'hospital_preparedness',
     'data_quality',
   ]),
-  assignee: z.string().trim().max(80).optional().transform((v) => (v ? v : null)),
-  reason: z.string().trim().max(300).optional().transform((v) => (v ? v : null)),
+  assignee: z.string().trim().max(80).nullish().transform((v) => (v ? v : null)),
+  reason: z.string().trim().max(300).nullish().transform((v) => (v ? v : null)),
 })
 export type CreateActionRequest = z.output<typeof createActionSchema>
 

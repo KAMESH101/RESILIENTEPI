@@ -7,12 +7,17 @@ indicator). Mock API now; FastAPI + ML pipeline later. Full brief: `docs/PROMPT.
 ## Commands
 
 ```bash
-npm install        # install
-npm run dev        # dev server (http://localhost:5173)
-npm run build      # tsc -b && vite build — must pass before a phase is done
-npm run lint       # oxlint — must pass before a phase is done
-npx playwright test  # visual QA screenshots at 375 / 768 / 1440 px
+npm install          # install
+npm run dev          # dev server (http://localhost:5173)
+npm run build        # tsc -b && vite build — must pass before a phase is done
+npm run lint         # oxlint — must pass before a phase is done
+npm run qa:screens   # Playwright: qa/visual.spec.ts (screenshots → qa/screenshots/,
+                     # fails on horizontal overflow or console errors) + qa/flows.spec.ts
+npx tsx --tsconfig tsconfig.app.json scripts/check-mock.ts 2026-10   # print seeded demo stories
 ```
+
+First Playwright run needs `npx playwright install chromium`. QA pins
+`VITE_DEMO_AS_OF=2026-10` so screenshots are comparable.
 
 ## Rules (non-negotiable)
 
@@ -29,9 +34,15 @@ npx playwright test  # visual QA screenshots at 375 / 768 / 1440 px
 - **Lean scope.** Ask before adding any page, feature, or dependency not in the brief.
 - **Never claim** "first ever", "proven" or "clinically validated". ResilientEpi
   complements IDSP/IHIP; humans make all decisions; nothing triggers interventions.
-- **Map:** only `public/geo/india_districts.topojson` (Survey of India boundaries,
-  supplied by the team). No basemap tiles, no downloaded/invented geometry. If
-  missing/invalid → "Boundary file not loaded" + schematic tile view + table.
+- **Map:** only the team-supplied file in `public/geo/` (planned source: DataMeet
+  districts with attribution, LGD codes joined in preprocessing — see
+  `scripts/simplify-boundaries.md`). No basemap tiles, no downloaded/invented
+  geometry. If missing/invalid → "Boundary file not loaded" + labelled schematic
+  tile view + table.
+- **Blind-spot bands** (≥50 flagged, 35–49 watch) are a demo assumption and the
+  UI says so. **Likelihood words** derive from `RISK_BANDS` in `config/risk.ts` only.
+- **Provenance:** every record has `source`. `SyntheticTag` always tags synthetic;
+  pass `mixed` in views that combine live and synthetic records.
 - **LGD codes** are `null` unless `public/data/lgd_districts.csv` is supplied.
 - No API keys, no PII, no patient-level data. Env vars only.
 - Light theme only. No dark mode.
@@ -40,7 +51,8 @@ npx playwright test  # visual QA screenshots at 375 / 768 / 1440 px
 
 ```
 src/
-  app/          router, providers, layout (Sidebar, Topbar, MobileNav)
+  app/          router, providers, layout (Sidebar, Topbar, MobileNav), session & toast
+                stores, URL filters (filters.ts)
   pages/        Overview, RiskMap, DistrictDetail, BlindSpots, ActionCentre,
                 Reports, MethodologyData
   components/   shared UI (KpiCard, RiskBadge, DistrictPanel, DataTable, …)
@@ -55,7 +67,8 @@ src/
   i18n/         en.json, hi.json (UI); bulletin templates en/hi/ta
 public/geo/     boundary file (team-supplied)
 public/data/    lgd_districts.csv (team-supplied, optional)
-scripts/        simplify-boundaries.md
+scripts/        simplify-boundaries.md, check-mock.ts
+qa/             Playwright visual + flow specs
 docs/PROMPT.md  the original product brief
 ```
 
@@ -64,6 +77,18 @@ docs/PROMPT.md  the original product brief
 - Filters (horizon, state, …) live in the URL; Zustand holds session state
   (role, demo-tour step) and persisted demo edits (reviews, actions).
 - One `DistrictSearch` and one `DistrictPanel`, reused everywhere.
+
+## Gotchas
+
+- **React 18 + shadcn:** current shadcn components assume React 19 (`ref` as a
+  prop). Any `components/ui` component used as an `asChild` child or rendered
+  inside a Radix Portal/Presence must use `React.forwardRef` (Button and the
+  Dialog/Sheet/AlertDialog overlays already do). The QA spec fails on the
+  "Function components cannot be given refs" warning.
+- zod schemas are re-run by the mock API on already-parsed data, so optional
+  fields must accept `null` (`.nullish()`).
+- On Git Bash, an env value of `/` is rewritten to a Windows path (MSYS) — don't
+  pass `/` as a URL through env vars.
 
 ## Design conventions
 

@@ -1,4 +1,4 @@
-import type { ActionPriority, DecisionQuadrant, ResponsibleTeam } from '@/types'
+import type { ActionPriority, ActionStatus, DecisionQuadrant, ResponsibleTeam } from '@/types'
 
 /** Decision matrix that generates Action Centre recommendations (prompt §8 Phase 4). */
 export const DECISION_MATRIX: Record<
@@ -30,3 +30,25 @@ export const DECISION_MATRIX: Record<
 
 export const HUMAN_REVIEW_NOTE =
   'Recommendations need human review and approval. ResilientEpi does not start interventions.'
+
+export const TEAM_LABELS: Record<ResponsibleTeam, string> = {
+  district_surveillance_unit: 'District surveillance unit',
+  rapid_response_team: 'Rapid response team',
+  laboratory: 'Laboratory',
+  vector_control: 'Vector control',
+  hospital_preparedness: 'Hospital preparedness',
+  data_quality: 'Data quality & audit',
+}
+
+export const PRIORITY_LABELS: Record<ActionPriority, string> = {
+  urgent: 'Urgent',
+  high: 'High',
+  medium: 'Medium',
+  low: 'Low',
+}
+
+export const STATUS_LABELS: Record<ActionStatus, string> = {
+  pending: 'Pending',
+  in_progress: 'In Progress',
+  completed: 'Completed',
+}

@@ -20,6 +20,10 @@ export interface BlindSpotComponent {
   evidence: string
 }
 
+/** flagged = score ≥ 50 (potential blind spot), watch = 35–49, none = below 35.
+ *  Cut-offs live in config/blindspot.ts and are a demo assumption. */
+export type BlindSpotBand = 'none' | 'watch' | 'flagged'
+
 export type ReviewDecision = 'acknowledge' | 'flag_for_audit' | 'dismiss'
 
 export interface BlindSpotReview {
@@ -36,7 +40,8 @@ export interface BlindSpotAssessment {
   district: DistrictRef
   /** 0–100. Always labelled experimental; never presented as proof. */
   score: number
-  /** score ≥ BLIND_SPOT_FLAG_THRESHOLD */
+  band: BlindSpotBand
+  /** band === "flagged" */
   flagged: boolean
   components: BlindSpotComponent[]
   evidence: string[]
@@ -49,6 +54,7 @@ export interface BlindSpotAssessment {
 export interface BlindSpotSummary {
   id: string
   score: number
+  band: BlindSpotBand
   flagged: boolean
   source: DataSource
 }

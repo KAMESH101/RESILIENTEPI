@@ -21,12 +21,13 @@ export function BulletinView({ b }: { b: Bulletin }) {
 
   return (
     <article lang={b.language} className="bulletin rounded-xl border bg-white text-ink shadow-card print:rounded-none print:border-0 print:shadow-none" aria-label={t.title(b.scope_label)}>
-      <table className="bulletin-frame w-full border-collapse">
+      {/* table-fixed: the single column stays at 100% width; wide inner tables scroll instead of widening the page. */}
+      <table className="bulletin-frame w-full table-fixed border-collapse">
         <thead>
           <tr>
-            <td className="px-6 pt-6 pb-3 print:px-0 print:pt-0">
-              <div className="flex items-start justify-between gap-4 border-b-2 border-navy-900 pb-3">
-                <div className="flex items-start gap-3">
+            <td className="px-4 pt-5 pb-3 sm:px-6 sm:pt-6 print:px-0 print:pt-0">
+              <div className="flex flex-col gap-3 border-b-2 border-navy-900 pb-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4 print:flex-row print:justify-between">
+                <div className="flex min-w-0 items-start gap-3">
                   <LogoMark className="size-9" />
                   <div>
                     <p className="text-xs font-semibold tracking-wide text-teal-600 uppercase">ResilientEpi · {t.scopeKind[b.scope]}</p>
@@ -34,7 +35,7 @@ export function BulletinView({ b }: { b: Bulletin }) {
                     <p className="text-sm text-ink-muted">{t.horizonLine(month, b.horizon)}</p>
                   </div>
                 </div>
-                <div className="shrink-0 text-right text-xs text-ink-muted">
+                <div className="min-w-0 text-xs text-ink-muted sm:max-w-[45%] sm:text-right print:max-w-[45%] print:text-right">
                   <p>
                     {t.generated}: <span className="font-medium text-ink tabular-nums">{bulletinDateTime(b.generated_at, b.language)}</span>
                   </p>
@@ -54,7 +55,7 @@ export function BulletinView({ b }: { b: Bulletin }) {
         </thead>
         <tfoot>
           <tr>
-            <td className="px-6 pt-3 pb-6 print:px-0 print:pb-0">
+            <td className="px-4 pt-3 pb-5 sm:px-6 sm:pb-6 print:px-0 print:pb-0">
               <div className="bulletin-footer border-t pt-2 text-xs text-ink-muted" data-testid="bulletin-footer">
                 <p className="font-semibold text-ink">{BULLETIN_DISCLAIMER_EN}</p>
                 {b.language !== 'en' && <p>{t.disclaimer}</p>}
@@ -67,7 +68,7 @@ export function BulletinView({ b }: { b: Bulletin }) {
         </tfoot>
         <tbody>
           <tr>
-            <td className="flex flex-col gap-5 px-6 py-2 print:block print:px-0">
+            <td className="flex min-w-0 flex-col gap-5 px-4 py-2 sm:px-6 print:block print:px-0">
               <Section title={t.sections.summary}>
                 <p className="text-base">{t.summary({ high, total: b.districts_covered, month })}</p>
                 {flagged > 0 && <p className="mt-1">{t.summaryBlindSpots(flagged)}</p>}
@@ -178,28 +179,31 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function DataRows({ head, rows, numeric = [] }: { head: string[]; rows: (string | number)[][]; numeric?: number[] }) {
+  // On narrow screens the table scrolls inside its own box instead of widening the page.
   return (
-    <table className="w-full text-sm">
-      <thead>
-        <tr className="border-b text-left text-ink-muted">
-          {head.map((h, i) => (
-            <th key={h} className={cn('py-1 pr-3 font-medium', numeric.includes(i) && 'text-right')}>
-              {h}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((r, i) => (
-          <tr key={i} className="border-b align-top last:border-b-0">
-            {r.map((c, j) => (
-              <td key={j} className={cn('py-1 pr-3', numeric.includes(j) && 'text-right tabular-nums')}>
-                {c}
-              </td>
+    <div className="overflow-x-auto print:overflow-visible">
+      <table className="w-full min-w-[32rem] text-sm print:min-w-0">
+        <thead>
+          <tr className="border-b text-left text-ink-muted">
+            {head.map((h, i) => (
+              <th key={h} className={cn('py-1 pr-3 font-medium', numeric.includes(i) && 'text-right')}>
+                {h}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i} className="border-b align-top last:border-b-0">
+              {r.map((c, j) => (
+                <td key={j} className={cn('py-1 pr-3', numeric.includes(j) && 'text-right tabular-nums')}>
+                  {c}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }

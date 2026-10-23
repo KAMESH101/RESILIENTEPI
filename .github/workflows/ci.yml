@@ -39,11 +39,21 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      # Runs every spec: visual (375/768/1440), flows, boundary-file guard and the
-      # geographic map against the committed public/geo file. BOUNDARY_FIXTURE is
-      # unset here, so no external boundary file is needed.
-      - name: Playwright tests
-        run: npx playwright test
+      # Two steps so each gets its own annotation quota (GitHub shows ~10 failures
+      # per step): behaviour/data checks first, then the screenshot sweep.
+      # BOUNDARY_FIXTURE is unset, so the geographic checks use the committed file.
+      - name: Playwright — behaviour, data and boundary checks
+        env:
+          PW_REPORT_DIR: playwright-report/behaviour
+          PW_RESULTS_DIR: test-results/behaviour
+        run: npx playwright test qa/flows.spec.ts qa/phase5.spec.ts qa/geo.spec.ts qa/boundary-file.spec.ts
+
+      - name: Playwright — visual (375 / 768 / 1440 px)
+        if: ${{ !cancelled() }}
+        env:
+          PW_REPORT_DIR: playwright-report/visual
+          PW_RESULTS_DIR: test-results/visual
+        run: npx playwright test qa/visual.spec.ts
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}

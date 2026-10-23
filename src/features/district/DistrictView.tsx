@@ -325,7 +325,6 @@ function BlindSpot({ d }: { d: DistrictDetail }) {
           Blind-spot score <ExperimentalChip />
         </>
       }
-      caption={<ExperimentalNotice className="mt-1 text-xs" />}
       footer={
         <Link to={withFilters('/blind-spots', params, { focus: d.district.id })} className="inline-flex items-center gap-1 text-sm font-medium text-teal-600 hover:underline">
           Review on the Blind-Spot page <ArrowRight className="size-4" aria-hidden />
@@ -333,6 +332,8 @@ function BlindSpot({ d }: { d: DistrictDetail }) {
       }
     >
       <div className="flex flex-col gap-3 p-4">
+        {/* Not a SectionCard caption: captions are <p>, and the notice is a <p> too. */}
+        <ExperimentalNotice className="text-xs" />
         <BlindSpotBadge band={bs.band} score={bs.score} showChip={false} />
         {bs.band === 'none' && <p className="text-sm text-ink-muted">No blind-spot signal (score {bs.score} / 100).</p>}
         <ScoreBreakdown components={bs.components} score={bs.score} />

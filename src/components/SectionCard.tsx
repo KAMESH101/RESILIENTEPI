@@ -33,7 +33,8 @@ export function SectionCard({
           <H id={id ? `${id}-title` : undefined} className="flex flex-wrap items-center gap-2 text-base font-semibold text-navy-900">
             {title}
           </H>
-          {caption && <p className="mt-0.5 text-sm text-ink-muted">{caption}</p>}
+          {/* A div, not a <p>: captions may contain block content (avoids invalid <p> nesting). */}
+          {caption && <div className="mt-0.5 text-sm text-ink-muted">{caption}</div>}
         </div>
         {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
       </header>

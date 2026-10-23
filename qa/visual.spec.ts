@@ -106,9 +106,21 @@ for (const width of WIDTHS) {
       }
       await page.waitForTimeout(250) // let 150–200 ms transitions finish
 
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+      // On overflow, name the first elements that stick out so the CI annotation says what to fix.
+      const { overflow, culprits } = await page.evaluate(() => {
+        const w = document.documentElement.clientWidth
+        const over = document.documentElement.scrollWidth - w
+        const culprits =
+          over <= 0
+            ? []
+            : [...document.querySelectorAll('main *, body > div *')]
+                .filter((e) => e.getBoundingClientRect().right > w + 1)
+                .slice(0, 6)
+                .map((e) => `${e.tagName.toLowerCase()}[${String((e as HTMLElement).className).slice(0, 80)}] "${(e.textContent ?? '').trim().slice(0, 40)}"`)
+        return { overflow: over, culprits }
+      })
       await page.screenshot({ path: `qa/screenshots/${shot.name}-${width}.png`, fullPage: !shot.overlay })
-      expect(overflow, 'page must not scroll horizontally').toBeLessThanOrEqual(0)
+      expect(overflow, `page must not scroll horizontally; first overflowing: ${culprits.join(' | ')}`).toBeLessThanOrEqual(0)
       expect(problems, 'no console errors or React warnings').toEqual([])
     })
   }

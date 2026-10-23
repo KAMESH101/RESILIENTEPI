@@ -27,18 +27,21 @@ test('Darjeeling: missing months render as gaps (null), never zero', async ({ pa
 
   await chart.getByRole('button', { name: 'View as table' }).click()
   const rows = chart.getByRole('row')
-  for (const month of ['Sep 2026', 'Jun 2026', 'Mar 2026']) {
+  // en-IN short month for September is "Sep" or "Sept" depending on the ICU version.
+  for (const month of [/Sept? 2026/, /Jun 2026/, /Mar 2026/]) {
     await expect(rows.filter({ hasText: month })).toContainText('No data')
   }
-  await expect(page.getByRole('list', { name: 'Months with no report' })).toContainText('Sep 2026')
-  await expect(page.getByRole('list', { name: 'Months with no report' })).toContainText('Mar 2026')
+  const missing = page.getByRole('list', { name: 'Months with no report' })
+  await expect(missing).toContainText(/Sept? 2026/)
+  await expect(missing).toContainText('Mar 2026')
 })
 
 test('Bathinda: low-confidence note and "Explanation not yet available"', async ({ page }) => {
   await page.goto('/district/pb-bathinda')
   await ready(page)
   await expect(page.getByRole('note').filter({ hasText: 'Low confidence: data 4 months old' })).toBeVisible()
-  await expect(page.getByText('Explanation not yet available.')).toBeVisible()
+  // Exact: the header sentence also mentions it; this is the Top reasons card.
+  await expect(page.getByText('Explanation not yet available.', { exact: true })).toBeVisible()
 })
 
 test('Medchal–Malkajgiri works without a map shape', async ({ page }) => {
@@ -90,7 +93,8 @@ for (const L of LANGS) {
       await expect(bulletin.getByTestId('translation-pending')).toHaveCount(0)
     }
     // Same number as the district page shows for the 1-month horizon.
-    await expect(bulletin.getByRole('row').filter({ hasText: 'Madurai' }).first()).toContainText('62%')
+    // Section tables only — the repeating page header also contains "Madurai".
+    await expect(bulletin.locator('.bulletin-section tr').filter({ hasText: 'Madurai' }).first()).toContainText('62%')
     await expect(bulletin).toHaveAttribute('lang', L.lang)
   })
 }

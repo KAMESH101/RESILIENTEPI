@@ -17,7 +17,8 @@ test('method tab explains target, models, features, blind spot and data reality'
   for (const heading of ['What ResilientEpi forecasts', 'How the forecast is made', 'What goes into the model', 'How the model is checked', 'The blind-spot indicator (experimental)', 'Data reality', 'Glossary']) {
     await expect(page.getByRole('heading', { name: heading })).toBeVisible()
   }
-  await expect(page.getByText('75th percentile', { exact: false })).toBeVisible()
+  // Also in the glossary; the first match is the method text.
+  await expect(page.getByText('75th percentile', { exact: false }).first()).toBeVisible()
   await expect(page.getByRole('cell', { name: 'Expected vs reported gap' })).toBeVisible()
   await expect(page.getByRole('cell', { name: '35%' })).toBeVisible()
   await expect(page.getByText('HMIS district-month data ends in 2022, so the district model is retrospective.')).toBeVisible()

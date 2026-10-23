@@ -22,8 +22,12 @@ function useUpdateParams() {
   const [, setParams] = useSearchParams()
   return useCallback(
     (mutate: (p: URLSearchParams) => void) => {
-      const next = new URLSearchParams(window.location.search)
+      const current = new URLSearchParams(window.location.search)
+      const next = new URLSearchParams(current)
       mutate(next)
+      // Skip no-op updates: some controls (e.g. tabs) report the same change twice,
+      // which would push duplicate history entries and break the back button.
+      if (next.toString() === current.toString()) return
       setParams(next)
     },
     [setParams],

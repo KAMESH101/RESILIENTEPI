@@ -1,5 +1,11 @@
 # District boundary file: DataMeet → `public/geo/`
 
+> **The committed file** is built by `scripts/build-demo-boundaries.sh`:
+> DataMeet Census 2011 districts, **demo states only**, cleaned and simplified
+> (≈ 0.3 MB). See `public/geo/NOTICE.md`. The steps below are for adding LGD
+> codes or rebuilding — never add states outside the demo set
+> (`qa/boundary-file.spec.ts` will fail).
+
 ResilientEpi draws districts only from a file the team places in `public/geo/`:
 
 - `public/geo/india_districts.topojson` (preferred), or

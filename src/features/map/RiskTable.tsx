@@ -1,4 +1,4 @@
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, MapPinOff } from 'lucide-react'
 import { BlindSpotBadge } from '@/components/BlindSpotBadge'
 import { DataTable } from '@/components/DataTable'
 import { EmptyState } from '@/components/EmptyState'
@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { STALE_AFTER_MONTHS, riskBand } from '@/config/risk'
 import { formatInt, formatMonth, formatPct } from '@/lib/format'
 import type { DistrictSummary } from '@/types'
+import { useNoBoundaryNotes } from './useNoBoundaryNotes'
 
 /** The map's table alternative: always available, sortable, filtered by the page filters. */
 export function RiskTable({
@@ -20,6 +21,7 @@ export function RiskTable({
   onSelect: (id: string) => void
   onClearFilters?: () => void
 }) {
+  const noBoundary = useNoBoundaryNotes()
   return (
     <DataTable
       caption="District forecast risk"
@@ -49,6 +51,12 @@ export function RiskTable({
             <span className="flex flex-col">
               <span>{r.district.name}</span>
               <span className="text-xs font-normal text-ink-muted">{r.district.state}</span>
+              {noBoundary.has(r.district.id) && (
+                <span className="mt-0.5 inline-flex items-center gap-1 text-xs font-normal text-ink-muted">
+                  <MapPinOff className="size-3 shrink-0" aria-hidden />
+                  {noBoundary.get(r.district.id)}
+                </span>
+              )}
             </span>
           ),
         },

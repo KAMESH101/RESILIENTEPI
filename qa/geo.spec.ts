@@ -1,16 +1,16 @@
 import { expect, test } from '@playwright/test'
 
 /**
- * Geographic-map checks. Opt-in: set BOUNDARY_FIXTURE to a local boundary file
- * (e.g. the DataMeet districts converted with scripts/simplify-boundaries.md).
- * The file is served through a route, so no boundary data lives in the repo.
+ * Geographic-map checks against the committed boundary file. Set
+ * BOUNDARY_FIXTURE to serve a different local file through a route instead.
  */
 const fixture = process.env.BOUNDARY_FIXTURE
-test.skip(!fixture, 'BOUNDARY_FIXTURE not set')
 
 test.beforeEach(async ({ page }) => {
-  await page.route('**/geo/india_districts.topojson', (route) => route.fulfill({ path: fixture!, contentType: 'application/json' }))
+  if (fixture) await page.route('**/geo/india_districts.topojson', (route) => route.fulfill({ path: fixture, contentType: 'application/json' }))
 })
+
+const ATTRIBUTION = 'District boundaries © DataMeet (CC BY 2.5 IN) · indicative, not official'
 
 for (const width of [375, 768, 1440]) {
   test(`geographic map @ ${width}px`, async ({ page }) => {
@@ -21,7 +21,7 @@ for (const width of [375, 768, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 812 : 900 })
     await page.goto('/map?view=map&h=2&focus=tn-madurai')
     await expect(page.locator('.leaflet-overlay-pane path').first()).toBeAttached({ timeout: 15_000 })
-    await expect(page.getByText('District boundaries: DataMeet India community', { exact: false }).first()).toBeVisible()
+    await expect(page.locator('.leaflet-control-attribution')).toHaveText(ATTRIBUTION)
     await page.waitForTimeout(900) // flyToBounds
     await page.screenshot({ path: `qa/screenshots/geo-map-${width}.png`, fullPage: true })
     await page.goto('/')
@@ -41,4 +41,16 @@ test('clicking a district shape opens the shared panel', async ({ page }) => {
   const box = (await page.locator('.leaflet-container').first().boundingBox())!
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2)
   await expect(page.getByRole('dialog').getByRole('heading', { name: 'Madurai' })).toBeVisible()
+})
+
+test('Medchal–Malkajgiri is in the table and panel with its note, not on the map', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/map?view=table&state=Telangana')
+  const row = page.getByRole('row').filter({ hasText: 'Medchal–Malkajgiri' })
+  await expect(row.getByText('No 2011 boundary (district created 2016)')).toBeVisible()
+  await row.getByRole('button').first().click()
+  await expect(page.getByRole('dialog').getByText('No 2011 boundary (district created 2016) — not drawn on the map.')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await page.getByRole('radio', { name: 'Map' }).click()
+  await expect(page.getByText('Not drawn: Medchal–Malkajgiri — No 2011 boundary (district created 2016). Shown in the table only.')).toBeVisible()
 })

@@ -124,7 +124,8 @@ function Attribution() {
   useEffect(() => {
     const ctl = map.attributionControl
     ctl.setPrefix(false)
-    const text = `District boundaries: <a href="${BOUNDARY_ATTRIBUTION.url}" target="_blank" rel="noopener noreferrer">DataMeet India community</a> (${BOUNDARY_ATTRIBUTION.license})`
+    const a = BOUNDARY_ATTRIBUTION
+    const text = `District boundaries © <a href="${a.url}" target="_blank" rel="noopener noreferrer">${a.holder}</a> (<a href="${a.licenseUrl}" target="_blank" rel="noopener noreferrer">${a.license}</a>) · indicative, not official`
     ctl.addAttribution(text)
     return () => {
       ctl.removeAttribution(text)

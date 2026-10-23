@@ -2,7 +2,8 @@ import { AlertCircle, Info } from 'lucide-react'
 import { lazy, Suspense, useMemo } from 'react'
 import { MapLegend } from '@/components/MapLegend'
 import { BlockSkeleton } from '@/components/Skeletons'
-import { BOUNDARY_MISSING_LABEL } from '@/config/geo'
+import { BOUNDARY_MISSING_LABEL, NO_BOUNDARY_DEFAULT_NOTE, NO_BOUNDARY_NOTES } from '@/config/geo'
+import { normaliseName } from '@/lib/names'
 import { cn } from '@/lib/utils'
 import type { DistrictSummary } from '@/types'
 import { useBoundaries } from './boundaries'
@@ -94,7 +95,7 @@ function JoinNote({ method, unmatched, compact }: { method: 'lgd' | 'name' | 'mi
         {unmatched.length > 0 &&
           (compact
             ? `${unmatched.length} district${unmatched.length > 1 ? 's have' : ' has'} no matching shape (see the table).`
-            : `No matching shape for: ${unmatched.join(', ')} — shown in the table only.`)}
+            : `Not drawn: ${unmatched.map((n) => `${n} — ${NO_BOUNDARY_NOTES[normaliseName(n)] ?? NO_BOUNDARY_DEFAULT_NOTE}`).join('; ')}. Shown in the table only.`)}
       </span>
     </p>
   )

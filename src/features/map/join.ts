@@ -5,17 +5,17 @@
  */
 import { DISTRICT_NAME_ALIASES, STATE_NAME_ALIASES } from '@/config/geo'
 import { normaliseName } from '@/lib/names'
-import type { DistrictSummary } from '@/types'
+import type { DistrictRef, DistrictSummary } from '@/types'
 import type { BoundaryFeature } from './boundaries'
 
-export interface JoinResult {
-  /** Summary for each feature index, or null → rendered "No data". */
-  byFeature: (DistrictSummary | null)[]
+export interface JoinResult<T extends { district: DistrictRef } = DistrictSummary> {
+  /** Record for each feature index, or null → rendered "No data". */
+  byFeature: (T | null)[]
   /** Feature index for each district id that found a shape. */
   featureOf: Map<string, number>
   method: 'lgd' | 'name' | 'mixed'
   /** Records with data but no matching shape (shown in the table only). */
-  unmatched: DistrictSummary[]
+  unmatched: T[]
 }
 
 function variants(name: string, aliases: Record<string, string[]>): string[] {
@@ -23,8 +23,8 @@ function variants(name: string, aliases: Record<string, string[]>): string[] {
   return [n, ...(aliases[n] ?? []).map(normaliseName)]
 }
 
-export function joinBoundaries(features: BoundaryFeature[], summaries: DistrictSummary[]): JoinResult {
-  const byFeature: (DistrictSummary | null)[] = features.map(() => null)
+export function joinBoundaries<T extends { district: DistrictRef }>(features: BoundaryFeature[], summaries: T[]): JoinResult<T> {
+  const byFeature: (T | null)[] = features.map(() => null)
   const featureOf = new Map<string, number>()
 
   const byLgd = new Map<string, number>()
@@ -40,7 +40,7 @@ export function joinBoundaries(features: BoundaryFeature[], summaries: DistrictS
 
   let viaLgd = 0
   let viaName = 0
-  const unmatched: DistrictSummary[] = []
+  const unmatched: T[] = []
 
   for (const s of summaries) {
     let idx: number | undefined

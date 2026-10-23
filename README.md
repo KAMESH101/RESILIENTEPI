@@ -30,17 +30,18 @@ npm run dev
 npm run build && npm run lint
 npx playwright install chromium   # first time only
 npm run qa:screens                # screenshots at 375/768/1440 px + behaviour flows
-BOUNDARY_FIXTURE=path/to/india_districts.topojson npx playwright test qa/geo.spec.ts  # optional: geographic map
+                                  # (includes the geographic map and the boundary-file guard)
 ```
 
 ## Boundary file
 
-The map uses only a team-supplied file in `public/geo/` (planned: DataMeet
-district boundaries with attribution, LGD codes joined during preprocessing).
-Without it, the app shows a labelled schematic view plus a table. See
-[`scripts/simplify-boundaries.md`](scripts/simplify-boundaries.md).
+`public/geo/india_districts.topojson` holds DataMeet's Census 2011 district
+boundaries (CC BY 2.5 IN — see [`public/geo/NOTICE.md`](public/geo/NOTICE.md)),
+filtered to the 12 demo states and simplified (≈ 0.3 MB). They are indicative,
+not official. Rebuild with `scripts/build-demo-boundaries.sh`; to add LGD codes
+see [`scripts/simplify-boundaries.md`](scripts/simplify-boundaries.md). Without a
+valid file the app shows a labelled schematic view plus a table.
 
-> Status: Phases 1–2 (app shell, seeded mock API, Overview, National Risk
-> Map) complete. Full
-> documentation (live API switch, LGD CSV, backend plan) is added as the phases
-> complete. See `CLAUDE.md` and `docs/PROMPT.md`.
+> Status: Phases 1–2 (app shell, seeded mock API, Overview, National Risk Map)
+> complete. Full documentation (live API switch, LGD CSV, backend plan) is added
+> as the phases complete. See `CLAUDE.md` and `docs/PROMPT.md`.

@@ -4,7 +4,8 @@ const WIDTHS = [375, 768, 1440] as const
 
 /** Pages (and key states) to capture. Grows as phases are built. */
 /** `overlay` shots capture the viewport only — fixed dialogs/drawers misrepresent in full-page captures. */
-const SHOTS: { name: string; path: string; overlay?: boolean; setup?: (page: Page) => Promise<void> }[] = [
+/** `noBoundary` blocks the boundary file to capture the schematic fallback. */
+const SHOTS: { name: string; path: string; overlay?: boolean; noBoundary?: boolean; setup?: (page: Page) => Promise<void> }[] = [
   { name: 'overview', path: '/' },
   { name: 'overview-h3-kerala', path: '/?h=3&state=Kerala' },
   { name: 'overview-panel', path: '/?district=tn-madurai', overlay: true },
@@ -34,6 +35,8 @@ const SHOTS: { name: string; path: string; overlay?: boolean; setup?: (page: Pag
   { name: 'map-table', path: '/map?view=table&bs=any' },
   { name: 'map-view-map', path: '/map?view=map&focus=ka-kalaburagi' },
   { name: 'map-layers-off', path: '/map?view=map&risk_layer=0' },
+  { name: 'map-fallback', path: '/map?view=map&focus=ka-kalaburagi', noBoundary: true },
+  { name: 'overview-fallback', path: '/', noBoundary: true },
   { name: 'map-panel', path: '/map?h=2&focus=tn-madurai&district=tn-madurai', overlay: true },
   { name: 'blind-spots-placeholder', path: '/blind-spots' },
   { name: 'actions-placeholder', path: '/actions' },
@@ -52,9 +55,12 @@ for (const width of WIDTHS) {
     test(`${shot.name} @ ${width}px`, async ({ page }) => {
       const problems: string[] = []
       page.on('console', (m) => {
+        // The deliberately blocked boundary file logs a 404; nothing else may.
+        if (shot.noBoundary && m.text().startsWith('Failed to load resource')) return
         if (m.type() === 'error' || (m.type() === 'warning' && m.text().includes('React'))) problems.push(m.text().slice(0, 300))
       })
       page.on('pageerror', (e) => problems.push(e.message))
+      if (shot.noBoundary) await page.route('**/geo/india_districts.*', (r) => r.fulfill({ status: 404, body: '' }))
       await page.setViewportSize({ width, height: width < 768 ? 812 : 900 })
       await page.goto(shot.path)
       await settle(page)

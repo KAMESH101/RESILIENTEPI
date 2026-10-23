@@ -122,6 +122,7 @@ test('demo tour Go buttons navigate with the scripted filters', async ({ page })
 })
 
 test('missing boundary file falls back to the labelled schematic view', async ({ page }) => {
+  await page.route('**/geo/india_districts.*', (r) => r.fulfill({ status: 404, body: '' }))
   await page.goto('/')
   await ready(page)
   await expect(page.getByText('Boundary file not loaded.')).toBeVisible()
@@ -172,5 +173,5 @@ test('risk map opens on the list first on mobile, with a Show map toggle', async
   await expect(page.getByRole('list', { name: 'District forecast risk' })).toBeVisible()
   await page.getByRole('button', { name: 'Show map' }).click()
   await expect(page).toHaveURL(/view=map/)
-  await expect(page.getByText('Schematic view — not geographic')).toBeVisible()
+  await expect(page.locator('.leaflet-container')).toBeVisible()
 })

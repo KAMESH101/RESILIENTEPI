@@ -13,8 +13,8 @@ npm run build        # tsc -b && vite build — must pass before a phase is done
 npm run lint         # oxlint — must pass before a phase is done
 npm run qa:screens   # Playwright: qa/visual.spec.ts (screenshots → qa/screenshots/,
                      # fails on horizontal overflow or console errors) + qa/flows.spec.ts
-BOUNDARY_FIXTURE=/path/to/india_districts.topojson npx playwright test qa/geo.spec.ts
-                     # geographic-map checks; the file is served via a route, never committed
+BOUNDARY_FIXTURE=/path/to/other.topojson npx playwright test qa/geo.spec.ts
+                     # optional: run the geographic checks against a different local file
 npx tsx --tsconfig tsconfig.app.json scripts/check-mock.ts 2026-10   # print seeded demo stories
 ```
 
@@ -36,11 +36,15 @@ First Playwright run needs `npx playwright install chromium`. QA pins
 - **Lean scope.** Ask before adding any page, feature, or dependency not in the brief.
 - **Never claim** "first ever", "proven" or "clinically validated". ResilientEpi
   complements IDSP/IHIP; humans make all decisions; nothing triggers interventions.
-- **Map:** only the team-supplied file in `public/geo/` (planned source: DataMeet
-  districts with attribution, LGD codes joined in preprocessing — see
-  `scripts/simplify-boundaries.md`). No basemap tiles, no downloaded/invented
-  geometry. If missing/invalid → "Boundary file not loaded" + labelled schematic
-  tile view + table.
+- **Map:** only `public/geo/india_districts.topojson` — DataMeet Census 2011
+  districts (CC BY 2.5 IN, see `public/geo/NOTICE.md`), **filtered to the 12 demo
+  states only** so no all-India outline or J&K/Ladakh/Arunachal border is drawn.
+  Rebuild with `scripts/build-demo-boundaries.sh`; `qa/boundary-file.spec.ts`
+  fails if any other state gets in. On-map credit: "District boundaries ©
+  DataMeet (CC BY 2.5 IN) · indicative, not official". No basemap tiles.
+  Districts with no 2011 shape (Medchal–Malkajgiri) are never drawn inside a
+  parent; they get a note in the table/panel. Missing/invalid file → "Boundary
+  file not loaded" + labelled schematic view + table.
 - **Blind-spot bands** (≥50 flagged, 35–49 watch) are a demo assumption and the
   UI says so. **Likelihood words** derive from `RISK_BANDS` in `config/risk.ts` only.
 - **Provenance:** every record has `source`. `SyntheticTag` always tags synthetic;

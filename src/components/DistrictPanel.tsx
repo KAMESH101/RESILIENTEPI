@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { AlertTriangle, ArrowRight, ChevronDown, Clock, FlaskRound, TrendingDown, TrendingUp } from 'lucide-react'
+import { AlertTriangle, ArrowRight, ChevronDown, Clock, FlaskRound, MapPinOff, TrendingDown, TrendingUp } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router'
 import { useDistrictPanel, useFilters, withFilters } from '@/app/filters'
 import { HUMAN_REVIEW_NOTE } from '@/config/actions'
 import { riskBand } from '@/config/risk'
 import { CreateActionButton } from '@/features/actions/CreateActionButton'
 import { prefillFor } from '@/features/actions/createActionStore'
+import { useNoBoundaryNotes } from '@/features/map/useNoBoundaryNotes'
 import { formatInt, formatMonth, formatPct } from '@/lib/format'
 import { MQ, useMediaQuery } from '@/lib/useMediaQuery'
 import { cn } from '@/lib/utils'
@@ -78,6 +79,7 @@ export function DistrictPanel() {
 function DistrictPanelBody({ summary: s }: { summary: DistrictSummary }) {
   const [params] = useSearchParams()
   const f = s.forecast
+  const noBoundary = useNoBoundaryNotes().get(s.district.id)
   const band = f ? riskBand(f.category) : null
 
   return (
@@ -86,6 +88,12 @@ function DistrictPanelBody({ summary: s }: { summary: DistrictSummary }) {
       <SheetHeader className="gap-2 border-b px-4 pt-4 pb-3 pr-12">
         <SheetTitle className="text-xl text-navy-900">{s.district.name}</SheetTitle>
         <SheetDescription className="text-sm text-ink-muted">{s.district.state}</SheetDescription>
+        {noBoundary && (
+          <p className="flex items-center gap-1 text-xs text-ink-muted">
+            <MapPinOff className="size-3.5 shrink-0" aria-hidden />
+            {noBoundary} — not drawn on the map.
+          </p>
+        )}
         <div className="flex flex-wrap items-center gap-1.5">
           <RiskBadge category={f?.category ?? null} probability={f?.probability} />
           {s.blind_spot && <BlindSpotBadge band={s.blind_spot.band} score={s.blind_spot.score} />}

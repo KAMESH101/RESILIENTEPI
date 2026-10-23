@@ -22,10 +22,23 @@ export const BOUNDARY_PROPERTY_ALIASES = {
 
 /** Shown under every geographic map when the boundary file is loaded. */
 export const BOUNDARY_ATTRIBUTION = {
-  text: 'District boundaries: DataMeet India community',
-  license: 'CC BY',
-  url: 'https://github.com/datameet/maps',
+  holder: 'DataMeet',
+  url: 'https://github.com/datameet/maps/tree/master/Districts/Census_2011',
+  license: 'CC BY 2.5 IN',
+  licenseUrl: 'https://creativecommons.org/licenses/by/2.5/in/',
+  /** Plain-text form: "District boundaries © DataMeet (CC BY 2.5 IN) · indicative, not official". */
+  text: 'District boundaries © DataMeet (CC BY 2.5 IN) · indicative, not official',
 } as const
+
+/**
+ * Why a demo district has no shape in the boundary file. Shown in the table and
+ * district panel. The district is never drawn inside its parent's shape.
+ */
+export const NO_BOUNDARY_NOTES: Record<string, string> = {
+  'medchal malkajgiri': 'No 2011 boundary (district created 2016)',
+}
+
+export const NO_BOUNDARY_DEFAULT_NOTE = 'No matching shape in the boundary file'
 
 /**
  * Name-matching fallback, used ONLY when LGD codes are not available on both

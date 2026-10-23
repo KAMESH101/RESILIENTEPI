@@ -30,11 +30,11 @@ export function AppLayout() {
       </a>
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="sticky top-0 z-30 print:static">
+        <div className="sticky top-0 z-30 print:hidden">
           <DemoBanner />
           <Topbar />
         </div>
-        <main id="main" tabIndex={-1} className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-6 pb-28 outline-none md:px-6 md:pb-12 xl:px-8">
+        <main id="main" tabIndex={-1} className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-6 pb-28 outline-none md:px-6 md:pb-12 xl:px-8 print:max-w-none print:p-0">
           <Suspense
             fallback={
               <>

@@ -22,6 +22,7 @@ const routes: [method: string, pattern: string, handler: Handler][] = [
   ['GET', '/actions', h.listActions],
   ['POST', '/actions', h.createAction],
   ['PATCH', '/actions/:id', h.updateAction],
+  ['POST', '/reports/generate', h.generateReport],
   ['GET', '/model-performance', h.getModelPerformance],
   ['GET', '/data-sources', h.getDataSources],
 ]

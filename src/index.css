@@ -2,6 +2,13 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
+/* Bundled locally (no CDN) so Hindi and Tamil render — and print — on any machine. */
+@import "@fontsource/noto-sans-devanagari/400.css";
+@import "@fontsource/noto-sans-devanagari/600.css";
+@import "@fontsource/noto-sans-devanagari/700.css";
+@import "@fontsource/noto-sans-tamil/400.css";
+@import "@fontsource/noto-sans-tamil/600.css";
+@import "@fontsource/noto-sans-tamil/700.css";
 
 /*
  * ResilientEpi design tokens (prompt §5.2). Light theme only — no dark mode.
@@ -56,7 +63,8 @@
 }
 
 @theme inline {
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  /* Inter for Latin; the browser falls back per glyph to Noto for Devanagari / Tamil. */
+  --font-sans: "Inter Variable", "Noto Sans Devanagari", "Noto Sans Tamil", ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-sans);
 
   --color-navy-900: var(--navy-900);
@@ -146,6 +154,42 @@
     background-color: #f1f5f9;
     background-image: radial-gradient(var(--nodata) 1px, transparent 1.2px);
     background-size: 6px 6px;
+  }
+}
+
+/* Print / Save as PDF (bulletins). A4; header and footer repeat on every page. */
+@page {
+  size: A4;
+  margin: 12mm 12mm 14mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+  .print-exact,
+  .pattern-hatch,
+  .pattern-nodata {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  /* Repeated on each printed page by the browser. */
+  .bulletin-frame > thead {
+    display: table-header-group;
+  }
+  .bulletin-frame > tfoot {
+    display: table-footer-group;
+  }
+  .bulletin-section {
+    break-inside: avoid;
+    margin-bottom: 6mm;
+  }
+  .bulletin-section h3 {
+    break-after: avoid;
+  }
+  .bulletin-section tr {
+    break-inside: avoid;
   }
 }
 

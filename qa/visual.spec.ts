@@ -29,7 +29,10 @@ const SHOTS: { name: string; path: string; overlay?: boolean; noBoundary?: boole
   },
   { name: 'overview-table-view', path: '/', setup: async (page) => page.getByRole('button', { name: 'View as table' }).first().click() },
   { name: 'district-picker', path: '/district' },
-  { name: 'district-interim', path: '/district/ka-kalaburagi' },
+  { name: 'district-madurai', path: '/district/tn-madurai?h=2' },
+  { name: 'district-darjeeling', path: '/district/wb-darjeeling' },
+  { name: 'district-bathinda', path: '/district/pb-bathinda' },
+  { name: 'district-medchal', path: '/district/tg-medchal-malkajgiri' },
   { name: 'map', path: '/map' },
   { name: 'map-high-risk', path: '/map?risk=high&h=2' },
   { name: 'map-table', path: '/map?view=table&bs=any' },
@@ -63,7 +66,17 @@ const SHOTS: { name: string; path: string; overlay?: boolean; noBoundary?: boole
       await page.getByRole('alertdialog').waitFor()
     },
   },
-  { name: 'reports-placeholder', path: '/reports' },
+  { name: 'reports', path: '/reports' },
+  { name: 'reports-hi-district', path: '/reports?scope=district&target=tn-madurai&lang=hi' },
+  { name: 'reports-ta-state', path: '/reports?scope=state&target=Tamil%20Nadu&lang=ta' },
+  { name: 'reports-en-national', path: '/reports?scope=national&lang=en' },
+  {
+    name: 'reports-print-ta',
+    path: '/reports?scope=district&target=tn-madurai&lang=ta',
+    setup: async (page) => {
+      await page.emulateMedia({ media: 'print' })
+    },
+  },
   { name: 'methodology-placeholder', path: '/methodology' },
 ]
 

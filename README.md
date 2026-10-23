@@ -92,7 +92,22 @@ not official. Rebuild with `scripts/build-demo-boundaries.sh`; to add LGD codes
 see [`scripts/simplify-boundaries.md`](scripts/simplify-boundaries.md). Without a
 valid file the app shows a labelled schematic view plus a table.
 
-> Status: Phases 1–3 (app shell, seeded mock API, Overview, National Risk Map,
-> Blind-Spot Analysis) complete. Full documentation (live API switch, LGD CSV,
-> backend plan) is added as the phases complete. See `CLAUDE.md` and
-> `docs/PROMPT.md`.
+> Status: Phases 1–5 (app shell, seeded mock API, Overview, National Risk Map,
+> Blind-Spot Analysis, Action Centre, District Detail, Reports & Bulletins)
+> complete. Hindi and Tamil bulletin templates are marked "Translation pending
+> review" until a fluent reader checks them. Full documentation (live API
+> switch, LGD CSV, backend plan) follows with the last phase. See `CLAUDE.md`
+> and `docs/PROMPT.md`.
+
+## Bulletins and exports
+
+- Bulletins (district, state, national) are **templates**: only fixed labels
+  are translated (`src/i18n/bulletin.ts`); every number, district name and
+  action comes from the same data as the rest of the app.
+- Hindi and Tamil use bundled Noto Sans Devanagari / Noto Sans Tamil
+  (`@fontsource`, no CDN), so printed PDFs never show empty boxes.
+- Print / Save as PDF: A4, the generation date in the header and the
+  "Demonstration bulletin — not an official government communication" footer
+  on every page.
+- CSV exports (Reports page only): UTF-8 with BOM, a `source` column, and an
+  apostrophe before any cell starting with `=`, `+`, `-` or `@`.

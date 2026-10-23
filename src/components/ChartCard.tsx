@@ -21,6 +21,7 @@ export function ChartCard({
   table,
   synthetic = false,
   chips,
+  actions,
   children,
   compact = false,
   className,
@@ -33,6 +34,8 @@ export function ChartCard({
   table: ChartTable
   synthetic?: boolean
   chips?: ReactNode
+  /** Extra controls beside "View as table", e.g. a date-range selector. */
+  actions?: ReactNode
   children: ReactNode
   compact?: boolean
   className?: string
@@ -51,10 +54,13 @@ export function ChartCard({
           </Heading>
           {caption && <p className="mt-0.5 text-xs text-ink-muted">{caption}</p>}
         </div>
-        <Button variant="ghost" size="sm" onClick={() => setAsTable((v) => !v)} aria-pressed={asTable} className="text-teal-600">
-          <Table2 aria-hidden />
-          {asTable ? 'View as chart' : 'View as table'}
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          {actions}
+          <Button variant="ghost" size="sm" onClick={() => setAsTable((v) => !v)} aria-pressed={asTable} className="text-teal-600">
+            <Table2 aria-hidden />
+            {asTable ? 'View as chart' : 'View as table'}
+          </Button>
+        </div>
       </div>
       <figcaption className="sr-only">{summary}</figcaption>
       {asTable ? (

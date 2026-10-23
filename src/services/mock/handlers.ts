@@ -22,7 +22,8 @@ import type {
   RiskMapResponse,
   Role,
 } from '@/types'
-import { blindSpotReviewSchema, createActionSchema, HORIZONS, updateActionSchema } from '@/types'
+import { blindSpotReviewSchema, createActionSchema, generateReportSchema, HORIZONS, updateActionSchema, type Bulletin } from '@/types'
+import { buildBulletin } from './reports'
 import { blindSpotState, buildActions } from './actions'
 import { ensureAsOf, useMockDb, type ActionEdit } from './db'
 import { STATES } from './districts'
@@ -400,6 +401,15 @@ export function updateAction(req: MockRequest): ActionMutationResponse {
   }
   const action = allActions(data).find((a) => a.id === id)!
   return { action, demo: true }
+}
+
+export function generateReport(req: MockRequest): Bulletin {
+  const parsed = generateReportSchema.safeParse(req.body)
+  if (!parsed.success) throw new MockHttpError(422, parsed.error.issues[0]?.message ?? 'Invalid report request')
+  const data = ds()
+  if (parsed.data.scope === 'district') getDistrictOr404(data, parsed.data.district_id)
+  if (parsed.data.scope === 'state' && !STATES.includes(parsed.data.state ?? '')) throw new MockHttpError(404, 'State not found')
+  return buildBulletin(data, useMockDb.getState(), parsed.data)
 }
 
 export function getModelPerformance(): ModelPerformanceResponse {

@@ -1,25 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft, Construction, PanelRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
-import { useDistrictPanel, withFilters } from '@/app/filters'
+import { withFilters } from '@/app/filters'
 import { PageHeader } from '@/app/layout/PageHeader'
 import { useRunInfo } from '@/app/useRunInfo'
-import { BlindSpotBadge } from '@/components/BlindSpotBadge'
 import { DistrictSearch } from '@/components/DistrictSearch'
 import { ErrorState } from '@/components/ErrorState'
-import { RiskBadge } from '@/components/RiskBadge'
 import { SectionCard } from '@/components/SectionCard'
 import { ListSkeleton } from '@/components/Skeletons'
-import { SyntheticTag } from '@/components/SyntheticTag'
-import { Button } from '@/components/ui/button'
-import { riskBand } from '@/config/risk'
-import { formatMonth, formatPct } from '@/lib/format'
-import { getDistrict, listDistricts } from '@/services/endpoints'
+import { DistrictView } from '@/features/district/DistrictView'
+import { listDistricts } from '@/services/endpoints'
 
 export default function DistrictDetail() {
   const { id } = useParams()
-  return id ? <DistrictInterim id={id} /> : <DistrictPicker />
+  return id ? <DistrictView id={id} /> : <DistrictPicker />
 }
 
 /** Sidebar entry point: a searchable district picker. */
@@ -66,73 +60,6 @@ function DistrictPicker() {
           )}
         </div>
       </SectionCard>
-    </div>
-  )
-}
-
-/** Until Phase 5: status header and the 1/2/3-month forecast, plus the shared panel. */
-function DistrictInterim({ id }: { id: string }) {
-  const [params] = useSearchParams()
-  const { open } = useDistrictPanel()
-  const run = useRunInfo()
-  const q = useQuery({ queryKey: ['district', id], queryFn: () => getDistrict(id) })
-
-  if (q.isError) {
-    return (
-      <div className="rounded-xl border bg-surface shadow-card">
-        <ErrorState title="Could not load this district" error={q.error} onRetry={() => void q.refetch()} />
-      </div>
-    )
-  }
-  const d = q.data
-  return (
-    <div className="flex flex-col gap-6">
-      <Link to={withFilters('/district', params)} className="inline-flex w-fit items-center gap-1 text-sm font-medium text-teal-600 hover:underline">
-        <ArrowLeft className="size-4" aria-hidden /> All districts
-      </Link>
-      <PageHeader
-        title={d ? d.district.name : 'Loading district…'}
-        purpose={d ? `${d.district.state} · ${d.summary_sentence.replace(`${d.district.name}: `, '')}` : ''}
-        lastRunAt={run.lastRunAt}
-        asOf={run.asOf}
-        actions={
-          <Button variant="outline" onClick={() => open(id)}>
-            <PanelRight aria-hidden /> Quick view
-          </Button>
-        }
-      />
-      {!d ? (
-        <ListSkeleton rows={3} />
-      ) : (
-        <>
-          <SectionCard id="fc" title={<>Forecast by horizon <SyntheticTag /></>} caption="Probability that cases exceed this district’s outbreak threshold.">
-            <ul className="grid gap-3 p-4 sm:grid-cols-3">
-              {d.forecasts.map((f) => (
-                <li key={f.horizon} className="rounded-lg border p-3">
-                  <p className="text-sm text-ink-muted">
-                    {f.horizon} month{f.horizon > 1 ? 's' : ''} ahead · {formatMonth(f.target_month)}
-                  </p>
-                  <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <RiskBadge category={f.category} probability={f.probability} />
-                    <span className="text-sm tabular-nums">
-                      {riskBand(f.category).word} ({formatPct(f.probability)})
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            {d.blind_spot && d.blind_spot.band !== 'none' && (
-              <div className="border-t px-4 py-3">
-                <BlindSpotBadge band={d.blind_spot.band} score={d.blind_spot.score} />
-              </div>
-            )}
-          </SectionCard>
-          <div className="flex items-start gap-3 rounded-xl border border-dashed bg-surface p-4 text-sm text-ink-muted">
-            <Construction className="mt-0.5 size-5 shrink-0" aria-hidden />
-            <p>Forecast-vs-baseline charts, testing, climate and the blind-spot breakdown arrive in Phase 5. Use “Quick view” for this district’s reasons, trend and recommended action.</p>
-          </div>
-        </>
-      )}
     </div>
   )
 }

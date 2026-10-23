@@ -191,6 +191,11 @@
   .bulletin-section tr {
     break-inside: avoid;
   }
+  /* Long Tamil / Hindi compound words may break so narrow columns never overflow the page. */
+  .bulletin-section th,
+  .bulletin-section td {
+    overflow-wrap: anywhere;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

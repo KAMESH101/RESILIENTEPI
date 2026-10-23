@@ -146,7 +146,8 @@ export function DistrictView({ id }: { id: string }) {
             <ClimateChart name={d.district.name} history={d.history} />
           </div>
 
-          <div className="grid gap-4 md:gap-6 xl:grid-cols-2">
+          {/* items-start: the short Freshness card keeps its own height next to the long blind-spot card. */}
+          <div className="grid gap-4 md:gap-6 xl:grid-cols-2 xl:items-start">
             <Freshness d={d} />
             <BlindSpot d={d} />
           </div>
@@ -320,11 +321,7 @@ function BlindSpot({ d }: { d: DistrictDetail }) {
   return (
     <SectionCard
       id="bs"
-      title={
-        <>
-          Blind-spot score <ExperimentalChip />
-        </>
-      }
+      title="Blind-spot score"
       footer={
         <Link to={withFilters('/blind-spots', params, { focus: d.district.id })} className="inline-flex items-center gap-1 text-sm font-medium text-teal-600 hover:underline">
           Review on the Blind-Spot page <ArrowRight className="size-4" aria-hidden />

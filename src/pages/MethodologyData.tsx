@@ -7,6 +7,8 @@ import { MethodTab, ResultsTab, SourcesTab } from '@/features/methodology/tabs'
 
 const TABS = ['method', 'results', 'sources'] as const
 type Tab = (typeof TABS)[number]
+/** The default active tab is white on light grey; make the current one unmistakable. */
+const TAB = 'text-ink-muted data-active:font-semibold data-active:text-navy-900 data-active:shadow-sm data-active:ring-1 data-active:ring-slate-300'
 
 /** One page, three tabs; the active tab lives in the URL (?tab=). */
 export default function MethodologyData() {
@@ -21,9 +23,9 @@ export default function MethodologyData() {
       <PageHeader title={t('pages.methodology.title')} purpose={t('pages.methodology.purpose')} lastRunAt={run.lastRunAt} asOf={run.asOf} />
       <Tabs value={tab} onValueChange={(v) => setParam({ tab: v === 'method' ? null : v })} className="flex flex-col gap-4">
         <TabsList className="w-full max-w-xl sm:w-fit">
-          <TabsTrigger value="method">{t('methodology.method')}</TabsTrigger>
-          <TabsTrigger value="results">{t('methodology.results')}</TabsTrigger>
-          <TabsTrigger value="sources">{t('methodology.sources')}</TabsTrigger>
+          <TabsTrigger value="method" className={TAB}>{t('methodology.method')}</TabsTrigger>
+          <TabsTrigger value="results" className={TAB}>{t('methodology.results')}</TabsTrigger>
+          <TabsTrigger value="sources" className={TAB}>{t('methodology.sources')}</TabsTrigger>
         </TabsList>
         <TabsContent value="method">
           <MethodTab />

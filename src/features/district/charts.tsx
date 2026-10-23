@@ -152,7 +152,8 @@ export function ForecastChart({
         <>
           <Select value={kind} onValueChange={(v) => setKind(v as BaselineKind)}>
             <SelectTrigger className="h-8 w-56 max-w-full bg-surface text-xs" aria-label="Baseline">
-              <SelectValue />
+              {/* Short name in the trigger (the full description is in the list), so it never clips. */}
+              <SelectValue>Baseline: {BASELINE_LABELS[kind].split(' (')[0]}</SelectValue>
             </SelectTrigger>
             <SelectContent>
               {(Object.keys(BASELINE_LABELS) as BaselineKind[]).map((k) => (

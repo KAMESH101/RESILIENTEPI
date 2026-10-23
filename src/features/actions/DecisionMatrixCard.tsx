@@ -2,6 +2,7 @@ import { ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { DECISION_MATRIX, MATRIX_COLUMNS, MATRIX_ROWS, TEAM_LABELS } from '@/config/actions'
 import { BLIND_SPOT_THRESHOLD_NOTE } from '@/config/blindspot'
+import { MQ, useMediaQuery } from '@/lib/useMediaQuery'
 import type { ActionTask, DecisionQuadrant } from '@/types'
 import { PriorityPill } from './PriorityPill'
 
@@ -13,9 +14,11 @@ const CELLS: Record<'high' | 'low', Record<'bs' | 'none', DecisionQuadrant>> = {
 /** How recommendations are generated, with the count of open matrix tasks per cell. */
 export function DecisionMatrixCard({ tasks }: { tasks: ActionTask[] }) {
   const { t } = useTranslation()
-  const open = (q: DecisionQuadrant) => tasks.filter((x) => x.origin === 'decision_matrix' && x.quadrant === q && x.status !== 'completed').length
+  // Collapsed on phones so the task list is visible without scrolling past the matrix.
+  const tablet = useMediaQuery(MQ.tablet)
+  const open =(q: DecisionQuadrant) => tasks.filter((x) => x.origin === 'decision_matrix' && x.quadrant === q && x.status !== 'completed').length
   return (
-    <details className="group rounded-xl border bg-surface shadow-card" open>
+    <details key={String(tablet)} className="group rounded-xl border bg-surface shadow-card" open={tablet}>
       <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3">
         <span>
           <h2 className="text-base font-semibold text-navy-900">{t('actions.matrix')}</h2>

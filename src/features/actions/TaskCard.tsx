@@ -56,9 +56,10 @@ export function TaskCard({ task: t, onOpenDistrict, highlighted = false }: { tas
         highlighted && 'ring-2 ring-teal-600 ring-offset-2',
       )}
     >
-      <header className="flex flex-wrap items-start gap-x-3 gap-y-2">
+      {/* Phones: pill and status share the first row, so the title gets the full card width. */}
+      <header className="grid grid-cols-[auto_1fr] items-start gap-x-3 gap-y-2 sm:grid-cols-[auto_1fr_auto]">
         <PriorityPill priority={t.priority} className="mt-0.5" />
-        <div className="min-w-0 flex-1">
+        <div className="col-span-2 row-start-2 min-w-0 sm:col-span-1 sm:col-start-2 sm:row-start-1">
           <h3 id={`${t.id}-title`} className="text-base font-semibold text-navy-900">
             {t.suggested_action}
           </h3>
@@ -79,7 +80,7 @@ export function TaskCard({ task: t, onOpenDistrict, highlighted = false }: { tas
             <SyntheticTag source={t.source} />
           </div>
         </div>
-        <span className={cn('inline-flex h-7 shrink-0 items-center rounded-full border px-2.5 text-sm font-medium', STATUS_TONE[t.status])}>
+        <span className={cn('inline-flex h-7 shrink-0 items-center justify-self-end rounded-full border px-2.5 text-sm font-medium sm:justify-self-auto', STATUS_TONE[t.status])}>
           {STATUS_LABELS[t.status]}
         </span>
       </header>

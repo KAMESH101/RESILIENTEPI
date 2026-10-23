@@ -63,14 +63,36 @@ export const VALIDATION_STEPS: string[] = [
   'Results are shown by horizon (1, 2, 3 months) and by state, with the model version and evaluation date.',
 ]
 
-/**
- * Three independent tests are planned (prompt §2); only one is specified so far.
- * Add the other two here when the team defines them — never invent them.
- */
-export const BLIND_SPOT_VALIDATION = {
-  planned: 3,
-  defined: ['A synthetic test that hides real reports and checks whether the indicator flags the gap.'],
+export type ValidationStatus = 'planned'
+
+export const VALIDATION_STATUS_LABELS: Record<ValidationStatus, string> = {
+  planned: 'Planned — not yet run',
 }
+
+/**
+ * The three independent tests for the experimental blind-spot indicator, as
+ * defined by the team. Plan only: no results are shown until a test has run.
+ */
+export const BLIND_SPOT_VALIDATION: { name: string; description: string; passIf: string; status: ValidationStatus }[] = [
+  {
+    name: 'Synthetic test',
+    description: 'Hide real reports in some districts and re-score them.',
+    passIf: 'The indicator flags the districts whose reports were hidden.',
+    status: 'planned',
+  },
+  {
+    name: 'External check against serosurveys',
+    description: 'Compare the indicator with ICMR dengue serosurvey seroprevalence where districts overlap.',
+    passIf: 'Districts with high seroprevalence but low reported incidence score higher.',
+    status: 'planned',
+  },
+  {
+    name: 'Stability check',
+    description: 'Vary each signal weight by ±20%, and drop one signal at a time.',
+    passIf: 'The top-flagged districts stay largely the same.',
+    status: 'planned',
+  },
+]
 
 export const DATA_REALITY: string[] = [
   'HMIS district-month data ends in 2022, so the district model is retrospective.',

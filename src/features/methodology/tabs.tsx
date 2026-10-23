@@ -25,6 +25,7 @@ import {
   MODEL_ORDER,
   SOURCE_STATUS_LABELS,
   SOURCE_TYPE_LABELS,
+  VALIDATION_STATUS_LABELS,
   VALIDATION_STEPS,
 } from '@/config/methodology'
 import { OUTBREAK_PERCENTILE, RISK_BANDS } from '@/config/risk'
@@ -165,16 +166,25 @@ export function MethodTab() {
           </table>
           <p>{BLIND_SPOT_THRESHOLD_NOTE}</p>
           <p>
-            <strong>Validation plan:</strong> {BLIND_SPOT_VALIDATION.planned} independent tests. Defined so far:
+            <strong>Validation plan:</strong> {BLIND_SPOT_VALIDATION.length} independent tests. None has been run yet, so no results are shown.
           </p>
-          <ul>
-            {BLIND_SPOT_VALIDATION.defined.map((t) => (
-              <li key={t}>{t}</li>
+          <ol className="flex list-none flex-col gap-2 pl-0" aria-label="Blind-spot validation plan">
+            {BLIND_SPOT_VALIDATION.map((t, i) => (
+              <li key={t.name} className="rounded-lg border p-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-semibold text-navy-900">
+                    {i + 1}. {t.name}
+                  </span>
+                  <span className="inline-flex h-6 items-center gap-1 rounded-full border border-dashed border-navy-700 px-2 text-xs font-medium text-navy-900">
+                    <Hourglass className="size-3.5" aria-hidden />
+                    {VALIDATION_STATUS_LABELS[t.status]}
+                  </span>
+                </div>
+                <p className="mt-1">{t.description}</p>
+                <p className="mt-0.5 text-ink-muted">Passes if: {t.passIf}</p>
+              </li>
             ))}
-          </ul>
-          <p className="text-ink-muted">
-            The other {BLIND_SPOT_VALIDATION.planned - BLIND_SPOT_VALIDATION.defined.length} tests are still to be specified by the team.
-          </p>
+          </ol>
         </Prose>
       </SectionCard>
 

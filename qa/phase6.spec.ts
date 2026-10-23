@@ -22,8 +22,15 @@ test('method tab explains target, models, features, blind spot and data reality'
   await expect(page.getByRole('cell', { name: 'Expected vs reported gap' })).toBeVisible()
   await expect(page.getByRole('cell', { name: '35%' })).toBeVisible()
   await expect(page.getByText('HMIS district-month data ends in 2022, so the district model is retrospective.')).toBeVisible()
-  // Only the specified validation test is listed; the rest are explicitly pending.
-  await expect(page.getByText('still to be specified by the team', { exact: false })).toBeVisible()
+  // The three blind-spot validation tests: plan only, each "Planned — not yet run", no results.
+  const plan = page.getByRole('list', { name: 'Blind-spot validation plan' })
+  await expect(plan.getByRole('listitem')).toHaveCount(3)
+  for (const name of ['Synthetic test', 'External check against serosurveys', 'Stability check']) {
+    await expect(plan.getByRole('listitem').filter({ hasText: name })).toContainText('Planned — not yet run')
+  }
+  await expect(plan).toContainText('ICMR dengue serosurvey seroprevalence')
+  await expect(plan).toContainText('±20%')
+  await expect(plan).not.toContainText(/result|passed|failed/i)
 })
 
 test('model results: "Validation pending" and no accuracy figures', async ({ page }) => {

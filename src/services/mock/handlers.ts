@@ -1,5 +1,6 @@
 import { DECISION_MATRIX } from '@/config/actions'
 import { DEMO_AS_OF, HMIS_DATA_ENDS } from '@/config/demo'
+import { BOUNDARY_NOTES } from '@/config/geo'
 import { isHighOrAbove, likelihoodWord, riskBand } from '@/config/risk'
 import { addMonths } from '@/lib/format'
 import type {
@@ -485,6 +486,17 @@ export function getDataSources(): DataSourcesResponse {
         last_success_at: null,
         coverage: null,
         warnings: [demo],
+      },
+      {
+        id: 'boundaries',
+        name: 'District boundaries (map)',
+        description: 'DataMeet Census 2011 district shapes, filtered to the demo states. Used only to draw the map; all data joins use LGD codes.',
+        type_tag: 'imported_historical',
+        status: 'ok',
+        last_success_at: null,
+        coverage: null,
+        coverage_note: 'Census 2011 districts, 12 demo states',
+        warnings: BOUNDARY_NOTES,
       },
     ],
   }

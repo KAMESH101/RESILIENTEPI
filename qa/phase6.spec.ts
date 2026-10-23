@@ -37,15 +37,54 @@ test('model results: "Validation pending" and no accuracy figures', async ({ pag
   // No results tables or charts in demo mode.
   await expect(panel.getByRole('table')).toHaveCount(0)
   await expect(panel.locator('svg.recharts-surface')).toHaveCount(0)
+  // No accuracy-like numbers at all: no percentages, no decimals.
+  const text = (await panel.textContent()) ?? ''
+  expect(text).not.toMatch(/%/)
+  expect(text).not.toMatch(/\d\.\d/)
   await page.goBack()
   await expect(page.getByRole('tab', { name: 'Method', selected: true })).toBeVisible()
+})
+
+test('Back works after changing filters and tabs, one step per change (no duplicate history)', async ({ page }) => {
+  // Methodology tabs: two changes → two Backs.
+  await page.goto('/methodology')
+  await ready(page)
+  await page.getByRole('tab', { name: 'Model results' }).click()
+  await page.getByRole('tab', { name: 'Data sources' }).click()
+  await expect(page).toHaveURL(/tab=sources/)
+  await page.goBack()
+  await expect(page.getByRole('tab', { name: 'Model results', selected: true })).toBeVisible()
+  await page.goBack()
+  await expect(page.getByRole('tab', { name: 'Method', selected: true })).toBeVisible()
+  await expect(page).not.toHaveURL(/tab=/)
+
+  // Risk Map horizon: 1M → 2M → 3M, then Back twice.
+  await page.goto('/map?view=table')
+  await ready(page)
+  await page.getByRole('radio', { name: '2 months ahead' }).click()
+  await page.getByRole('radio', { name: '2 months ahead' }).click() // re-clicking the active option is a no-op
+  await page.getByRole('radio', { name: '3 months ahead' }).click()
+  await expect(page).toHaveURL(/h=3/)
+  await page.goBack()
+  await expect(page).toHaveURL(/h=2/)
+  await expect(page.getByRole('radio', { name: '2 months ahead' })).toHaveAttribute('aria-checked', 'true')
+  await expect(page.getByText('Forecast risk, 2 months ahead')).toBeVisible()
+  await page.goBack()
+  await expect(page).not.toHaveURL(/h=/)
+  await expect(page.getByRole('radio', { name: '1 month ahead' })).toHaveAttribute('aria-checked', 'true')
 })
 
 test('data sources: type tag, status, last update, coverage and warnings for each', async ({ page }) => {
   await page.goto('/methodology?tab=sources')
   await ready(page)
   const list = page.getByRole('list', { name: 'Data sources' })
-  await expect(list.getByRole('listitem').filter({ has: page.getByRole('heading') })).toHaveCount(6)
+  await expect(list.getByRole('listitem').filter({ has: page.getByRole('heading') })).toHaveCount(7)
+  const boundaries = list.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'District boundaries (map)' }) })
+  await expect(boundaries).toContainText('Census 2011 districts, 12 demo states')
+  const notes = boundaries.getByRole('list', { name: 'Warnings for District boundaries (map)' })
+  await expect(notes).toContainText('Census 2011 district boundaries are used')
+  await expect(notes).toContainText('Darjeeling: the 2011 shape still includes Kalimpong, which became a separate district in 2017.')
+  await expect(notes).toContainText('Medchal–Malkajgiri: no 2011 boundary (district created 2016)')
   for (const tag of ['Synthetic demo', 'Imported historical', 'Live', 'Delayed']) {
     await expect(list.getByText(tag, { exact: true }).first()).toBeVisible()
   }

@@ -39,7 +39,7 @@ export const METRICS: Record<MetricKey, { label: string; plain: string; better: 
   },
   brier_score: {
     label: 'Brier score (calibration)',
-    plain: 'Whether a forecast of “60%” comes true about 60% of the time. Lower is better.',
+    plain: 'Whether forecast chances match how often outbreaks really happen. Lower is better.',
     better: 'lower',
   },
   mae: { label: 'MAE', plain: 'Average size of the error in the case count (count model only).', better: 'lower', countOnly: true },

@@ -384,11 +384,15 @@ export function SourcesTab() {
               </div>
               <div>
                 <dt className="text-xs text-ink-muted">Last successful update</dt>
-                <dd className="font-medium tabular-nums">{s.last_success_at ? formatDateTime(s.last_success_at) : 'Never (not connected)'}</dd>
+                <dd className="font-medium tabular-nums">
+                  {s.last_success_at ? formatDateTime(s.last_success_at) : s.status === 'not_connected' ? 'Never (not connected)' : 'Bundled with the app'}
+                </dd>
               </div>
               <div>
                 <dt className="text-xs text-ink-muted">Coverage</dt>
-                <dd className="font-medium">{s.coverage ? `${formatMonth(s.coverage.from)} – ${formatMonth(s.coverage.to)}` : 'Not known yet'}</dd>
+                <dd className="font-medium">
+                  {s.coverage ? `${formatMonth(s.coverage.from)} – ${formatMonth(s.coverage.to)}` : (s.coverage_note ?? 'Not known yet')}
+                </dd>
               </div>
             </dl>
             {s.warnings.length > 0 && (

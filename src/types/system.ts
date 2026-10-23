@@ -43,13 +43,15 @@ export type DataSourceHealth = 'ok' | 'degraded' | 'unavailable' | 'not_connecte
 
 /** GET /data-sources — one entry per upstream source. */
 export interface DataSourceStatus {
-  /** `demo_generator` = the seeded synthetic data shown in demo mode. */
-  id: 'hmis' | 'idsp' | 'ncvbdc' | 'imd' | 'open_meteo' | 'demo_generator'
+  /** `demo_generator` = the seeded synthetic data shown in demo mode; `boundaries` = map file. */
+  id: 'hmis' | 'idsp' | 'ncvbdc' | 'imd' | 'open_meteo' | 'demo_generator' | 'boundaries'
   name: string
   description: string
   type_tag: DataSourceTypeTag
   status: DataSourceHealth
   last_success_at: IsoDateTime | null
   coverage: { from: YearMonth; to: YearMonth } | null
+  /** Coverage that isn't a month range, e.g. "Census 2011 districts, 12 demo states". */
+  coverage_note?: string
   warnings: string[]
 }

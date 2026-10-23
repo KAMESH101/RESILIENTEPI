@@ -40,6 +40,15 @@ export const NO_BOUNDARY_NOTES: Record<string, string> = {
 
 export const NO_BOUNDARY_DEFAULT_NOTE = 'No matching shape in the boundary file'
 
+/** Known limits of the Census 2011 boundary file, shown under Data sources. */
+export const BOUNDARY_NOTES: string[] = [
+  'Census 2011 district boundaries are used (DataMeet, CC BY 2.5 IN) — indicative, not official, and not Survey of India boundaries.',
+  'Only the 12 demo states are included, so no all-India outline is drawn; only borders between districts are drawn as lines.',
+  'Darjeeling: the 2011 shape still includes Kalimpong, which became a separate district in 2017.',
+  'Medchal–Malkajgiri: no 2011 boundary (district created 2016). It appears in tables and the district page, but is not drawn on the map.',
+  'Telangana districts come from the 2011 Andhra Pradesh layer (Telangana was formed in 2014).',
+]
+
 /**
  * Name-matching fallback, used ONLY when LGD codes are not available on both
  * sides. Keys are current names (lower-case); values are older spellings found

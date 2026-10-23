@@ -65,12 +65,30 @@ Node 20.19+ (or 22.12+) is required; in WSL install it with `nvm`.
 codespace on main*, then run `npm ci && npm run dev`. The forwarded port opens
 in the browser.
 
+## Demo build (v1.0-demo)
+
+The tag **`v1.0-demo`** (commit `c74633c`) is the fixed, tested snapshot: all
+six phases, CI green with 155 tests. If later polish breaks something, go back
+to it with `git checkout v1.0-demo`.
+
+Its built app is the **dist** artifact of that commit's CI run:
+
+- Run: <https://github.com/KAMESH101/RESILIENTEPI/actions/runs/39976488480>
+- Direct download (needs a GitHub login):
+  <https://github.com/KAMESH101/RESILIENTEPI/actions/runs/39976488480/artifacts/12510873864>
+- **Expires 22 Nov 2026.** That run kept `dist` for 30 days; runs from now on
+  keep it for 90 days (`ci.yml`). Actions artifacts always expire — after
+  that, re-run CI on the `v1.0-demo` tag from the Actions page (or build the
+  tag in WSL2 / Codespaces) to get a fresh copy. For a copy that never
+  expires, attach `dist` to a GitHub Release for the tag.
+
 ## Demo laptop: serve the pre-built app
 
 Running the app from a build needs no bundler, so it works even where rolldown
 is blocked.
 
-1. Open the latest green CI run on GitHub → **Artifacts** → download **dist**.
+1. Download **dist** (the v1.0-demo link above, or the latest green CI run →
+   **Artifacts**).
 2. Unzip it into a folder named `dist`.
 3. Serve it (single-page mode, so deep links like `/map?h=2` work):
 

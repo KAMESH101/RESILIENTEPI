@@ -45,10 +45,7 @@ export const useSession = create<SessionState>()(
 
 configureApi({ getRole: () => useSession.getState().role })
 
-export const ROLE_LABELS: Record<Role, string> = {
-  district_officer: 'District Officer',
-  evaluator: 'Evaluator',
-}
+export { ROLE_LABELS } from '@/config/roles'
 
 export function useCanEdit(): boolean {
   return useSession((s) => s.role === 'district_officer')

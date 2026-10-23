@@ -37,7 +37,7 @@ function CreateActionForm({ prefill, close }: { prefill: CreateActionPrefill | n
 
   const [district, setDistrict] = useState<DistrictRef | null>(prefill?.district ?? null)
   const [action, setAction] = useState(prefill?.suggested_action ?? '')
-  const [priority, setPriority] = useState<ActionPriority>(prefill?.priority ?? 'medium')
+  const [priority, setPriority] = useState<ActionPriority>(prefill?.priority ?? 'p3')
   const [team, setTeam] = useState<ResponsibleTeam>(prefill?.responsible_team ?? 'district_surveillance_unit')
   const [assignee, setAssignee] = useState('')
   const [reason, setReason] = useState(prefill?.reason ?? '')

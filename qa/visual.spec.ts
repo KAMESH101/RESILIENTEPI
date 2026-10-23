@@ -51,7 +51,18 @@ const SHOTS: { name: string; path: string; overlay?: boolean; noBoundary?: boole
       await page.getByRole('alertdialog').waitFor()
     },
   },
-  { name: 'actions-placeholder', path: '/actions' },
+  { name: 'actions', path: '/actions' },
+  { name: 'actions-madurai', path: '/actions?dist=tn-madurai' },
+  { name: 'actions-p3', path: '/actions?priority=p3' },
+  {
+    name: 'actions-complete-dialog',
+    path: '/actions?dist=tn-madurai',
+    overlay: true,
+    setup: async (page) => {
+      await page.getByRole('button', { name: 'Mark Completed' }).first().click()
+      await page.getByRole('alertdialog').waitFor()
+    },
+  },
   { name: 'reports-placeholder', path: '/reports' },
   { name: 'methodology-placeholder', path: '/methodology' },
 ]

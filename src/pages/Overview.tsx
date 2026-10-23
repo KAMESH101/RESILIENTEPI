@@ -102,7 +102,7 @@ export default function Overview() {
                     label={t('kpi.immediate')}
                     kpi={data.kpis.needing_immediate_attention}
                     meaning="High risk and a potential blind spot."
-                    to={link('/actions', { priority: 'urgent' })}
+                    to={link('/actions', { priority: 'p1' })}
                     emphasis={data.kpis.needing_immediate_attention.value > 0}
                   />
                 </>
@@ -171,7 +171,7 @@ export default function Overview() {
                 </Link>
               }
             >
-              {!data ? <ListSkeleton rows={5} /> : <ActionList rows={data.recommended_actions} linkFor={(a) => link('/actions', { focus: a.district.id })} />}
+              {!data ? <ListSkeleton rows={5} /> : <ActionList rows={data.recommended_actions} linkFor={(a) => link('/actions', { dist: a.district.id })} />}
             </SectionCard>
           </div>
 
@@ -305,10 +305,9 @@ function ScoreBar({ score }: { score: number }) {
 }
 
 const PRIORITY_TONE: Record<ActionTask['priority'], string> = {
-  urgent: 'bg-risk-veryhigh text-white',
-  high: 'bg-risk-high text-ink',
-  medium: 'bg-risk-moderate text-ink',
-  low: 'bg-muted text-ink',
+  p1: 'bg-risk-veryhigh text-white',
+  p2: 'bg-risk-high text-ink',
+  p3: 'bg-muted text-ink',
 }
 
 function ActionList({ rows, linkFor }: { rows: ActionTask[]; linkFor: (a: ActionTask) => string }) {

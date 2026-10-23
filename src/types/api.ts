@@ -80,6 +80,7 @@ export interface BlindSpotReviewResponse {
 
 /** GET /actions?district=&priority=&status= */
 export interface ActionListQuery {
+  state?: string | null
   district?: string | null
   priority?: ActionPriority | null
   status?: ActionStatus | null

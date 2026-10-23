@@ -82,5 +82,9 @@
   "blindSpots": {
     "ranked": "Ranked by blind-spot score",
     "evidence": "Supporting evidence"
+  },
+  "actions": {
+    "matrix": "Decision matrix",
+    "tasks": "Tasks"
   }
 }

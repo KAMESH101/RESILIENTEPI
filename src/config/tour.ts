@@ -32,7 +32,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     title: 'Action Centre',
     text: 'Assign Madurai’s testing and test-kit task, then mark it In Progress. Every change asks for confirmation.',
-    to: `/actions?focus=${TOUR_DISTRICTS.highRiskBlindSpot}`,
+    to: `/actions?dist=${TOUR_DISTRICTS.highRiskBlindSpot}`,
   },
   {
     title: 'Reports',

@@ -230,3 +230,101 @@ test('blind spots: empty state per state offers a next step', async ({ page }) =
   await expect(page).not.toHaveURL(/state=Kerala/)
   await expect(page.locator('article').first()).toBeVisible()
 })
+
+/** The matrix task of a district on the Action Centre. */
+const matrixTask = (page: Page, districtId: string) => page.locator(`article#act-${districtId}-matrix`)
+
+test('action centre: tour story — assign Madurai’s P1 task, then mark it In Progress', async ({ page }) => {
+  await page.goto('/actions?dist=tn-madurai')
+  await ready(page)
+  await expect(page.getByRole('note').filter({ hasText: 'Recommendations need human review and approval. ResilientEpi does not start interventions.' })).toBeVisible()
+  const task = matrixTask(page, 'tn-madurai')
+  await expect(task.getByLabel(/^Priority P1/)).toBeVisible()
+
+  await task.getByRole('button', { name: 'Assign' }).click()
+  let dialog = page.getByRole('alertdialog')
+  await dialog.getByLabel('Assign to').fill('Rapid Response Team 2')
+  await dialog.getByRole('button', { name: 'Assign' }).click()
+  await expect(task.getByText('Rapid Response Team 2', { exact: true })).toBeVisible()
+  await expect(task.getByRole('list', { name: /History for Madurai/ })).toContainText('Assigned to Rapid Response Team 2 · Demo District Officer (District Officer)')
+
+  await task.getByRole('button', { name: 'Mark In Progress' }).click()
+  dialog = page.getByRole('alertdialog')
+  await dialog.getByRole('button', { name: 'Mark In Progress' }).click()
+  await expect(task.getByRole('list', { name: /History for Madurai/ })).toContainText('Status Pending → In Progress')
+  await expect(task.locator('header').getByText('In Progress', { exact: true })).toBeVisible()
+})
+
+test('action centre: Completed requires a short note', async ({ page }) => {
+  await page.goto('/actions?dist=ka-kalaburagi')
+  await ready(page)
+  const task = matrixTask(page, 'ka-kalaburagi')
+  await task.getByRole('button', { name: 'Mark Completed' }).click()
+  const dialog = page.getByRole('alertdialog')
+  await dialog.getByRole('button', { name: 'Mark Completed' }).click()
+  await expect(dialog.getByRole('alert')).toHaveText('Add a short note on what was done before marking it completed')
+  await dialog.getByLabel('What was done? (required)').fill('Audited lab registers with DSU')
+  await dialog.getByRole('button', { name: 'Mark Completed' }).click()
+  await expect(dialog).toHaveCount(0)
+  await expect(task.locator('header').getByText('Completed', { exact: true })).toBeVisible()
+  await expect(task.getByText('Audited lab registers with DSU')).toBeVisible()
+})
+
+test('action centre: watch band gets a P3 verify task; generated tasks never duplicate', async ({ page }) => {
+  await page.goto('/actions')
+  await ready(page)
+  for (const id of ['up-gorakhpur', 'od-ganjam']) {
+    const verify = page.locator(`article#act-${id}-verify`)
+    await expect(verify.getByLabel(/^Priority P3/)).toBeVisible()
+    await expect(verify.getByRole('heading')).toContainText('Verify data completeness')
+  }
+  const count = async () => Number((await page.getByRole('status').filter({ hasText: /^Showing/ }).textContent())!.match(/of (\d+)/)![1])
+  const before = await count()
+  await page.getByLabel('Priority').click()
+  await page.getByRole('option', { name: /^P2/ }).click()
+  await page.getByRole('button', { name: 'Clear all' }).click()
+  await page.reload()
+  await ready(page)
+  expect(await count()).toBe(before)
+  const ids = await page.locator('article[id^="act-"]').evaluateAll((els) => els.map((e) => e.id))
+  expect(new Set(ids).size).toBe(ids.length)
+})
+
+test('action centre ↔ blind spots: Dismiss demotes to "no blind spot" with a note; Flag for audit creates one audit task', async ({ page }) => {
+  await page.goto('/blind-spots?focus=tn-madurai')
+  await ready(page)
+  const madurai = page.locator('article').filter({ has: page.getByRole('heading', { name: /Madurai/ }) })
+  await madurai.getByRole('button', { name: 'Dismiss', exact: true }).click()
+  await page.getByRole('alertdialog').getByRole('button', { name: 'Dismiss' }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Dismissed: Madurai' })).toBeVisible()
+
+  const kalaburagi = page.locator('article').filter({ has: page.getByRole('heading', { name: /Kalaburagi/ }) })
+  for (let i = 0; i < 2; i++) {
+    await kalaburagi.getByRole('button', { name: 'Flag for audit', exact: true }).click()
+    await page.getByRole('alertdialog').getByRole('button', { name: 'Flag for audit' }).click()
+    await expect(page.getByRole('alertdialog')).toHaveCount(0)
+  }
+
+  await page.goto('/actions?dist=tn-madurai')
+  await ready(page)
+  const task = matrixTask(page, 'tn-madurai')
+  await expect(task.getByLabel(/^Priority P2/)).toBeVisible()
+  await expect(task.getByText(/^Blind spot dismissed by District Officer, \d{1,2} \w{3} \d{4}$/)).toBeVisible()
+  await expect(task.getByRole('list', { name: /History for Madurai/ })).toContainText('Recommendation updated P1 → P2: blind spot dismissed')
+
+  await page.goto('/actions?dist=ka-kalaburagi')
+  await ready(page)
+  await expect(page.locator('article#act-ka-kalaburagi-audit')).toHaveCount(1)
+  await expect(page.locator('article#act-ka-kalaburagi-audit').getByRole('heading')).toContainText('Audit testing and reporting')
+})
+
+test('action centre: evaluator is read-only', async ({ page }) => {
+  await page.goto('/actions?dist=tn-madurai')
+  await ready(page)
+  await page.getByRole('button', { name: /Profile/ }).click()
+  await page.getByRole('menuitemradio', { name: 'Evaluator' }).click()
+  await expect(page.getByText('Read-only view (Evaluator)', { exact: false })).toBeVisible()
+  const task = matrixTask(page, 'tn-madurai')
+  await expect(task.getByRole('button', { name: 'Assign' })).toBeDisabled()
+  await expect(task.getByRole('button', { name: 'Mark In Progress' })).toBeDisabled()
+})

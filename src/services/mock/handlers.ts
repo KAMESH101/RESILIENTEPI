@@ -23,7 +23,8 @@ import type {
   Role,
 } from '@/types'
 import { blindSpotReviewSchema, createActionSchema, HORIZONS, updateActionSchema } from '@/types'
-import { ensureAsOf, useMockDb } from './db'
+import { blindSpotState, buildActions } from './actions'
+import { ensureAsOf, useMockDb, type ActionEdit } from './db'
 import { STATES } from './districts'
 import {
   baselinesFor,
@@ -32,10 +33,8 @@ import {
   freshnessFor,
   getDataset,
   peakForecast,
-  PRIORITY_RANK,
   quadrantFor,
   reasonsFor,
-  seedActions,
   summaryFor,
   summarySentence,
   type Dataset,
@@ -90,16 +89,19 @@ function requireOfficer(role: Role) {
 }
 
 function allActions(data: Dataset): ActionTask[] {
-  return useMockDb.getState().actions ?? seedActions(data)
+  return buildActions(data, useMockDb.getState())
 }
 
-function saveActions(list: ActionTask[]) {
-  useMockDb.setState({ actions: list })
+/** District ids whose blind-spot flag was dismissed on review (matrix treats as none). */
+function dismissedIds(data: Dataset): Set<string> {
+  const reviews = useMockDb.getState().reviews
+  const out = new Set<string>()
+  for (const d of data.districts) {
+    const bs = blindSpotFor(data, d, data.asOf)
+    if (blindSpotState(bs, reviews[bs.id] ?? []).status === 'dismissed') out.add(d.ref.id)
+  }
+  return out
 }
-
-const sortActions = (a: ActionTask, b: ActionTask) =>
-  PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority] ||
-  Number(b.blind_spot_flagged) - Number(a.blind_spot_flagged)
 
 const newId = (prefix: string) => `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
 
@@ -150,7 +152,8 @@ export function getOverview(req: MockRequest): OverviewResponse {
   const h = parseHorizon(req.query)
   const state = stateFilter(req.query)
   const list = districtsIn(data, state)
-  const summaries = list.map((d) => summaryFor(data, d, h))
+  const dismissed = dismissedIds(data)
+  const summaries = list.map((d) => summaryFor(data, d, h, dismissed.has(d.ref.id)))
   const prevIssue = addMonths(data.asOf, -1)
 
   const high = summaries.filter((s) => s.forecast && isHighOrAbove(s.forecast.category))
@@ -183,7 +186,6 @@ export function getOverview(req: MockRequest): OverviewResponse {
       .slice(0, 5),
     recommended_actions: allActions(data)
       .filter((a) => a.status !== 'completed' && (!state || a.district.state === state))
-      .sort(sortActions)
       .slice(0, 5),
     map: summaries,
   }
@@ -197,7 +199,10 @@ export function getRiskMap(req: MockRequest): RiskMapResponse {
     last_run_at: data.lastRunAt,
     source: SRC,
     horizon: h,
-    districts: data.districts.map((d) => summaryFor(data, d, h)),
+    districts: (() => {
+      const dismissed = dismissedIds(data)
+      return data.districts.map((d) => summaryFor(data, d, h, dismissed.has(d.ref.id)))
+    })(),
   }
 }
 
@@ -283,15 +288,16 @@ export function reviewBlindSpot(req: MockRequest): BlindSpotReviewResponse {
 
 export function listActions(req: MockRequest): ActionListResponse {
   const data = ds()
+  const state = stateFilter(req.query)
   const district = req.query.get('district')
   const priority = req.query.get('priority')
   const status = req.query.get('status')
   return {
     items: allActions(data)
+      .filter((a) => !state || a.district.state === state)
       .filter((a) => !district || a.district.id === district)
       .filter((a) => !priority || a.priority === priority)
-      .filter((a) => !status || a.status === status)
-      .sort(sortActions),
+      .filter((a) => !status || a.status === status),
   }
 }
 
@@ -303,18 +309,24 @@ export function createAction(req: MockRequest): ActionMutationResponse {
   const d = getDistrictOr404(data, parsed.data.district_id)
   const f = peakForecast(data, d)
   const bs = blindSpotFor(data, d, data.asOf)
+  const st = blindSpotState(bs, useMockDb.getState().reviews[bs.id] ?? [])
+  const counts = st.status === 'flagged'
   const now = new Date().toISOString()
   const actor = { actor_name: actorName(req.role), actor_role: req.role, created_at: now }
-  const q = quadrantFor(isHighOrAbove(f.category), bs.flagged)
+  const q = quadrantFor(isHighOrAbove(f.category), counts)
+  const id = newId('act-manual')
   const action: ActionTask = {
-    id: newId('act'),
+    id,
+    origin: 'manual',
     district: d.ref,
     severity: f.category,
-    blind_spot_flagged: bs.flagged,
+    blind_spot_flagged: counts,
+    blind_spot_status: st.status,
     quadrant: q,
     reason:
       parsed.data.reason ??
-      `${riskBand(f.category).label} risk (${likelihoodWord(f.probability)}, ${Math.round(f.probability * 100)}%)${bs.flagged ? ' and a potential blind spot (experimental)' : ''}.`,
+      `${riskBand(f.category).label} risk (${likelihoodWord(f.probability)}, ${Math.round(f.probability * 100)}%)${counts ? ' and a potential blind spot (experimental)' : ''}.`,
+    context_note: null,
     suggested_action: parsed.data.suggested_action || DECISION_MATRIX[q].action,
     priority: parsed.data.priority,
     responsible_team: parsed.data.responsible_team,
@@ -322,14 +334,14 @@ export function createAction(req: MockRequest): ActionMutationResponse {
     status: 'pending',
     notes: [],
     history: [
-      { id: newId('h'), change: 'created', from: null, to: 'pending', ...actor },
-      ...(parsed.data.assignee ? [{ id: newId('h'), change: 'assigned' as const, from: null, to: parsed.data.assignee, ...actor }] : []),
+      { id: `${id}-created`, change: 'created', from: null, to: 'pending', ...actor },
+      ...(parsed.data.assignee ? [{ id: `${id}-assigned`, change: 'assigned' as const, from: null, to: parsed.data.assignee, ...actor }] : []),
     ],
     created_at: now,
     updated_at: now,
     source: SRC,
   }
-  saveActions([action, ...allActions(data)])
+  useMockDb.setState((db) => ({ manualActions: [...db.manualActions, action] }))
   return { action, demo: true }
 }
 
@@ -338,31 +350,56 @@ export function updateAction(req: MockRequest): ActionMutationResponse {
   const parsed = updateActionSchema.safeParse(req.body)
   if (!parsed.success) throw new MockHttpError(422, parsed.error.issues[0]?.message ?? 'Invalid update')
   const data = ds()
-  const list = allActions(data)
-  const current = list.find((a) => a.id === req.params.id)
+  const id = req.params.id!
+  const current = allActions(data).find((a) => a.id === id)
   if (!current) throw new MockHttpError(404, 'Action not found')
+  const u = parsed.data
+  const manual = current.origin === 'manual'
+  if (u.priority && u.priority !== current.priority && !manual)
+    throw new MockHttpError(422, 'Priority of generated tasks follows the decision-matrix rules.')
+
   const now = new Date().toISOString()
   const actor = { actor_name: actorName(req.role), actor_role: req.role, created_at: now }
-  const next: ActionTask = { ...current, history: [...current.history], notes: [...current.notes], updated_at: now }
-  const u = parsed.data
+  const edit: ActionEdit = { notes: [], history: [], updated_at: now }
   if (u.status && u.status !== current.status) {
-    next.history.push({ id: newId('h'), change: 'status', from: current.status, to: u.status, ...actor })
-    next.status = u.status
-  }
-  if (u.priority && u.priority !== current.priority) {
-    next.history.push({ id: newId('h'), change: 'priority', from: current.priority, to: u.priority, ...actor })
-    next.priority = u.priority
+    edit.status = u.status
+    edit.history.push({ id: newId('h'), change: 'status', from: current.status, to: u.status, ...actor })
   }
   if (u.assignee !== undefined && u.assignee !== current.assignee) {
-    next.history.push({ id: newId('h'), change: 'assigned', from: current.assignee, to: u.assignee, ...actor })
-    next.assignee = u.assignee
+    edit.assignee = u.assignee
+    edit.history.push({ id: newId('h'), change: 'assigned', from: current.assignee, to: u.assignee, ...actor })
   }
   if (u.note) {
-    next.notes.push({ id: newId('n'), text: u.note, author_name: actor.actor_name, author_role: req.role, created_at: now })
-    next.history.push({ id: newId('h'), change: 'note', from: null, to: u.note, ...actor })
+    edit.notes.push({ id: newId('n'), text: u.note, author_name: actor.actor_name, author_role: req.role, created_at: now })
+    edit.history.push({ id: newId('h'), change: 'note', from: null, to: u.note, ...actor })
   }
-  saveActions(list.map((a) => (a.id === next.id ? next : a)))
-  return { action: next, demo: true }
+
+  if (manual) {
+    const next: ActionTask = {
+      ...current,
+      status: edit.status ?? current.status,
+      assignee: edit.assignee !== undefined ? edit.assignee : current.assignee,
+      priority: u.priority ?? current.priority,
+      notes: [...current.notes, ...edit.notes],
+      history: [...current.history, ...edit.history],
+      updated_at: now,
+    }
+    useMockDb.setState((db) => ({ manualActions: db.manualActions.map((a) => (a.id === id ? next : a)) }))
+  } else {
+    useMockDb.setState((db) => {
+      const prev = db.actionEdits[id]
+      const merged: ActionEdit = {
+        status: edit.status ?? prev?.status,
+        assignee: edit.assignee !== undefined ? edit.assignee : prev?.assignee,
+        notes: [...(prev?.notes ?? []), ...edit.notes],
+        history: [...(prev?.history ?? []), ...edit.history],
+        updated_at: now,
+      }
+      return { actionEdits: { ...db.actionEdits, [id]: merged } }
+    })
+  }
+  const action = allActions(data).find((a) => a.id === id)!
+  return { action, demo: true }
 }
 
 export function getModelPerformance(): ModelPerformanceResponse {

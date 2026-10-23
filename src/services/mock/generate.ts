@@ -10,10 +10,9 @@ import {
   blindSpotBand,
 } from '@/config/blindspot'
 import { DEMO_SEED, DEMO_SERIES_START } from '@/config/demo'
-import { categorize, isHighOrAbove, likelihoodWord, OUTBREAK_PERCENTILE, riskBand, STALE_AFTER_MONTHS } from '@/config/risk'
+import { categorize, isHighOrAbove, OUTBREAK_PERCENTILE, riskBand, STALE_AFTER_MONTHS } from '@/config/risk'
 import { addMonths, calendarMonth, formatInt, formatMonthShort, monthsBetween } from '@/lib/format'
 import type {
-  ActionTask,
   BaselinePoint,
   BlindSpotAssessment,
   BlindSpotComponent,
@@ -522,13 +521,14 @@ export function quadrantFor(highRisk: boolean, flagged: boolean): DecisionQuadra
   return flagged ? 'low_risk_blind_spot' : 'low_risk_no_blind_spot'
 }
 
-export function summaryFor(ds: Dataset, d: DistrictData, h: Horizon): DistrictSummary {
+/** `blindSpotDismissed`: an officer dismissed the flag, so the matrix treats it as no blind spot. */
+export function summaryFor(ds: Dataset, d: DistrictData, h: Horizon, blindSpotDismissed = false): DistrictSummary {
   const f = forecastFor(d, ds.asOf, h, ds.asOf)
   const bs = blindSpotFor(ds, d, ds.asOf)
   const reasons = reasonsFor(ds, d, ds.asOf, f)
   const fresh = freshnessFor(d, ds.asOf)
   const latest = recentObs(d, ds.asOf, 1)[0]?.obs
-  const q = quadrantFor(isHighOrAbove(f.category), bs.flagged)
+  const q = quadrantFor(isHighOrAbove(f.category), bs.flagged && !blindSpotDismissed)
   return {
     district: d.ref,
     forecast: f,
@@ -550,54 +550,3 @@ export function summaryFor(ds: Dataset, d: DistrictData, h: Horizon): DistrictSu
 export function peakForecast(ds: Dataset, d: DistrictData): HorizonForecast {
   return HORIZONS.map((h) => forecastFor(d, ds.asOf, h, ds.asOf)).reduce((a, b) => (b.probability > a.probability ? b : a))
 }
-
-const PRIORITY_RANK = { urgent: 0, high: 1, medium: 2, low: 3 } as const
-
-export function seedActions(ds: Dataset): ActionTask[] {
-  const at = ds.lastRunAt
-  const tasks: ActionTask[] = []
-  for (const d of ds.districts) {
-    const f = peakForecast(ds, d)
-    const bs = blindSpotFor(ds, d, ds.asOf)
-    const q = quadrantFor(isHighOrAbove(f.category), bs.flagged)
-    if (q === 'low_risk_no_blind_spot') continue
-    const rule = DECISION_MATRIX[q]
-    const band = riskBand(f.category)
-    const riskText = `${band.label} risk in ${plural(f.horizon, 'month')} (${likelihoodWord(f.probability)}, ${Math.round(f.probability * 100)}%)`
-    const reason = bs.flagged ? `${riskText} and a potential blind spot (experimental score ${bs.score}).` : `${riskText}.`
-    tasks.push({
-      id: `act-${d.ref.id}`,
-      district: d.ref,
-      severity: f.category,
-      blind_spot_flagged: bs.flagged,
-      quadrant: q,
-      reason,
-      suggested_action: rule.action,
-      priority: rule.priority,
-      responsible_team: rule.team,
-      assignee: null,
-      status: 'pending',
-      notes: [],
-      history: [
-        { id: `h-${d.ref.id}-0`, change: 'created', from: null, to: 'pending', actor_name: 'Monthly batch run', actor_role: 'district_officer', created_at: at },
-      ],
-      created_at: at,
-      updated_at: at,
-      source: SRC,
-    })
-  }
-  // A couple of tasks already under way so the list isn't uniform.
-  for (const t of tasks) {
-    if (t.district.name === 'Ernakulam' || t.district.name === 'Mumbai') {
-      t.status = 'in_progress'
-      t.assignee = t.district.name === 'Mumbai' ? 'Vector control unit' : 'Hospital preparedness cell'
-      t.history.push(
-        { id: `h-${t.id}-1`, change: 'assigned', from: null, to: t.assignee, actor_name: 'Demo District Officer', actor_role: 'district_officer', created_at: at },
-        { id: `h-${t.id}-2`, change: 'status', from: 'pending', to: 'in_progress', actor_name: 'Demo District Officer', actor_role: 'district_officer', created_at: at },
-      )
-    }
-  }
-  return tasks.sort((a, b) => PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority] || Number(b.blind_spot_flagged) - Number(a.blind_spot_flagged))
-}
-
-export { PRIORITY_RANK }

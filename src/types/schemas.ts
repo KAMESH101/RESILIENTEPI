@@ -23,7 +23,7 @@ export type BlindSpotReviewRequest = z.output<typeof blindSpotReviewSchema>
 export const createActionSchema = z.object({
   district_id: z.string().min(1, 'Choose a district'),
   suggested_action: z.string().trim().min(3, 'Describe the action').max(300),
-  priority: z.enum(['urgent', 'high', 'medium', 'low']),
+  priority: z.enum(['p1', 'p2', 'p3']),
   responsible_team: z.enum([
     'district_surveillance_unit',
     'rapid_response_team',
@@ -37,16 +37,26 @@ export const createActionSchema = z.object({
 })
 export type CreateActionRequest = z.output<typeof createActionSchema>
 
-/** PATCH /actions/{action_id} — any subset of fields; at least one required. */
+/** Minimum length of the note required when a task is marked Completed. */
+export const COMPLETION_NOTE_MIN = 5
+
+/**
+ * PATCH /actions/{action_id} — any subset of fields; at least one required.
+ * Marking a task Completed requires a short note.
+ */
 export const updateActionSchema = z
   .object({
     status: z.enum(['pending', 'in_progress', 'completed']).optional(),
-    priority: z.enum(['urgent', 'high', 'medium', 'low']).optional(),
-    assignee: z.string().trim().max(80).nullable().optional(),
-    note: z.string().trim().min(1, 'Note cannot be empty').max(500).optional(),
+    priority: z.enum(['p1', 'p2', 'p3']).optional(),
+    assignee: z.string().trim().min(2, 'Enter a team or unit name').max(80, 'Keep it under 80 characters').nullable().optional(),
+    note: z.string().trim().max(500, 'Keep the note under 500 characters').optional(),
   })
-  .refine((v) => Object.values(v).some((x) => x !== undefined), {
+  .refine((v) => Object.values(v).some((x) => x !== undefined && x !== ''), {
     message: 'Nothing to update',
+  })
+  .refine((v) => v.status !== 'completed' || (v.note?.length ?? 0) >= COMPLETION_NOTE_MIN, {
+    message: 'Add a short note on what was done before marking it completed',
+    path: ['note'],
   })
 export type UpdateActionRequest = z.output<typeof updateActionSchema>
 

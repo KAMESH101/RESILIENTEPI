@@ -47,7 +47,7 @@ export const reviewBlindSpot = (id: string, body: BlindSpotReviewRequest) =>
 
 export const listActions = (q: ActionListQuery = {}) =>
   apiRequest<ActionListResponse>('GET', '/actions', {
-    query: { district: q.district, priority: q.priority, status: q.status },
+    query: { state: q.state, district: q.district, priority: q.priority, status: q.status },
   })
 
 export const createAction = (body: CreateActionRequest) =>

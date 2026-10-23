@@ -1,5 +1,40 @@
-import { PhasePlaceholder } from './PhasePlaceholder'
+import { useTranslation } from 'react-i18next'
+import { useFilters } from '@/app/filters'
+import { PageHeader } from '@/app/layout/PageHeader'
+import { useRunInfo } from '@/app/useRunInfo'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { MethodTab, ResultsTab, SourcesTab } from '@/features/methodology/tabs'
 
+const TABS = ['method', 'results', 'sources'] as const
+type Tab = (typeof TABS)[number]
+
+/** One page, three tabs; the active tab lives in the URL (?tab=). */
 export default function MethodologyData() {
-  return <PhasePlaceholder pageKey="methodology" phase={6} note="Method, model results (validation pending) and data-source status arrive in Phase 6." />
+  const { t } = useTranslation()
+  const { params, setParam } = useFilters()
+  const run = useRunInfo()
+  const tabParam = params.get('tab')
+  const tab: Tab = (TABS as readonly string[]).includes(tabParam ?? '') ? (tabParam as Tab) : 'method'
+
+  return (
+    <div className="flex flex-col gap-6">
+      <PageHeader title={t('pages.methodology.title')} purpose={t('pages.methodology.purpose')} lastRunAt={run.lastRunAt} asOf={run.asOf} />
+      <Tabs value={tab} onValueChange={(v) => setParam({ tab: v === 'method' ? null : v })} className="flex flex-col gap-4">
+        <TabsList className="w-full max-w-xl sm:w-fit">
+          <TabsTrigger value="method">{t('methodology.method')}</TabsTrigger>
+          <TabsTrigger value="results">{t('methodology.results')}</TabsTrigger>
+          <TabsTrigger value="sources">{t('methodology.sources')}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="method">
+          <MethodTab />
+        </TabsContent>
+        <TabsContent value="results">
+          <ResultsTab />
+        </TabsContent>
+        <TabsContent value="sources">
+          <SourcesTab />
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
 }

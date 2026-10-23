@@ -77,7 +77,9 @@ const SHOTS: { name: string; path: string; overlay?: boolean; noBoundary?: boole
       await page.emulateMedia({ media: 'print' })
     },
   },
-  { name: 'methodology-placeholder', path: '/methodology' },
+  { name: 'methodology-method', path: '/methodology' },
+  { name: 'methodology-results', path: '/methodology?tab=results' },
+  { name: 'methodology-sources', path: '/methodology?tab=sources' },
 ]
 
 async function settle(page: Page) {

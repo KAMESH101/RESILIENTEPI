@@ -91,5 +91,10 @@
     "generate": "Generate a bulletin",
     "exports": "Exports",
     "preview": "Bulletin preview"
+  },
+  "methodology": {
+    "method": "Method",
+    "results": "Model results",
+    "sources": "Data sources"
   }
 }

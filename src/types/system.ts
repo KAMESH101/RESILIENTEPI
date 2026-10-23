@@ -43,7 +43,8 @@ export type DataSourceHealth = 'ok' | 'degraded' | 'unavailable' | 'not_connecte
 
 /** GET /data-sources — one entry per upstream source. */
 export interface DataSourceStatus {
-  id: 'hmis' | 'idsp' | 'ncvbdc' | 'imd' | 'open_meteo'
+  /** `demo_generator` = the seeded synthetic data shown in demo mode. */
+  id: 'hmis' | 'idsp' | 'ncvbdc' | 'imd' | 'open_meteo' | 'demo_generator'
   name: string
   description: string
   type_tag: DataSourceTypeTag

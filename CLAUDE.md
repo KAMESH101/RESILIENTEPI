@@ -47,6 +47,10 @@ First Playwright run needs `npx playwright install chromium`. QA pins
   `innerlines` layer (borders shared by two districts) is drawn as lines, so no
   coastal/international edge is ever stroked — hover darkens, focus uses a pin.
   Missing/invalid file → "Boundary file not loaded" + labelled schematic view + table.
+- **Methodology** (`config/methodology.ts`): describes the method only. Model
+  results come from `GET /model-performance` (demo: "Validation pending", no
+  numbers). Only one of the three blind-spot validation tests is specified —
+  never invent the other two.
 - **Blind-spot bands** (≥50 flagged, 35–49 watch) are a demo assumption and the
   UI says so. **Likelihood words** derive from `RISK_BANDS` in `config/risk.ts` only.
 - **Provenance:** every record has `source`. `SyntheticTag` always tags synthetic;

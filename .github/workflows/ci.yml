@@ -46,7 +46,7 @@ jobs:
         env:
           PW_REPORT_DIR: playwright-report/behaviour
           PW_RESULTS_DIR: test-results/behaviour
-        run: npx playwright test qa/flows.spec.ts qa/phase5.spec.ts qa/geo.spec.ts qa/boundary-file.spec.ts
+        run: npx playwright test qa/flows.spec.ts qa/phase5.spec.ts qa/phase6.spec.ts qa/geo.spec.ts qa/boundary-file.spec.ts
 
       - name: Playwright — visual (375 / 768 / 1440 px)
         if: ${{ !cancelled() }}

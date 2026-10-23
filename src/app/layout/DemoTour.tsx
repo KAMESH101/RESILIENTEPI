@@ -16,7 +16,9 @@ export function DemoTour() {
   return (
     <aside
       aria-label="Demo tour"
-      className="fixed inset-x-3 bottom-3 z-40 rounded-xl border bg-surface p-4 shadow-xl md:inset-x-auto md:right-6 md:bottom-6 md:w-80 print:hidden"
+      // Above the district panel's overlay (z-50) and clickable while it is open, so a
+      // presenter can press Next without closing the panel first (the click closes it).
+      className="pointer-events-auto fixed inset-x-3 bottom-3 z-[60] rounded-xl border bg-surface p-4 shadow-xl md:inset-x-auto md:right-6 md:bottom-6 md:w-80 print:hidden"
     >
       <div className="flex items-start justify-between gap-2">
         <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-teal-600 uppercase">

@@ -423,8 +423,19 @@ export function getModelPerformance(): ModelPerformanceResponse {
 
 export function getDataSources(): DataSourcesResponse {
   const demo = 'Demo mode: not connected. Figures in the app are synthetic.'
+  const data = ds()
   return {
     items: [
+      {
+        id: 'demo_generator',
+        name: 'ResilientEpi demo generator',
+        description: 'Seeded synthetic data for 60 districts in 12 states. Everything shown in demo mode comes from here.',
+        type_tag: 'synthetic_demo',
+        status: 'ok',
+        last_success_at: data.lastRunAt,
+        coverage: { from: '2018-01', to: data.asOf },
+        warnings: ['Synthetic demo data — not real surveillance data. Not for operational use.'],
+      },
       {
         id: 'hmis',
         name: 'HMIS',

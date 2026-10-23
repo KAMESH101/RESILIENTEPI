@@ -92,12 +92,42 @@ not official. Rebuild with `scripts/build-demo-boundaries.sh`; to add LGD codes
 see [`scripts/simplify-boundaries.md`](scripts/simplify-boundaries.md). Without a
 valid file the app shows a labelled schematic view plus a table.
 
-> Status: Phases 1–5 (app shell, seeded mock API, Overview, National Risk Map,
-> Blind-Spot Analysis, Action Centre, District Detail, Reports & Bulletins)
-> complete. Hindi and Tamil bulletin templates are marked "Translation pending
-> review" until a fluent reader checks them. Full documentation (live API
-> switch, LGD CSV, backend plan) follows with the last phase. See `CLAUDE.md`
-> and `docs/PROMPT.md`.
+### LGD codes (`public/data/lgd_districts.csv`, optional)
+
+LGD codes are **never invented**. Without this file every `lgd_code` is null
+and the map matches districts to shapes by name (and says so on the map).
+To supply codes, add the Local Government Directory district list as:
+
+```csv
+lgd_code,district,state,census2011_code
+```
+
+The mock API fills each demo district's `lgd_code` from this file (matched on
+state + district name). To join codes into the boundary file as well, see
+[`scripts/simplify-boundaries.md`](scripts/simplify-boundaries.md).
+
+> Status: Phases 1–6 complete (app shell, seeded mock API, Overview, National
+> Risk Map, Blind-Spot Analysis, Action Centre, District Detail, Reports &
+> Bulletins, Methodology & Data). Hindi and Tamil bulletin templates are marked
+> "Translation pending review" until a fluent reader checks them. See
+> `CLAUDE.md` and `docs/PROMPT.md`.
+
+## Switching to the live API
+
+The only change is the environment:
+
+```bash
+VITE_API_MODE=live
+VITE_API_BASE_URL=https://api.example.org/api/v1   # or /api/v1 behind a reverse proxy
+```
+
+The client (`src/services/api.ts`) then calls the backend with `fetch` and
+never loads the mock code. The backend must implement the endpoints below with
+the request/response shapes in `src/types/` (snake_case, zod schemas in
+`src/types/schemas.ts`). Records carry `source: "observed" | "model"`; anything
+still synthetic keeps `source: "synthetic"` and is tagged in the UI. Requests
+send cookies (`credentials: "include"`), so serve the API from the same site or
+configure CORS for it. No API keys live in the frontend.
 
 ## Bulletins and exports
 
@@ -111,3 +141,74 @@ valid file the app shows a labelled schematic view plus a table.
   on every page.
 - CSV exports (Reports page only): UTF-8 with BOM, a `source` column, and an
   apostrophe before any cell starting with `=`, `+`, `-` or `@`.
+
+## Backend plan (future work — not built in this repo)
+
+**Stack:** Python FastAPI, PostgreSQL, pandas, GeoPandas, imdlib, LightGBM,
+statsmodels, SHAP.
+
+### Endpoints (`/api/v1`)
+
+| Method | Path | Purpose |
+|---|---|---|
+| GET | `/overview?horizon=&state=` | KPIs, attention items, top risk, blind-spot alerts, top actions |
+| GET | `/risk-map?horizon=` | One summary per district (map and table) |
+| GET | `/districts?search=&state=` | District list and states |
+| GET | `/districts/{district_id}` | District detail: forecasts, baselines, history, blind spot, tasks |
+| GET | `/districts/{district_id}/explanations?horizon=` | SHAP top reasons, or `not_available` |
+| GET | `/blind-spots?state=` | Experimental blind-spot assessments with reviews |
+| POST | `/blind-spots/{id}/review` | Acknowledge / Flag for audit / Dismiss (+ reason) |
+| GET | `/actions?district=&priority=&status=&state=` | Tasks from the decision matrix, audit flags and officers |
+| POST | `/actions` | Create a task |
+| PATCH | `/actions/{action_id}` | Assign, change status (Completed needs a note), add note |
+| POST | `/reports/generate` | Language-neutral bulletin facts (frontend renders EN/HI/TA) |
+| GET | `/model-performance` | Backtest metrics vs baselines, or `pending` |
+| GET | `/data-sources` | Source type, status, last update, coverage, warnings |
+| POST | `/auth/login` | **Future work only** — not used by the demo |
+
+### PostgreSQL tables
+
+| Table | Holds |
+|---|---|
+| `districts` | `lgd_code` (PK), name, state, `census2011_code` |
+| `observations_monthly` | `lgd_code`, month, reported cases, tests, positivity, fever admissions, reporting completeness, source, ingested_at (missing = no row, never 0) |
+| `climate_monthly` | `lgd_code`, month, rainfall, temperature, humidity; ONI by month |
+| `model_runs` | run id, as-of month, model version, started/finished, status |
+| `forecasts` | run, `lgd_code`, horizon, target month, probability, category, expected cases, interval (nullable), threshold |
+| `explanations` | run, `lgd_code`, horizon, rank, feature, SHAP value, sentence |
+| `blind_spot_scores` | run, `lgd_code`, score, band, five components, evidence, data-quality warnings |
+| `blind_spot_reviews` | assessment, decision, reason, user, role, created_at |
+| `actions`, `action_events`, `action_notes` | tasks with stable ids, every change as an event (history), notes |
+| `model_performance` | model version, model, horizon, state, metric, value, evaluated_at |
+| `data_sources` | id, type tag, status, last success, coverage |
+| `users`, `roles`, `audit_log` | accounts, role assignments, every write with who/when/what |
+
+### Monthly batch pipeline
+
+```
+ingest (HMIS, IDSP/IHIP, NCVBDC, IMD via imdlib, Open-Meteo)
+  → LGD match (all sources joined on LGD district codes)
+  → features (case lags 1–3 + same month last year, climate lags 1–3, ONI,
+              neighbour cases, testing, fever admissions, month/season)
+  → LightGBM (national pooled classifier) / negative-binomial counts + baselines
+  → SHAP (top 3 reasons per district and horizon)
+  → blind-spot score (five weighted parts, config-driven)
+  → publish (write the run, flip "last monthly run", invalidate caches)
+```
+
+Runs once a month for 700+ districts; "Last updated" in the UI is the finish
+time of the last run, not real time. A walk-forward backtest writes
+`model_performance` before any results are shown.
+
+### Access control (planned)
+
+| Role | Can |
+|---|---|
+| Admin | Manage users, roles, data sources and configuration |
+| State Officer | Everything a District Officer can, for all districts in their state |
+| District Officer | Review blind spots and edit actions for their district(s) |
+| Evaluator | Read-only |
+
+Authentication via `POST /api/v1/auth/login` (session cookie); every write is
+recorded in `audit_log`. The demo has only District Officer and Evaluator,
+switched from the profile menu, with no login.

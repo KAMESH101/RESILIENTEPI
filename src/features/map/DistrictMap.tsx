@@ -52,6 +52,7 @@ export function DistrictMap({
           <Suspense fallback={<BlockSkeleton className={compact ? 'h-[26rem]' : 'h-[480px]'} />}>
             <RiskChoropleth
               features={loaded.features}
+              innerLines={loaded.innerLines}
               join={join}
               onSelect={onSelect}
               focusId={focusId}

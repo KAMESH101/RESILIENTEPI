@@ -43,8 +43,10 @@ First Playwright run needs `npx playwright install chromium`. QA pins
   fails if any other state gets in. On-map credit: "District boundaries ©
   DataMeet (CC BY 2.5 IN) · indicative, not official". No basemap tiles.
   Districts with no 2011 shape (Medchal–Malkajgiri) are never drawn inside a
-  parent; they get a note in the table/panel. Missing/invalid file → "Boundary
-  file not loaded" + labelled schematic view + table.
+  parent; they get a note in the table/panel. Fills have NO stroke; only the
+  `innerlines` layer (borders shared by two districts) is drawn as lines, so no
+  coastal/international edge is ever stroked — hover darkens, focus uses a pin.
+  Missing/invalid file → "Boundary file not loaded" + labelled schematic view + table.
 - **Blind-spot bands** (≥50 flagged, 35–49 watch) are a demo assumption and the
   UI says so. **Likelihood words** derive from `RISK_BANDS` in `config/risk.ts` only.
 - **Provenance:** every record has `source`. `SyntheticTag` always tags synthetic;

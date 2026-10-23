@@ -28,8 +28,12 @@ Simplified with mapshaper and filtered to demo states:
 - Telangana's 10 districts were taken from the 2011 "Andhra Pradesh" layer
   and relabelled "Telangana"; "NCT of Delhi" was relabelled "Delhi".
 - Fields reduced to `district`, `state`, `censuscode`.
-- Topology cleaned, then simplified to 8% of vertices (`keep-shapes`),
-  quantised to 1e5.
+- Topology cleaned, simplified to 8% of vertices (`keep-shapes`), cleaned
+  again, quantised to 1e5.
+- Added an `innerlines` layer (mapshaper `-innerlines`): only the borders
+  shared by two districts. The app draws district fills with no outline and
+  strokes only these inner lines, so no coastal, state-union or international
+  edge is drawn as a line.
 
 Reproduce with `scripts/build-demo-boundaries.sh path/to/2011_Dist.shp`.
 

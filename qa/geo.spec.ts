@@ -20,22 +20,35 @@ for (const width of [375, 768, 1440]) {
     })
     await page.setViewportSize({ width, height: width < 768 ? 812 : 900 })
     await page.goto('/map?view=map&h=2&focus=tn-madurai')
-    await expect(page.locator('.leaflet-overlay-pane path').first()).toBeAttached({ timeout: 15_000 })
+    await expect(page.locator('.leaflet-re-fills-pane path').first()).toBeAttached({ timeout: 15_000 })
     await expect(page.locator('.leaflet-control-attribution')).toHaveText(ATTRIBUTION)
     await page.waitForTimeout(900) // flyToBounds
     await page.screenshot({ path: `qa/screenshots/geo-map-${width}.png`, fullPage: true })
     await page.goto('/')
-    await expect(page.locator('.leaflet-overlay-pane path').first()).toBeAttached({ timeout: 15_000 })
+    await expect(page.locator('.leaflet-re-fills-pane path').first()).toBeAttached({ timeout: 15_000 })
     await page.screenshot({ path: `qa/screenshots/geo-overview-${width}.png`, fullPage: true })
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0)
     expect(problems).toEqual([])
   })
 }
 
+test('no district outline is stroked; only inner borders are drawn as lines', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/map?view=map&focus=gj-surat')
+  const fills = page.locator('.leaflet-re-fills-pane path')
+  await expect(fills.first()).toBeAttached({ timeout: 15_000 })
+  expect(await fills.count()).toBeGreaterThan(300)
+  const stroked = await page.locator('.leaflet-re-fills-pane path, .leaflet-re-hatch-pane path').evaluateAll((els) => els.filter((e) => (e.getAttribute('stroke') ?? 'none') !== 'none').length)
+  expect(stroked, 'fills and hatch overlay must have no stroke').toBe(0)
+  await expect(page.locator('.leaflet-re-lines-pane path').first()).toBeAttached()
+  // Focus is shown with a pin, not an outline.
+  await expect(page.locator('.re-pin')).toHaveCount(1)
+})
+
 test('clicking a district shape opens the shared panel', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/map?view=map&focus=tn-madurai')
-  await expect(page.locator('.leaflet-overlay-pane path').first()).toBeAttached({ timeout: 15_000 })
+  await expect(page.locator('.leaflet-re-fills-pane path').first()).toBeAttached({ timeout: 15_000 })
   await page.waitForTimeout(900)
   // Madurai is centred by the focus zoom.
   const box = (await page.locator('.leaflet-container').first().boundingBox())!

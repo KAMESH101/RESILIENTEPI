@@ -10,17 +10,19 @@ import { riskBand } from '@/config/risk'
 import { formatPct } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import type { DistrictSummary } from '@/types'
-import type { BoundaryFeature } from './boundaries'
+import type { BoundaryFeature, InnerLines } from './boundaries'
 import type { JoinResult } from './join'
 import { PATTERN } from './patterns'
 
 export interface ChoroplethProps {
   features: BoundaryFeature[]
+  /** Borders between districts only; outer edges are never stroked. */
+  innerLines: InnerLines
   join: JoinResult
   onSelect: (id: string) => void
   showRisk?: boolean
   showBlindSpot?: boolean
-  /** District to outline and zoom to (e.g. from search). */
+  /** District to pin and zoom to (e.g. from search). */
   focusId?: string | null
   /** Records not matching the page filters are dimmed, not hidden. */
   isDimmed?: (s: DistrictSummary) => boolean
@@ -42,19 +44,46 @@ function tooltipHtml(f: BoundaryFeature, s: DistrictSummary | null): string {
   return html
 }
 
+/**
+ * Fills only — no stroke. Outlines would trace coastal and international
+ * edges; borders between districts come from the separate inner-lines layer.
+ */
 function baseStyle(s: DistrictSummary | null, showRisk: boolean, dimmed: boolean): L.PathOptions {
-  if (!s?.forecast) return { fillColor: PATTERN.noData, fillOpacity: 1, color: '#CBD5E1', weight: 0.4 }
+  if (!s?.forecast) return { stroke: false, fillColor: PATTERN.noData, fillOpacity: 1 }
   return {
-    fillColor: showRisk ? RISK_STYLE[s.forecast.category].fill : '#FFFFFF',
-    fillOpacity: dimmed ? 0.18 : showRisk ? 0.88 : 0.6,
-    color: '#FFFFFF',
-    weight: 0.8,
+    stroke: false,
+    fillColor: showRisk ? RISK_STYLE[s.forecast.category].fill : '#E2E8F0',
+    fillOpacity: dimmed ? 0.18 : showRisk ? 0.88 : 0.9,
   }
 }
+
+/** Fixed stacking: fills < blind-spot hatch < inner district borders < pin. */
+const PANES = [
+  ['re-fills', 400],
+  ['re-hatch', 410],
+  ['re-lines', 420],
+] as const
+
+function ensurePanes(map: L.Map) {
+  for (const [name, z] of PANES) {
+    if (!map.getPane(name)) map.createPane(name).style.zIndex = String(z)
+  }
+  // Hatch and lines never take pointer events, so clicks reach the fills.
+  map.getPane('re-hatch')!.style.pointerEvents = 'none'
+  map.getPane('re-lines')!.style.pointerEvents = 'none'
+}
+
+const PIN_ICON = L.divIcon({
+  className: 're-pin',
+  html: '<svg viewBox="0 0 28 36" width="28" height="36" aria-hidden="true"><path d="M14 1C7 1 1.5 6.4 1.5 13.2 1.5 22.5 14 35 14 35s12.5-12.5 12.5-21.8C26.5 6.4 21 1 14 1Z" fill="#0F2A4A" stroke="#fff" stroke-width="2"/><circle cx="14" cy="13" r="4.5" fill="#fff"/></svg>',
+  iconSize: [28, 36],
+  iconAnchor: [14, 35],
+})
 
 /** Geographic choropleth from the team's boundary file only — no basemap tiles. */
 export function RiskChoropleth({
   features,
+  innerLines,
   join,
   onSelect,
   showRisk = true,
@@ -94,6 +123,7 @@ export function RiskChoropleth({
       >
         <Layers
           fc={fc}
+          innerLines={innerLines}
           join={join}
           onSelect={onSelect}
           showRisk={showRisk}
@@ -153,6 +183,7 @@ function FitOnStateChange({ state, fit }: { state: string | null; fit: () => voi
 
 function Layers({
   fc,
+  innerLines,
   join,
   onSelect,
   showRisk,
@@ -161,6 +192,7 @@ function Layers({
   isDimmed,
 }: {
   fc: GeoJSON.FeatureCollection
+  innerLines: InnerLines
   join: JoinResult
   onSelect: (id: string) => void
   showRisk: boolean
@@ -175,27 +207,26 @@ function Layers({
     onSelectRef.current = onSelect
   }, [onSelect])
 
-  // Forecast-risk layer (interactive).
+  // Forecast-risk fills (interactive).
   useEffect(() => {
+    ensurePanes(map)
     const layers: L.Path[] = []
     const styleOf = (i: number) => {
       const s = join.byFeature[i] ?? null
-      const st = baseStyle(s, showRisk, !!(s && isDimmed?.(s)))
-      return s?.district.id === focusId ? { ...st, color: '#0F2A4A', weight: 3 } : st
+      return baseStyle(s, showRisk, !!(s && isDimmed?.(s)))
     }
     let i = 0
     const layer = L.geoJSON(fc, {
+      pane: 're-fills',
       onEachFeature: (feature, l) => {
         const idx = i++
         const path = l as L.Path
         layers[idx] = path
         const s = join.byFeature[idx] ?? null
         path.bindTooltip(tooltipHtml(feature as BoundaryFeature, s), { sticky: true, direction: 'top', className: 're-map-tooltip' })
-        path.on('mouseover', () => {
-          path.setStyle({ color: '#0F2A4A', weight: 2 })
-          path.bringToFront()
-        })
-        path.on('mouseout', () => path.setStyle(styleOf(idx)))
+        // Hover darkens the fill instead of outlining the shape.
+        path.on('mouseover', () => path.getElement()?.classList.add('re-hover'))
+        path.on('mouseout', () => path.getElement()?.classList.remove('re-hover'))
         if (s) path.on('click', () => onSelectRef.current(s.district.id))
       },
     })
@@ -206,7 +237,7 @@ function Layers({
     return () => {
       layer.remove()
     }
-  }, [map, fc, join, showRisk, focusId, isDimmed])
+  }, [map, fc, join, showRisk, isDimmed])
 
   // Experimental blind-spot overlay (non-interactive so clicks reach the risk layer).
   useEffect(() => {
@@ -215,14 +246,17 @@ function Layers({
     join.byFeature.forEach((s, i) => {
       if (s?.blind_spot && s.blind_spot.band !== 'none') bandOf.set(fc.features[i]!, s.blind_spot.band)
     })
+    ensurePanes(map)
     const overlay = L.geoJSON(
       { type: 'FeatureCollection', features: [...bandOf.keys()] } as GeoJSON.FeatureCollection,
       {
+        pane: 're-hatch',
         interactive: false,
-        style: (f) => {
-          const flagged = bandOf.get(f as GeoJSON.Feature) === 'flagged'
-          return { fillColor: flagged ? PATTERN.hatch : PATTERN.hatchLight, fillOpacity: 1, color: '#0F2A4A', weight: flagged ? 1.5 : 1, dashArray: flagged ? undefined : '3 3' }
-        },
+        style: (f) => ({
+          stroke: false,
+          fillColor: bandOf.get(f as GeoJSON.Feature) === 'flagged' ? PATTERN.hatch : PATTERN.hatchLight,
+          fillOpacity: 1,
+        }),
       },
     )
     overlay.addTo(map)
@@ -231,14 +265,32 @@ function Layers({
     }
   }, [map, fc, join, showBlindSpot])
 
-  // Zoom to the focused district.
+  // Borders BETWEEN districts only.
+  useEffect(() => {
+    if (!innerLines) return
+    ensurePanes(map)
+    const lines = L.geoJSON(innerLines as GeoJSON.GeoJsonObject, {
+      pane: 're-lines',
+      interactive: false,
+      style: { color: '#FFFFFF', weight: 1, opacity: 0.95 },
+    })
+    lines.addTo(map)
+    return () => {
+      lines.remove()
+    }
+  }, [map, innerLines])
+
+  // Zoom to the focused district and drop a pin on it (no outline).
   useEffect(() => {
     if (!focusId) return
     const idx = join.featureOf.get(focusId)
     const path = idx === undefined ? undefined : layersRef.current[idx]
-    if (path && 'getBounds' in path) {
-      map.flyToBounds((path as L.Polygon).getBounds(), { maxZoom: 7, duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 0.6 })
-      path.bringToFront()
+    if (!path || !('getBounds' in path)) return
+    const poly = path as L.Polygon
+    map.flyToBounds(poly.getBounds(), { maxZoom: 7, duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 0.6 })
+    const pin = L.marker(poly.getCenter(), { icon: PIN_ICON, interactive: false, keyboard: false }).addTo(map)
+    return () => {
+      pin.remove()
     }
   }, [map, focusId, join])
 

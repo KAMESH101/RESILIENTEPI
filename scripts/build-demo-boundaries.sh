@@ -4,6 +4,13 @@
 # J&K / Ladakh / Arunachal Pradesh). See public/geo/NOTICE.md and
 # scripts/simplify-boundaries.md.
 #
+# Output: one TopoJSON with two objects sharing arcs —
+#   districts   polygons, drawn as fills with NO outline
+#   innerlines  only the borders BETWEEN two districts, drawn as lines
+# so no outer (state-union / international / coastal) edge is ever stroked.
+# The second -clean (after -simplify) repairs slivers that would otherwise leave
+# short outer-edge segments in innerlines (qa/boundary-file.spec.ts checks this).
+#
 # Usage: scripts/build-demo-boundaries.sh path/to/2011_Dist.shp
 #   (download 2011_Dist.{shp,shx,dbf,prj} from
 #    https://github.com/datameet/maps/tree/master/Districts/Census_2011)
@@ -24,7 +31,9 @@ npx --yes mapshaper "$SRC" \
   -rename-fields district=DISTRICT,state=ST_NM \
   -filter-fields district,state,censuscode \
   -simplify 8% keep-shapes weighting=0.7 \
+  -clean \
   -rename-layers districts \
-  -o format=topojson quantization=1e5 "$OUT"
+  -innerlines + name=innerlines \
+  -o format=topojson quantization=1e5 'target=*' "$OUT"
 
 echo "Wrote $OUT"

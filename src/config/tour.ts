@@ -27,7 +27,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     title: 'Blind-spot analysis',
     text: 'Kalaburagi reports few cases, but testing is far below the state median — a potential blind spot (experimental).',
-    to: `/blind-spots?district=${TOUR_DISTRICTS.lowRiskBlindSpot}`,
+    to: `/blind-spots?focus=${TOUR_DISTRICTS.lowRiskBlindSpot}`,
   },
   {
     title: 'Action Centre',

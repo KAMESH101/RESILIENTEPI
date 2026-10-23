@@ -1,4 +1,4 @@
-import type { DataSource, DistrictRef, IsoDateTime, Role } from './common'
+import type { DataSource, DistrictRef, IsoDateTime, Role, YearMonth } from './common'
 
 /** The five transparent parts of the experimental blind-spot indicator (prompt §2). */
 export type BlindSpotComponentKey =
@@ -35,6 +35,22 @@ export interface BlindSpotReview {
   created_at: IsoDateTime
 }
 
+/** The numbers behind the five parts, over the recent months used for scoring. */
+export interface BlindSpotMetrics {
+  /** Months (with a report) the score was computed from, oldest first. */
+  months_used: YearMonth[]
+  reported_cases: number | null
+  /** Cases the climate-and-neighbour model expected over the same months. */
+  expected_cases: number | null
+  tests_per_100k: number | null
+  state_median_tests_per_100k: number | null
+  test_positivity: number | null
+  reporting_completeness: number | null
+  /** Change vs the previous 3 months, as a fraction (0.2 = +20%). */
+  fever_admissions_change: number | null
+  reported_cases_change: number | null
+}
+
 export interface BlindSpotAssessment {
   id: string
   district: DistrictRef
@@ -44,6 +60,7 @@ export interface BlindSpotAssessment {
   /** band === "flagged" */
   flagged: boolean
   components: BlindSpotComponent[]
+  metrics: BlindSpotMetrics
   evidence: string[]
   data_quality_warnings: string[]
   reviews: BlindSpotReview[]

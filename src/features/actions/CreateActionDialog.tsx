@@ -180,7 +180,9 @@ function CreateActionForm({ prefill, close }: { prefill: CreateActionPrefill | n
         title="Create this action?"
         description={`${pending ? `${district?.name}: ${pending.suggested_action}` : ''}${isDemoMode ? ` — ${DEMO_NOT_SENT_TEXT}.` : ''}`}
         confirmLabel={mutation.isPending ? 'Creating…' : 'Create action'}
-        onConfirm={() => pending && mutation.mutate(pending)}
+        onConfirm={() => {
+          if (pending) mutation.mutate(pending)
+        }}
       />
     </>
   )

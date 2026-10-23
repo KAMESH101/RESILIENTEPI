@@ -27,12 +27,13 @@ export function ConfirmDialog({
   description: string
   children?: ReactNode
   confirmLabel?: string
-  onConfirm: () => void
+  /** Return false to keep the dialog open (e.g. a field failed validation). */
+  onConfirm: () => boolean | void
   destructive?: boolean
 }) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
+      <AlertDialogContent className="max-h-[90dvh] overflow-y-auto">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
@@ -40,7 +41,12 @@ export function ConfirmDialog({
         {children}
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction variant={destructive ? 'destructive' : 'default'} onClick={onConfirm}>
+          <AlertDialogAction
+            variant={destructive ? 'destructive' : 'default'}
+            onClick={(e) => {
+              if (onConfirm() === false) e.preventDefault()
+            }}
+          >
             {confirmLabel}
           </AlertDialogAction>
         </AlertDialogFooter>

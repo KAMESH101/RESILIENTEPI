@@ -42,6 +42,7 @@ not official. Rebuild with `scripts/build-demo-boundaries.sh`; to add LGD codes
 see [`scripts/simplify-boundaries.md`](scripts/simplify-boundaries.md). Without a
 valid file the app shows a labelled schematic view plus a table.
 
-> Status: Phases 1–2 (app shell, seeded mock API, Overview, National Risk Map)
-> complete. Full documentation (live API switch, LGD CSV, backend plan) is added
-> as the phases complete. See `CLAUDE.md` and `docs/PROMPT.md`.
+> Status: Phases 1–3 (app shell, seeded mock API, Overview, National Risk Map,
+> Blind-Spot Analysis) complete. Full documentation (live API switch, LGD CSV,
+> backend plan) is added as the phases complete. See `CLAUDE.md` and
+> `docs/PROMPT.md`.

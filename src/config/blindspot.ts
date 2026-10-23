@@ -1,4 +1,4 @@
-import type { BlindSpotBand, BlindSpotComponentKey } from '@/types'
+import type { BlindSpotBand, BlindSpotComponentKey, ReviewDecision } from '@/types'
 
 /** Default weights of the experimental blind-spot indicator (prompt §2). Must sum to 1. */
 export const BLIND_SPOT_WEIGHTS: Record<BlindSpotComponentKey, number> = {
@@ -50,3 +50,22 @@ export const BLIND_SPOT_LABEL =
   'Experimental surveillance blind-spot indicator — not proof of under-reporting.'
 
 export const BLIND_SPOT_THRESHOLD_NOTE = `Demo assumption: score ${BLIND_SPOT_FLAG_THRESHOLD}+ = potential blind spot, ${BLIND_SPOT_WATCH_THRESHOLD}–${BLIND_SPOT_FLAG_THRESHOLD - 1} = watch. These cut-offs are not yet validated.`
+
+/** Review decisions (prompt §8 Phase 3): button label, history wording and what it means. */
+export const REVIEW_DECISIONS: Record<ReviewDecision, { label: string; past: string; meaning: string }> = {
+  acknowledge: {
+    label: 'Acknowledge',
+    past: 'Acknowledged',
+    meaning: 'Records that you have seen this alert. Nothing is sent to field teams.',
+  },
+  flag_for_audit: {
+    label: 'Flag for audit',
+    past: 'Flagged for audit',
+    meaning: "Marks this district's testing and reporting for a data-quality audit. A person decides what the audit covers.",
+  },
+  dismiss: {
+    label: 'Dismiss',
+    past: 'Dismissed',
+    meaning: 'Records that you reviewed the evidence and do not treat this as a blind spot. The indicator still updates every month.',
+  },
+}

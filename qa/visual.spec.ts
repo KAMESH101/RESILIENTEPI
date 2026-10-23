@@ -38,7 +38,19 @@ const SHOTS: { name: string; path: string; overlay?: boolean; noBoundary?: boole
   { name: 'map-fallback', path: '/map?view=map&focus=ka-kalaburagi', noBoundary: true },
   { name: 'overview-fallback', path: '/', noBoundary: true },
   { name: 'map-panel', path: '/map?h=2&focus=tn-madurai&district=tn-madurai', overlay: true },
-  { name: 'blind-spots-placeholder', path: '/blind-spots' },
+  { name: 'blind-spots', path: '/blind-spots' },
+  { name: 'blind-spots-focus', path: '/blind-spots?focus=ka-kalaburagi' },
+  { name: 'blind-spots-all-karnataka', path: '/blind-spots?band=all&state=Karnataka' },
+  { name: 'blind-spots-empty', path: '/blind-spots?state=Kerala' },
+  {
+    name: 'blind-spots-review-dialog',
+    path: '/blind-spots',
+    overlay: true,
+    setup: async (page) => {
+      await page.getByRole('button', { name: 'Flag for audit' }).first().click()
+      await page.getByRole('alertdialog').waitFor()
+    },
+  },
   { name: 'actions-placeholder', path: '/actions' },
   { name: 'reports-placeholder', path: '/reports' },
   { name: 'methodology-placeholder', path: '/methodology' },

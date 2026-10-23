@@ -175,3 +175,58 @@ test('risk map opens on the list first on mobile, with a Show map toggle', async
   await expect(page).toHaveURL(/view=map/)
   await expect(page.locator('.leaflet-container')).toBeVisible()
 })
+
+const BS_LABEL = 'Experimental surveillance blind-spot indicator — not proof of under-reporting.'
+
+test('every blind-spot entry and every review dialog carries the experimental label', async ({ page }) => {
+  await page.goto('/blind-spots')
+  await ready(page)
+  const entries = page.locator('article')
+  const n = await entries.count()
+  expect(n).toBeGreaterThan(0)
+  for (let i = 0; i < n; i++) await expect(entries.nth(i).getByText(BS_LABEL)).toBeVisible()
+
+  const first = entries.first()
+  for (const decision of ['Acknowledge', 'Flag for audit', 'Dismiss']) {
+    await first.getByRole('button', { name: decision, exact: true }).click()
+    const dialog = page.getByRole('alertdialog')
+    await expect(dialog.getByText(BS_LABEL)).toBeVisible()
+    await expect(dialog.getByText('Experimental', { exact: true })).toBeVisible()
+    await dialog.getByRole('button', { name: 'Cancel' }).click()
+    await expect(dialog).toHaveCount(0)
+  }
+})
+
+test('blind-spot review: reason validation, confirm, history line, persists, evaluator read-only', async ({ page }) => {
+  await page.goto('/blind-spots?focus=ka-kalaburagi')
+  await ready(page)
+  const entry = page.locator('article').filter({ has: page.getByRole('heading', { name: /Kalaburagi/ }) })
+  await entry.getByRole('button', { name: 'Flag for audit', exact: true }).click()
+  const dialog = page.getByRole('alertdialog')
+  await dialog.getByLabel('Reason (optional)').fill('x'.repeat(501))
+  await dialog.getByRole('button', { name: 'Flag for audit' }).click()
+  await expect(dialog.getByText('Keep the reason under 500 characters')).toBeVisible()
+  await dialog.getByLabel('Reason (optional)').fill('Testing camp scheduled; audit lab registers')
+  await dialog.getByRole('button', { name: 'Flag for audit' }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Flagged for audit: Kalaburagi' })).toBeVisible()
+  const history = entry.getByRole('list', { name: 'Review history for Kalaburagi' })
+  await expect(history).toContainText('Flagged for audit · Demo District Officer (District Officer)')
+  await expect(history).toContainText('“Testing camp scheduled; audit lab registers”')
+
+  await page.reload()
+  await ready(page)
+  await expect(page.getByRole('list', { name: 'Review history for Kalaburagi' })).toContainText('Flagged for audit')
+
+  await page.getByRole('button', { name: /Profile/ }).click()
+  await page.getByRole('menuitemradio', { name: 'Evaluator' }).click()
+  await expect(entry.getByRole('button', { name: 'Acknowledge', exact: true })).toBeDisabled()
+})
+
+test('blind spots: empty state per state offers a next step', async ({ page }) => {
+  await page.goto('/blind-spots?state=Kerala')
+  await ready(page)
+  await expect(page.getByText('No blind spots in this state. Try another state.')).toBeVisible()
+  await page.getByRole('button', { name: 'Show all states' }).click()
+  await expect(page).not.toHaveURL(/state=Kerala/)
+  await expect(page.locator('article').first()).toBeVisible()
+})

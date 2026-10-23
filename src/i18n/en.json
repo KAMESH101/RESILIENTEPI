@@ -78,5 +78,9 @@
     "state": "State",
     "allStates": "All states",
     "clearAll": "Clear all"
+  },
+  "blindSpots": {
+    "ranked": "Ranked by blind-spot score",
+    "evidence": "Supporting evidence"
   }
 }

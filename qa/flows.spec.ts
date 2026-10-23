@@ -283,7 +283,7 @@ test('action centre: watch band gets a P3 verify task; generated tasks never dup
   await ready(page)
   const count = async () => Number((await page.getByRole('status').filter({ hasText: /^Showing/ }).textContent())!.match(/of (\d+)/)![1])
   const before = await count()
-  await page.getByLabel('Priority').click()
+  await page.getByRole('combobox', { name: 'Priority' }).click()
   await page.getByRole('option', { name: /^P2/ }).click()
   await page.getByRole('button', { name: 'Clear all' }).click()
   await page.reload()
@@ -305,7 +305,8 @@ test('action centre ↔ blind spots: Dismiss demotes to "no blind spot" with a n
   for (let i = 0; i < 2; i++) {
     await kalaburagi.getByRole('button', { name: 'Flag for audit', exact: true }).click()
     await page.getByRole('alertdialog').getByRole('button', { name: 'Flag for audit' }).click()
-    await expect(page.getByRole('alertdialog')).toHaveCount(0)
+    // The mock API runs in the page: wait until the review is saved before navigating away.
+    await expect(page.getByRole('list', { name: 'Review history for Kalaburagi' }).getByRole('listitem')).toHaveCount(i + 1)
   }
 
   await page.goto('/actions?dist=tn-madurai')

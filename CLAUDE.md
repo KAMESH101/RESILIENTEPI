@@ -88,6 +88,12 @@ docs/PROMPT.md  the original product brief
 
 ## Gotchas
 
+- **Windows Application Control** on the dev laptop blocks rolldown's native
+  binding, so `npm run dev/build` and Playwright can't run there. Don't change
+  Windows security settings: run in WSL2 (repo under `~/`) or Codespaces, or
+  rely on CI (`.github/workflows/ci.yml`). Work goes on a branch; merge to
+  `main` only when CI is green. `tsc -b` and `npm run lint` still work locally.
+
 - **React 18 + shadcn:** current shadcn components assume React 19 (`ref` as a
   prop). Any `components/ui` component used as an `asChild` child or rendered
   inside a Radix Portal/Presence must use `React.forwardRef` (Button and the

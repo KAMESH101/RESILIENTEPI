@@ -271,13 +271,16 @@ test('action centre: Completed requires a short note', async ({ page }) => {
 })
 
 test('action centre: watch band gets a P3 verify task; generated tasks never duplicate', async ({ page }) => {
-  await page.goto('/actions')
+  // P3 tasks sort last (page 2 of the full list), so filter like an officer would.
+  await page.goto('/actions?priority=p3')
   await ready(page)
   for (const id of ['up-gorakhpur', 'od-ganjam']) {
     const verify = page.locator(`article#act-${id}-verify`)
     await expect(verify.getByLabel(/^Priority P3/)).toBeVisible()
     await expect(verify.getByRole('heading')).toContainText('Verify data completeness')
   }
+  await page.goto('/actions')
+  await ready(page)
   const count = async () => Number((await page.getByRole('status').filter({ hasText: /^Showing/ }).textContent())!.match(/of (\d+)/)![1])
   const before = await count()
   await page.getByLabel('Priority').click()

@@ -1,5 +1,7 @@
 # ResilientEpi
 
+[![CI](https://github.com/KAMESH101/RESILIENTEPI/actions/workflows/ci.yml/badge.svg)](https://github.com/KAMESH101/RESILIENTEPI/actions/workflows/ci.yml)
+
 District-level dengue outbreak early warning for India — a frontend prototype
 with a mock API. Forecasts the probability that dengue cases exceed each
 district's outbreak threshold 1–3 months ahead, and shows an **experimental**
@@ -32,6 +34,54 @@ npx playwright install chromium   # first time only
 npm run qa:screens                # screenshots at 375/768/1440 px + behaviour flows
                                   # (includes the geographic map and the boundary-file guard)
 ```
+
+CI (GitHub Actions, Ubuntu) runs the build, lint and the full Playwright suite
+on every push and pull request; `main` is merged only when it is green. Each run
+uploads the Playwright report, the screenshots and the built `dist/` as
+artifacts.
+
+## Where to run it
+
+Vite 8's bundler (rolldown) uses a native module that **Windows Smart App
+Control / Application Control can block** ("An Application Control policy has
+blocked this file"). Don't change Windows security settings — use Linux:
+
+**WSL2** (day-to-day work on Windows)
+
+```bash
+# inside the WSL2 (Ubuntu) shell — keep the repo in the Linux file system (~/),
+# NOT under /mnt/c: Windows-mounted folders are much slower
+cd ~
+git clone https://github.com/KAMESH101/RESILIENTEPI.git
+cd RESILIENTEPI
+npm ci
+npm run dev -- --host   # open the printed URL in your Windows browser
+npx playwright install --with-deps chromium && npm run qa:screens
+```
+
+Node 20.19+ (or 22.12+) is required; in WSL install it with `nvm`.
+
+**GitHub Codespaces** — on the repo page choose *Code → Codespaces → Create
+codespace on main*, then run `npm ci && npm run dev`. The forwarded port opens
+in the browser.
+
+## Demo laptop: serve the pre-built app
+
+Running the app from a build needs no bundler, so it works even where rolldown
+is blocked.
+
+1. Open the latest green CI run on GitHub → **Artifacts** → download **dist**.
+2. Unzip it into a folder named `dist`.
+3. Serve it (single-page mode, so deep links like `/map?h=2` work):
+
+   ```bash
+   npx serve -s dist
+   ```
+
+   Then open <http://localhost:3000>. Do this once before demo day while
+   online, so `serve` is cached; or run it from WSL2 / Codespaces instead.
+
+The demo "as-of" month is the current month at the time you open the app.
 
 ## Boundary file
 

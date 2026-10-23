@@ -5,6 +5,7 @@ import { DemoBanner } from '@/components/DemoBanner'
 import { DistrictPanel } from '@/components/DistrictPanel'
 import { BlockSkeleton, LoadingLabel } from '@/components/Skeletons'
 import { CreateActionDialog } from '@/features/actions/CreateActionDialog'
+import { MapPatterns } from '@/features/map/MapPatterns'
 import { DemoTour } from './DemoTour'
 import { Sidebar } from './Sidebar'
 import { Toaster } from './Toaster'
@@ -46,6 +47,7 @@ export function AppLayout() {
           </Suspense>
         </main>
       </div>
+      <MapPatterns />
       <DistrictPanel />
       <CreateActionDialog />
       <DemoTour />

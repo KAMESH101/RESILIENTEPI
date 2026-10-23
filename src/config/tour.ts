@@ -22,7 +22,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     title: 'Risk map',
     text: 'Madurai is forecast High risk in 2 months. Its panel shows the top 3 reasons in plain language.',
-    to: `/map?h=2&district=${TOUR_DISTRICTS.highRiskBlindSpot}`,
+    to: `/map?h=2&focus=${TOUR_DISTRICTS.highRiskBlindSpot}&district=${TOUR_DISTRICTS.highRiskBlindSpot}`,
   },
   {
     title: 'Blind-spot analysis',

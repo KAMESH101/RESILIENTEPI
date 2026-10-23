@@ -13,6 +13,8 @@ npm run build        # tsc -b && vite build — must pass before a phase is done
 npm run lint         # oxlint — must pass before a phase is done
 npm run qa:screens   # Playwright: qa/visual.spec.ts (screenshots → qa/screenshots/,
                      # fails on horizontal overflow or console errors) + qa/flows.spec.ts
+BOUNDARY_FIXTURE=/path/to/india_districts.topojson npx playwright test qa/geo.spec.ts
+                     # geographic-map checks; the file is served via a route, never committed
 npx tsx --tsconfig tsconfig.app.json scripts/check-mock.ts 2026-10   # print seeded demo stories
 ```
 
@@ -87,6 +89,12 @@ docs/PROMPT.md  the original product brief
   "Function components cannot be given refs" warning.
 - zod schemas are re-run by the mock API on already-parsed data, so optional
   fields must accept `null` (`.nullish()`).
+- **URL params:** always update them through `useFilters().setParam` /
+  `useDistrictPanel()` — they start from the live `window.location.search`.
+  React Router's functional `setSearchParams(prev => …)` can be one navigation
+  behind in a captured handler and silently undo a change (e.g. the map/table view).
+- Leaflet's CSS loads lazily (after ours), so map overrides need extra
+  specificity (`.leaflet-container.re-map`).
 - On Git Bash, an env value of `/` is rewritten to a Windows path (MSYS) — don't
   pass `/` as a URL through env vars.
 

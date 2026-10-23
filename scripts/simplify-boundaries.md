@@ -59,16 +59,17 @@ Never fill LGD codes by hand or by guessing; leave a row out if unknown.
 npm install -g mapshaper
 
 # 1. Inspect the DataMeet file
-mapshaper 2011_Dist.geojson -info
+mapshaper 2011_Dist.shp -info
 
-# 2. Join LGD codes, keep only the needed fields, simplify, write TopoJSON
-mapshaper 2011_Dist.geojson \
-  -join public/data/lgd_districts.csv keys=censuscode,census2011_code field-types=lgd_code:str,census2011_code:str \
+# 2. Clean, join LGD codes, keep only the needed fields, simplify, write TopoJSON
+#    (-clean must come BEFORE -simplify — see notes)
+mapshaper 2011_Dist.shp \
+  -clean \
+  -join public/data/lgd_districts.csv keys=censuscode,census2011_code fields=lgd_code field-types=lgd_code:str,census2011_code:str \
   -rename-fields district=DISTRICT,state=ST_NM \
-  -filter-fields lgd_code,district,state,census2011_code \
+  -filter-fields lgd_code,district,state,censuscode \
   -proj wgs84 \
   -simplify 8% keep-shapes weighting=0.7 \
-  -clean \
   -rename-layers districts \
   -o format=topojson quantization=1e5 public/geo/india_districts.topojson
 
@@ -81,7 +82,11 @@ Notes:
 
 - Use the property names the `-info` step prints if they differ from the
   example (`DISTRICT`, `ST_NM`, `censuscode`).
-- `keep-shapes` stops small districts from disappearing; `-clean` repairs
-  gaps and overlaps introduced by simplification.
-- Lower the simplify percentage (e.g. `5%`) if the file is still over 3 MB.
+- **Run `-clean` before `-simplify`, not after.** Measured on DataMeet's
+  `2011_Dist.shp` (641 districts, 10 MB): clean → simplify 8% gives
+  **≈ 0.5 MB**; simplify → clean gives ≈ 3.5 MB (cleaning re-densifies arcs).
+- `keep-shapes` stops small districts from disappearing.
+- Without the LGD CSV, drop the `-join` line; the app then matches by name
+  (with known old spellings, e.g. Gulbarga → Kalaburagi) and says so on the map.
+  Medchal–Malkajgiri (created 2016) has no Census 2011 shape.
 - Commit the attribution change together with the boundary file.

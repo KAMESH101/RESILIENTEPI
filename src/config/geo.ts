@@ -27,5 +27,34 @@ export const BOUNDARY_ATTRIBUTION = {
   url: 'https://github.com/datameet/maps',
 } as const
 
+/**
+ * Name-matching fallback, used ONLY when LGD codes are not available on both
+ * sides. Keys are current names (lower-case); values are older spellings found
+ * in Census 2011 boundary layers such as DataMeet's. The UI labels a name join.
+ */
+export const STATE_NAME_ALIASES: Record<string, string[]> = {
+  delhi: ['nct of delhi'],
+  // Census 2011 layers predate Telangana (2014).
+  telangana: ['andhra pradesh'],
+}
+
+export const DISTRICT_NAME_ALIASES: Record<string, string[]> = {
+  ahmedabad: ['ahmadabad'],
+  prayagraj: ['allahabad'],
+  'bengaluru urban': ['bangalore', 'bangalore urban'],
+  belagavi: ['belgaum'],
+  kalaburagi: ['gulbarga'],
+  mysuru: ['mysore'],
+  darjeeling: ['darjiling'],
+  howrah: ['haora'],
+  hooghly: ['hugli'],
+  baleshwar: ['baleswar', 'balasore'],
+  khordha: ['khurda'],
+  'south delhi': ['south'],
+  'north west delhi': ['north west'],
+  'east delhi': ['east'],
+  'west delhi': ['west'],
+}
+
 export const SCHEMATIC_LABEL = 'Schematic view — not geographic'
 export const BOUNDARY_MISSING_LABEL = 'Boundary file not loaded'

@@ -12,24 +12,40 @@ function parseHorizon(v: string | null): Horizon {
   return v === '2' ? 2 : v === '3' ? 3 : 1
 }
 
+/**
+ * Update query params starting from the LIVE URL. React Router's functional
+ * updater uses the params from the caller's last render, which can be one
+ * navigation behind (e.g. a handler captured before a view switch) and would
+ * silently undo that change.
+ */
+function useUpdateParams() {
+  const [, setParams] = useSearchParams()
+  return useCallback(
+    (mutate: (p: URLSearchParams) => void) => {
+      const next = new URLSearchParams(window.location.search)
+      mutate(next)
+      setParams(next)
+    },
+    [setParams],
+  )
+}
+
 export function useFilters() {
-  const [params, setParams] = useSearchParams()
+  const [params] = useSearchParams()
+  const update = useUpdateParams()
   const horizon = parseHorizon(params.get(FILTER_PARAMS.horizon))
   const state = params.get(FILTER_PARAMS.state) || null
 
   /** Set or clear any query params (null/'' removes). Pushes a history entry. */
   const setParam = useCallback(
-    (updates: Record<string, string | number | null | undefined>) => {
-      setParams((prev) => {
-        const next = new URLSearchParams(prev)
+    (updates: Record<string, string | number | null | undefined>) =>
+      update((next) => {
         for (const [k, v] of Object.entries(updates)) {
           if (v == null || v === '') next.delete(k)
           else next.set(k, String(v))
         }
-        return next
-      })
-    },
-    [setParams],
+      }),
+    [update],
   )
 
   return useMemo(
@@ -47,26 +63,11 @@ export function useFilters() {
 
 /** The shared DistrictPanel is driven by `?district=<id>` on any page. */
 export function useDistrictPanel() {
-  const [params, setParams] = useSearchParams()
+  const [params] = useSearchParams()
+  const update = useUpdateParams()
   const openId = params.get(FILTER_PARAMS.district)
-  const open = useCallback(
-    (id: string) =>
-      setParams((prev) => {
-        const next = new URLSearchParams(prev)
-        next.set(FILTER_PARAMS.district, id)
-        return next
-      }),
-    [setParams],
-  )
-  const close = useCallback(
-    () =>
-      setParams((prev) => {
-        const next = new URLSearchParams(prev)
-        next.delete(FILTER_PARAMS.district)
-        return next
-      }),
-    [setParams],
-  )
+  const open = useCallback((id: string) => update((next) => next.set(FILTER_PARAMS.district, id)), [update])
+  const close = useCallback(() => update((next) => next.delete(FILTER_PARAMS.district)), [update])
   return { openId, open, close }
 }
 

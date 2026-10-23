@@ -159,3 +159,22 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Leaflet: inherit the app font; tooltips match the design tokens. */
+.leaflet-container.re-map {
+  /* Beats leaflet.css (loaded later, lazily) — no grey basemap background. */
+  font-family: inherit;
+  background: transparent;
+}
+.leaflet-tooltip.re-map-tooltip {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow-card);
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 6px 8px;
+}
+.leaflet-control-attribution {
+  font-size: 11px;
+}

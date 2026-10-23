@@ -15,11 +15,19 @@ export function SchematicTiles({
   districts,
   onSelect,
   showBlindSpot = true,
+  showRisk = true,
+  focusId,
+  isDimmed,
   className,
 }: {
   districts: DistrictSummary[]
   onSelect: (id: string) => void
   showBlindSpot?: boolean
+  showRisk?: boolean
+  /** District to outline (e.g. from search). */
+  focusId?: string | null
+  /** Records not matching the page filters are dimmed, not hidden. */
+  isDimmed?: (s: DistrictSummary) => boolean
   className?: string
 }) {
   const byState = new Map<string, DistrictSummary[]>()
@@ -40,7 +48,7 @@ export function SchematicTiles({
             <ul className="mt-1 flex flex-wrap gap-1">
               {list.map((d) => (
                 <li key={d.district.id}>
-                  <Tile summary={d} onSelect={onSelect} showBlindSpot={showBlindSpot} />
+                  <Tile summary={d} onSelect={onSelect} showBlindSpot={showBlindSpot} showRisk={showRisk} focused={d.district.id === focusId} dimmed={!!isDimmed?.(d)} />
                 </li>
               ))}
             </ul>
@@ -51,9 +59,23 @@ export function SchematicTiles({
   )
 }
 
-function Tile({ summary: s, onSelect, showBlindSpot }: { summary: DistrictSummary; onSelect: (id: string) => void; showBlindSpot: boolean }) {
+function Tile({
+  summary: s,
+  onSelect,
+  showBlindSpot,
+  showRisk,
+  focused,
+  dimmed,
+}: {
+  summary: DistrictSummary
+  onSelect: (id: string) => void
+  showBlindSpot: boolean
+  showRisk: boolean
+  focused: boolean
+  dimmed: boolean
+}) {
   const cat = s.forecast?.category ?? null
-  const style = cat ? RISK_STYLE[cat] : null
+  const style = cat && showRisk ? RISK_STYLE[cat] : null
   const Icon = style?.icon ?? HelpCircle
   const flagged = showBlindSpot && s.blind_spot?.flagged
   const riskText = cat ? `${riskBand(cat).label} risk (${formatPct(s.forecast!.probability)})` : 'No data'
@@ -67,7 +89,9 @@ function Tile({ summary: s, onSelect, showBlindSpot }: { summary: DistrictSummar
           aria-label={label}
           className={cn(
             'relative inline-flex size-8 items-center justify-center overflow-hidden rounded-md border transition-transform duration-150 hover:scale-110 focus-visible:scale-110',
-            cat ? 'border-transparent' : 'pattern-nodata border-slate-300',
+            cat ? (showRisk ? 'border-transparent' : 'border-slate-300 bg-surface text-ink') : 'pattern-nodata border-slate-300',
+            dimmed && 'opacity-25',
+            focused && 'ring-2 ring-navy-900 ring-offset-2',
           )}
           style={style ? { background: style.fill, color: style.ink } : undefined}
         >

@@ -30,6 +30,7 @@ npm run dev
 npm run build && npm run lint
 npx playwright install chromium   # first time only
 npm run qa:screens                # screenshots at 375/768/1440 px + behaviour flows
+BOUNDARY_FIXTURE=path/to/india_districts.topojson npx playwright test qa/geo.spec.ts  # optional: geographic map
 ```
 
 ## Boundary file
@@ -39,6 +40,7 @@ district boundaries with attribution, LGD codes joined during preprocessing).
 Without it, the app shows a labelled schematic view plus a table. See
 [`scripts/simplify-boundaries.md`](scripts/simplify-boundaries.md).
 
-> Status: Phase 1 (app shell, seeded mock API, Overview) complete. Full
+> Status: Phases 1–2 (app shell, seeded mock API, Overview, National Risk
+> Map) complete. Full
 > documentation (live API switch, LGD CSV, backend plan) is added as the phases
 > complete. See `CLAUDE.md` and `docs/PROMPT.md`.

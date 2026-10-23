@@ -2,10 +2,12 @@
  * Mock backend entry point. Loaded with a dynamic import only when
  * VITE_API_MODE=mock, so it never ships in a live build's main chunk.
  */
-import { MOCK_DELAY_MS } from '@/config/demo'
+import { DEMO_AS_OF, MOCK_DELAY_MS } from '@/config/demo'
 import type { Role } from '@/types'
 import { resetMockDb } from './db'
+import { getDataset } from './generate'
 import * as h from './handlers'
+import { applyLgdCodes } from './lgd'
 
 type Handler = (req: h.MockRequest) => unknown
 
@@ -47,7 +49,10 @@ export async function handleMock(
   body: unknown,
   role: Role,
 ): Promise<unknown> {
-  await sleep(MOCK_DELAY_MS.min + Math.random() * (MOCK_DELAY_MS.max - MOCK_DELAY_MS.min))
+  await Promise.all([
+    sleep(MOCK_DELAY_MS.min + Math.random() * (MOCK_DELAY_MS.max - MOCK_DELAY_MS.min)),
+    applyLgdCodes(getDataset(DEMO_AS_OF)),
+  ])
   for (const [m, pattern, handler] of routes) {
     if (m !== method) continue
     const params = match(pattern, path)

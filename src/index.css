@@ -1,0 +1,294 @@
+@import url('https://fonts.cdnfonts.com/css/google-sans');
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+/* Bundled locally (no CDN) so Hindi and Tamil render — and print — on any machine. */
+@import "@fontsource/noto-sans-devanagari/400.css";
+@import "@fontsource/noto-sans-devanagari/600.css";
+@import "@fontsource/noto-sans-devanagari/700.css";
+@import "@fontsource/noto-sans-tamil/400.css";
+@import "@fontsource/noto-sans-tamil/600.css";
+@import "@fontsource/noto-sans-tamil/700.css";
+
+/* Explicit Google Sans font-face definitions with CDN fallback */
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Google Sans Regular'), local('Google Sans'), local('Product Sans'), url('https://fonts.cdnfonts.com/s/14955/ProductSans-Regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Google Sans Italic'), local('Product Sans Italic'), url('https://fonts.cdnfonts.com/s/14955/ProductSans-Italic.woff') format('woff');
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local('Google Sans Medium'), local('Product Sans Medium'), url('https://fonts.cdnfonts.com/s/14955/ProductSans-Medium.woff') format('woff');
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Google Sans Bold'), local('Product Sans Bold'), url('https://fonts.cdnfonts.com/s/14955/ProductSans-Bold.woff') format('woff');
+}
+
+/*
+ * ResilientEpi — Google Material Theme design tokens.
+ * Clean, modern Google aesthetics with Google Sans typography and iconic Google palette.
+ */
+:root {
+  /* Google Design Palette */
+  --google-blue: #1a73e8;
+  --google-blue-hover: #174ea6;
+  --google-blue-surface: #e8f0fe;
+  --google-blue-border: #d2e3fc;
+  --google-red: #d93025;
+  --google-yellow: #f9ab00;
+  --google-green: #1e8e3e;
+  --google-grey-50: #f8fafd;
+  --google-grey-100: #f1f3f4;
+  --google-grey-200: #e8eaed;
+  --google-grey-300: #dadce0;
+  --google-grey-500: #9aa0a6;
+  --google-grey-700: #5f6368;
+  --google-grey-900: #202124;
+
+  /* ResilientEpi brand tokens mapped to Google Theme */
+  --navy-900: #202124;        /* Google charcoal for primary headings and high-contrast text */
+  --navy-700: #174ea6;        /* Google deep blue for accents */
+  --teal-600: #1a73e8;        /* Google brand blue for primary interactive elements, links & focus rings */
+  --cyan-50: #e8f0fe;         /* Google signature light blue container for active states, chips & highlights */
+  --app-bg: #f8fafd;          /* Google Workspace/Cloud canvas background */
+  --surface: #ffffff;         /* Crisp pure white for cards and dialogs */
+  --line: #dadce0;            /* Google signature hairline border */
+  --ink: #202124;             /* Google primary charcoal text */
+  --ink-muted: #5f6368;       /* Google secondary grey text */
+
+  /* Google Material status/risk tokens */
+  --risk-low: #1e8e3e;        /* Google Green */
+  --risk-moderate: #f9ab00;   /* Google Amber */
+  --risk-high: #e37400;       /* Google Orange */
+  --risk-veryhigh: #d93025;   /* Google Red */
+  --nodata: #9aa0a6;          /* Google neutral grey */
+
+  /* shadcn semantic mapping to Google Theme */
+  --background: var(--app-bg);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: #1a73e8;         /* Google Blue */
+  --primary-foreground: #ffffff;
+  --secondary: #e8f0fe;       /* Google Blue pill container */
+  --secondary-foreground: #1967d2;
+  --muted: #f1f3f4;           /* Google neutral light grey */
+  --muted-foreground: var(--ink-muted);
+  --accent: #e8f0fe;          /* Google Blue container */
+  --accent-foreground: #1967d2;
+  --destructive: var(--risk-veryhigh);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: #1a73e8;            /* Google focus ring */
+  --radius: 0.625rem;         /* 10px Google rounded style */
+
+  /* Google Cloud Console navigation sidebar */
+  --sidebar: #101c30;
+  --sidebar-foreground: #bdc1c6;
+  --sidebar-primary: #1a73e8;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e3a6a;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #1a73e8;
+}
+
+@theme inline {
+  /* Google Sans for Latin; fallback to Product Sans, system, then Noto for Devanagari / Tamil. */
+  --font-sans: "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Open Sans", "Noto Sans Devanagari", "Noto Sans Tamil", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --color-navy-900: var(--navy-900);
+  --color-navy-700: var(--navy-700);
+  --color-teal-600: var(--teal-600);
+  --color-cyan-50: var(--cyan-50);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-risk-low: var(--risk-low);
+  --color-risk-moderate: var(--risk-moderate);
+  --color-risk-high: var(--risk-high);
+  --color-risk-veryhigh: var(--risk-veryhigh);
+  --color-nodata: var(--nodata);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  /* Google Material Radius tokens */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 9999px;
+
+  /* Google Material Elevation Shadows */
+  --shadow-card: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  --shadow-hover: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --shadow-dropdown: 0 2px 6px 2px rgba(60, 64, 67, 0.15), 0 1px 2px 0 rgba(60, 64, 67, 0.3);
+
+  --ease-ui: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  body {
+    @apply bg-background text-foreground text-sm antialiased md:text-base;
+    font-family: var(--font-sans);
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-[#1a73e8];
+  }
+}
+
+@layer utilities {
+  /* Experimental / blind-spot: navy diagonal hatch. */
+  .pattern-hatch {
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--navy-900) 0 2px,
+      transparent 2px 6px
+    );
+  }
+  /* No data: grey dotted pattern — never rendered as 0 or Low. */
+  .pattern-nodata {
+    background-color: #f1f5f9;
+    background-image: radial-gradient(var(--nodata) 1px, transparent 1.2px);
+    background-size: 6px 6px;
+  }
+}
+
+/* Print / Save as PDF (bulletins). A4; header and footer repeat on every page. */
+@page {
+  size: A4;
+  margin: 12mm 12mm 14mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+  .print-exact,
+  .pattern-hatch,
+  .pattern-nodata {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  /* Repeated on each printed page by the browser. */
+  .bulletin-frame > thead {
+    display: table-header-group;
+  }
+  .bulletin-frame > tfoot {
+    display: table-footer-group;
+  }
+  .bulletin-section {
+    break-inside: avoid;
+    margin-bottom: 6mm;
+  }
+  .bulletin-section h3 {
+    break-after: avoid;
+  }
+  .bulletin-section tr {
+    break-inside: avoid;
+  }
+  /* Long Tamil / Hindi compound words may break so narrow columns never overflow the page. */
+  .bulletin-section th,
+  .bulletin-section td {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Leaflet: inherit the app font; tooltips match the design tokens. */
+.leaflet-container.re-map {
+  /* Beats leaflet.css (loaded later, lazily) — no grey basemap background. */
+  font-family: inherit;
+  background: transparent;
+}
+.leaflet-tooltip.re-map-tooltip {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow-card);
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 6px 8px;
+}
+.leaflet-container.re-map .re-hover {
+  filter: brightness(0.82);
+}
+.re-pin {
+  background: none;
+  border: 0;
+  filter: drop-shadow(0 1px 2px rgb(15 42 74 / 0.4));
+}
+.leaflet-control-attribution {
+  font-size: 11px;
+}

@@ -1,0 +1,100 @@
+{
+  "app": {
+    "name": "ResilientEpi",
+    "tagline": "Dengue early warning",
+    "skip": "Skip to main content",
+    "demoBanner": "Demo mode — synthetic data. Not for operational use."
+  },
+  "nav": {
+    "label": "Main navigation",
+    "overview": "Overview",
+    "map": "National Risk Map",
+    "district": "District Detail",
+    "blindSpots": "Blind-Spot Analysis",
+    "actions": "Action Centre",
+    "reports": "Reports & Bulletins",
+    "methodology": "Methodology & Data",
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar",
+    "openMenu": "Open menu"
+  },
+  "topbar": {
+    "search": "Search district… (press /)",
+    "searchShort": "Search district",
+    "tour": "Demo tour",
+    "language": "Language",
+    "profile": "Profile",
+    "role": "Role",
+    "reset": "Reset demo data"
+  },
+  "pages": {
+    "overview": {
+      "title": "India Dengue Surveillance Overview",
+      "purpose": "Early warnings. Stronger surveillance. Better preparedness."
+    },
+    "map": {
+      "title": "National Risk Map",
+      "purpose": "Forecast dengue outbreak risk by district, with the experimental blind-spot overlay."
+    },
+    "district": {
+      "title": "District Detail",
+      "purpose": "Pick a district to see its forecast, surveillance quality and recommended actions."
+    },
+    "blindSpots": {
+      "title": "Where Dengue May Be Going Undetected",
+      "purpose": "Districts where low reported dengue may reflect low testing or weak reporting."
+    },
+    "actions": {
+      "title": "Action Centre",
+      "purpose": "Recommended tasks for human review, assignment and tracking."
+    },
+    "reports": {
+      "title": "Reports & Bulletins",
+      "purpose": "Generate district, state or national bulletins and export data."
+    },
+    "methodology": {
+      "title": "Methodology & Data",
+      "purpose": "How forecasts and the blind-spot indicator work, model results and data sources."
+    }
+  },
+  "overview": {
+    "attention": "Needs attention this month",
+    "attentionEmpty": "Nothing needs urgent attention for this selection.",
+    "kpis": "Key figures",
+    "miniMap": "Risk map",
+    "topRisk": "Top 10 forecast-risk districts",
+    "blindSpotAlerts": "Blind-spot alerts",
+    "recommendedActions": "Recommended actions",
+    "context": "2026 context"
+  },
+  "kpi": {
+    "monitored": "Districts Monitored",
+    "highRisk": "High / Very High Risk Districts",
+    "blindSpots": "Potential Blind Spots",
+    "immediate": "Needing Immediate Attention"
+  },
+  "filters": {
+    "horizon": "Forecast horizon",
+    "state": "State",
+    "allStates": "All states",
+    "clearAll": "Clear all"
+  },
+  "blindSpots": {
+    "ranked": "Ranked by blind-spot score",
+    "evidence": "Supporting evidence"
+  },
+  "actions": {
+    "matrix": "Decision matrix",
+    "tasks": "Tasks"
+  },
+  "reports": {
+    "generate": "Generate a bulletin",
+    "exports": "Exports",
+    "preview": "Bulletin preview"
+  },
+  "methodology": {
+    "method": "Method",
+    "results": "Model results",
+    "sources": "Data sources"
+  }
+}

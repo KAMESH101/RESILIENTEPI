@@ -8,16 +8,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-slate-900 text-white shadow-2xs hover:bg-black hover:shadow-xs transition-all font-medium",
+        default: "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-2xs hover:bg-black dark:hover:bg-slate-100 hover:shadow-xs transition-all font-medium",
         outline:
-          "border border-slate-200/80 bg-white/90 text-slate-700 hover:bg-white hover:text-slate-900 hover:border-slate-300 shadow-2xs aria-expanded:bg-white transition-all",
+          "border border-slate-200/80 dark:border-white/10 bg-white/90 dark:bg-white/5 text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20 shadow-2xs aria-expanded:bg-white dark:aria-expanded:bg-white/10 transition-all",
         secondary:
-          "bg-blue-50/80 text-blue-700 hover:bg-blue-100/90 border border-blue-200/60 aria-expanded:bg-blue-100/80 shadow-2xs transition-colors",
+          "bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100/90 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-500/30 aria-expanded:bg-blue-100/80 shadow-2xs transition-colors",
         ghost:
-          "text-slate-600 hover:bg-white/70 hover:text-slate-900 aria-expanded:bg-white/70 aria-expanded:text-slate-900 transition-colors",
+          "text-slate-600 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white aria-expanded:bg-white/70 dark:aria-expanded:bg-white/10 aria-expanded:text-slate-900 dark:aria-expanded:text-white transition-colors",
         destructive:
-          "bg-red-50 text-red-600 border border-red-200/60 hover:bg-red-100/80 focus-visible:border-red-400 focus-visible:ring-red-200",
-        link: "text-blue-600 hover:text-blue-800 underline-offset-4 hover:underline",
+          "bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200/60 dark:border-red-500/30 hover:bg-red-100/80 dark:hover:bg-red-900/50 focus-visible:border-red-400 focus-visible:ring-red-200",
+        link: "text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline-offset-4 hover:underline",
       },
       size: {
         default:
@@ -25,12 +25,12 @@ const buttonVariants = cva(
         xs: "h-6.5 gap-1 rounded-full px-2.5 text-xs in-data-[slot=button-group]:rounded-full has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-8 gap-1.5 rounded-full px-3 text-xs in-data-[slot=button-group]:rounded-full has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-3.5",
         lg: "h-11 gap-2.5 px-6 rounded-full text-base has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4",
-        icon: "size-9 rounded-full",
+        icon: "size-9 shrink-0 aspect-square rounded-full",
         "icon-xs":
-          "size-6 rounded-full in-data-[slot=button-group]:rounded-full [&_svg:not([class*='size-'])]:size-3",
+          "size-6 shrink-0 aspect-square rounded-full in-data-[slot=button-group]:rounded-full [&_svg:not([class*='size-'])]:size-3",
         "icon-sm":
-          "size-7.5 rounded-full in-data-[slot=button-group]:rounded-full",
-        "icon-lg": "size-10.5 rounded-full",
+          "size-7.5 shrink-0 aspect-square rounded-full in-data-[slot=button-group]:rounded-full",
+        "icon-lg": "size-10.5 shrink-0 aspect-square rounded-full",
       },
     },
     defaultVariants: {

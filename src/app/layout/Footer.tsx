@@ -49,7 +49,7 @@ export function Footer() {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noreferrer"
-                className="flex size-10 items-center justify-center rounded-full border border-slate-200/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-white/5 transition-all"
+                className="flex size-10 shrink-0 aspect-square items-center justify-center rounded-full border border-slate-200/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-white/5 transition-all"
                 aria-label="Twitter / X"
               >
                 <TwitterIcon className="size-3.5" />
@@ -58,14 +58,14 @@ export function Footer() {
                 href="https://github.com"
                 target="_blank"
                 rel="noreferrer"
-                className="flex size-10 items-center justify-center rounded-full border border-slate-200/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-white/5 transition-all"
+                className="flex size-10 shrink-0 aspect-square items-center justify-center rounded-full border border-slate-200/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-white/5 transition-all"
                 aria-label="GitHub"
               >
                 <Globe className="size-4.5" />
               </a>
               <a
                 href="mailto:surveillance@resilientepi.gov.in"
-                className="flex size-10 items-center justify-center rounded-full border border-slate-200/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-white/5 transition-all"
+                className="flex size-10 shrink-0 aspect-square items-center justify-center rounded-full border border-slate-200/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-white/5 transition-all"
                 aria-label="Email"
               >
                 <Mail className="size-4.5" />
@@ -346,8 +346,8 @@ export function Footer() {
           RESILIENTEPI
         </div>
         {/* Floating Reticle Symbol Over Giant Typography */}
-        <div className="absolute right-[22%] top-1/2 -translate-y-1/2 size-9 sm:size-12 rounded-full border border-slate-400/50 dark:border-white/40 flex items-center justify-center shadow-xs">
-          <span className="size-1.5 sm:size-2 rounded-full bg-slate-800 dark:bg-white" />
+        <div className="absolute right-[22%] top-1/2 -translate-y-1/2 size-9 sm:size-12 shrink-0 aspect-square rounded-full border border-slate-400/50 dark:border-white/40 flex items-center justify-center shadow-xs">
+          <span className="size-1.5 sm:size-2 shrink-0 aspect-square rounded-full bg-slate-800 dark:bg-white" />
         </div>
       </div>
     </footer>

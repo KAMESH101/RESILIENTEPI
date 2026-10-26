@@ -55,7 +55,7 @@ export function KpiCard({
         <div className="flex items-center gap-2.5 min-w-0">
           <div
             className={cn(
-              'flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold shadow-2xs',
+              'flex size-8 shrink-0 aspect-square items-center justify-center rounded-full text-xs font-semibold shadow-2xs',
               isOrange
                 ? 'bg-orange-500 text-white'
                 : isBlue

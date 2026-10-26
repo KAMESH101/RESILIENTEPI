@@ -66,14 +66,14 @@ export default function BlindSpots() {
         filters={
           <FilterBar extraChips={chips}>
             <div className="flex min-w-0 flex-col gap-1">
-              <label htmlFor="band-filter" className="text-xs font-medium text-slate-500">
+              <label htmlFor="band-filter" className="text-xs font-medium text-slate-500 dark:text-white">
                 Show
               </label>
               <Select value={band} onValueChange={(v) => setParam({ band: v === 'signals' ? null : v })}>
-                <SelectTrigger id="band-filter" className="h-10 w-64 max-w-full rounded-full border border-slate-200/80 bg-white/90 shadow-2xs text-slate-800 px-4">
+                <SelectTrigger id="band-filter" className="h-10 w-64 max-w-full rounded-full border border-slate-200/80 dark:border-white/10 bg-white/90 dark:bg-[#131418] shadow-2xs text-slate-800 dark:text-white px-4">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="rounded-2xl border border-slate-200/80 bg-white shadow-elevated">
+                <SelectContent className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#191a22] shadow-elevated">
                   {(Object.keys(BAND_LABELS) as (keyof typeof BAND_LABELS)[]).map((k) => (
                     <SelectItem key={k} value={k}>
                       {BAND_LABELS[k]}
@@ -102,15 +102,15 @@ export default function BlindSpots() {
           <AttentionStrip items={items} state={state} onFocus={(id) => setParam({ focus: id, trend: id })} />
 
           <section aria-labelledby="bs-list-title" className="flex flex-col gap-4">
-            <h2 id="bs-list-title" className="flex flex-wrap items-baseline gap-x-2 text-xl font-semibold text-navy-900">
+            <h2 id="bs-list-title" className="flex flex-wrap items-baseline gap-x-2 text-xl font-semibold text-slate-900 dark:text-white">
               {t('blindSpots.ranked')}
-              <span className="text-sm font-normal text-ink-muted tabular-nums">
+              <span className="text-sm font-normal text-slate-500 dark:text-slate-400 tabular-nums">
                 {visible.length} {visible.length === 1 ? 'district' : 'districts'}
                 {state ? ` in ${state}` : ''}
               </span>
             </h2>
             {visible.length === 0 ? (
-              <div className="rounded-xl border bg-surface shadow-card">
+              <div className="rounded-xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418] shadow-card dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)]">
                 <EmptyState
                   icon={EyeOff}
                   title={state ? `No blind spots in ${state}` : 'No districts match this filter'}
@@ -145,7 +145,7 @@ export default function BlindSpots() {
           </section>
 
           <section aria-labelledby="bs-charts-title" className="flex flex-col gap-4">
-            <h2 id="bs-charts-title" className="text-xl font-semibold text-navy-900">
+            <h2 id="bs-charts-title" className="text-xl font-semibold text-slate-900 dark:text-white">
               {t('blindSpots.evidence')}
             </h2>
             {items.length > 0 && <ReportedVsExpectedChart items={items} onSelect={showTrends} />}
@@ -153,14 +153,14 @@ export default function BlindSpots() {
               <div id="bs-trends" className="flex scroll-mt-32 flex-col gap-3">
                 <div className="flex flex-wrap items-end gap-3">
                   <div className="flex min-w-0 flex-col gap-1">
-                    <label htmlFor="trend-district" className="text-xs font-medium text-ink-muted">
+                    <label htmlFor="trend-district" className="text-xs font-medium text-slate-500 dark:text-slate-400">
                       District trends
                     </label>
                     <Select value={trend.district.id} onValueChange={(v) => setParam({ trend: v })}>
-                      <SelectTrigger id="trend-district" className="h-9 w-64 max-w-full bg-surface">
+                      <SelectTrigger id="trend-district" className="h-9 w-64 max-w-full bg-white dark:bg-[#131418] border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-200">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#191a22]">
                         {items.map((a) => (
                           <SelectItem key={a.id} value={a.district.id}>
                             {a.district.name} — score {a.score}
@@ -183,24 +183,24 @@ export default function BlindSpots() {
 /** Core message, the experimental label and how the score is built. */
 function Explainer() {
   return (
-    <section aria-label="About the blind-spot indicator" className="flex flex-col gap-3 rounded-[26px] border border-slate-200/80 bg-white p-6 shadow-[0_4px_24px_rgba(20,30,45,0.04)] md:p-7 transition-all duration-200">
-      <blockquote className="flex gap-2.5 text-lg font-semibold text-slate-800 md:text-xl">
-        <Quote className="mt-1 size-5 shrink-0 text-blue-600" aria-hidden />
+    <section aria-label="About the blind-spot indicator" className="flex flex-col gap-3 rounded-[26px] border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418] p-6 shadow-[0_4px_24px_rgba(20,30,45,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] md:p-7 transition-all duration-200">
+      <blockquote className="flex gap-2.5 text-lg font-semibold text-slate-800 dark:text-white md:text-xl">
+        <Quote className="mt-1 size-5 shrink-0 text-blue-600 dark:text-blue-400" aria-hidden />
         <p>{CORE_MESSAGE}</p>
       </blockquote>
       <ExperimentalNotice />
-      <p className="text-sm text-slate-500 leading-relaxed">
+      <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
         The score (0–100) adds up five transparent signals from surveillance data. A high score means the data pattern looks like missed cases — a
         person must check the evidence before acting. {BLIND_SPOT_THRESHOLD_NOTE}
       </p>
       <details className="group text-sm">
-        <summary className="flex w-fit cursor-pointer list-none items-center gap-1 font-medium text-blue-600 hover:text-blue-800">
+        <summary className="flex w-fit cursor-pointer list-none items-center gap-1 font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
           <ChevronDown className="size-4 transition-transform duration-150 group-open:rotate-180" aria-hidden />
           How is this calculated?
         </summary>
         <table className="mt-3 w-full max-w-3xl text-sm">
           <thead>
-            <tr className="border-b border-slate-200/60 text-left text-slate-500">
+            <tr className="border-b border-slate-200/60 dark:border-white/10 text-left text-slate-500 dark:text-slate-400">
               <th scope="col" className="py-1.5 pr-3 font-medium">
                 Part
               </th>
@@ -214,15 +214,15 @@ function Explainer() {
           </thead>
           <tbody>
             {BLIND_SPOT_COMPONENT_ORDER.map((k) => (
-              <tr key={k} className="border-b border-slate-100/80 last:border-b-0">
-                <td className="py-1.5 pr-3 font-medium text-slate-800">{BLIND_SPOT_COMPONENT_LABELS[k]}</td>
-                <td className="py-1.5 pr-3 text-slate-500">{BLIND_SPOT_COMPONENT_SIGNALS[k]}</td>
-                <td className="py-1.5 text-right tabular-nums text-slate-800">{Math.round(BLIND_SPOT_WEIGHTS[k] * 100)}%</td>
+              <tr key={k} className="border-b border-slate-100/80 dark:border-white/5 last:border-b-0">
+                <td className="py-1.5 pr-3 font-medium text-slate-800 dark:text-slate-200">{BLIND_SPOT_COMPONENT_LABELS[k]}</td>
+                <td className="py-1.5 pr-3 text-slate-500 dark:text-slate-400">{BLIND_SPOT_COMPONENT_SIGNALS[k]}</td>
+                <td className="py-1.5 text-right tabular-nums text-slate-800 dark:text-slate-200">{Math.round(BLIND_SPOT_WEIGHTS[k] * 100)}%</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <p className="mt-3 max-w-3xl text-slate-500 leading-relaxed">
+        <p className="mt-3 max-w-3xl text-slate-500 dark:text-slate-400 leading-relaxed">
           Each part scores 0 to its weight, using the last 3 reported months. Validation plan: three independent tests, including a synthetic test
           that hides real reports and checks whether the indicator flags the gap. Until then, treat every flag as a prompt to look, not a finding.
         </p>
@@ -237,16 +237,16 @@ function AttentionStrip({ items, state, onFocus }: { items: BlindSpotAssessment[
   const unreviewed = flagged.filter((a) => a.reviews.length === 0).length
   const top = [...flagged, ...watch].slice(0, 3)
   return (
-    <section aria-label="Needs review" className="flex flex-col gap-3 rounded-[26px] border border-orange-200/90 bg-gradient-to-r from-orange-50/90 via-white to-amber-50/60 p-5 shadow-[0_4px_24px_rgba(20,30,45,0.04)] lg:flex-row lg:items-center lg:justify-between transition-all duration-200">
-      <p className="flex items-start gap-2 text-base text-slate-800">
-        <EyeOff className="mt-0.5 size-5 shrink-0 text-orange-600" aria-hidden />
+    <section aria-label="Needs review" className="flex flex-col gap-3 rounded-[26px] border border-orange-200/90 dark:border-orange-500/30 bg-gradient-to-r from-orange-50/90 via-white to-amber-50/60 dark:from-orange-950/40 dark:via-[#191512] dark:to-amber-950/30 p-5 shadow-[0_4px_24px_rgba(20,30,45,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] lg:flex-row lg:items-center lg:justify-between transition-all duration-200">
+      <p className="flex items-start gap-2 text-base text-slate-800 dark:text-slate-200">
+        <EyeOff className="mt-0.5 size-5 shrink-0 text-orange-600 dark:text-orange-400" aria-hidden />
         <span>
-          <strong className="tabular-nums text-slate-900 font-bold">{flagged.length}</strong> potential blind spot{flagged.length === 1 ? '' : 's'} and{' '}
-          <strong className="tabular-nums text-slate-900 font-bold">{watch.length}</strong> on watch{state ? ` in ${state}` : ''}
+          <strong className="tabular-nums text-slate-900 dark:text-white font-bold">{flagged.length}</strong> potential blind spot{flagged.length === 1 ? '' : 's'} and{' '}
+          <strong className="tabular-nums text-slate-900 dark:text-white font-bold">{watch.length}</strong> on watch{state ? ` in ${state}` : ''}
           {flagged.length > 0 && (
             <>
               {' '}
-              · <strong className="tabular-nums text-slate-900 font-bold">{unreviewed}</strong> not yet reviewed
+              · <strong className="tabular-nums text-slate-900 dark:text-white font-bold">{unreviewed}</strong> not yet reviewed
             </>
           )}
           .
@@ -254,16 +254,16 @@ function AttentionStrip({ items, state, onFocus }: { items: BlindSpotAssessment[
       </p>
       {top.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Review first:</span>
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Review first:</span>
           {top.map((a) => (
             <button
               key={a.id}
               type="button"
               onClick={() => onFocus(a.district.id)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white py-1 pr-3 pl-1 text-xs font-semibold text-slate-800 shadow-2xs transition-all duration-150 hover:bg-white hover:border-blue-400 hover:shadow-xs"
+              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 dark:border-white/10 bg-white dark:bg-white/10 py-1 pr-3 pl-2.5 text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-2xs transition-all duration-150 hover:bg-white dark:hover:bg-white/20 hover:border-blue-400 hover:shadow-xs"
             >
-              <span className="font-semibold text-slate-800">{a.district.name}</span>
-              <span className="text-slate-500 tabular-nums">{a.score}</span>
+              <span className="font-semibold text-slate-800 dark:text-slate-200">{a.district.name}</span>
+              <span className="text-slate-500 dark:text-slate-400 tabular-nums">{a.score}</span>
             </button>
           ))}
         </div>

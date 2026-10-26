@@ -11,7 +11,7 @@ function Card({
       data-slot="card"
       data-size={size}
       className={cn(
-        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-[26px] border border-slate-200/80 bg-white py-(--card-spacing) text-sm text-card-foreground shadow-[0_4px_24px_rgba(20,30,45,0.04)] [--card-spacing:--spacing(5)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-[26px] *:[img:last-child]:rounded-b-[26px] transition-all duration-200",
+        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-[26px] border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418] py-(--card-spacing) text-sm text-card-foreground shadow-[0_4px_24px_rgba(20,30,45,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] [--card-spacing:--spacing(5)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-[26px] *:[img:last-child]:rounded-b-[26px] transition-all duration-200",
         className
       )}
       {...props}
@@ -37,7 +37,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-title"
       className={cn(
-        "font-heading text-base leading-snug font-medium group-data-[size=sm]/card:text-sm text-ink",
+        "font-heading text-base leading-snug font-medium group-data-[size=sm]/card:text-sm text-ink dark:text-white",
         className
       )}
       {...props}
@@ -49,7 +49,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn("text-sm text-muted-foreground dark:text-slate-400", className)}
       {...props}
     />
   )
@@ -83,7 +83,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-footer"
       className={cn(
-        "flex items-center rounded-b-2xl border-t border-slate-200/50 bg-slate-50/40 backdrop-blur-xs p-(--card-spacing)",
+        "flex items-center rounded-b-2xl border-t border-slate-200/50 dark:border-white/10 bg-slate-50/40 dark:bg-white/[0.03] backdrop-blur-xs p-(--card-spacing)",
         className
       )}
       {...props}

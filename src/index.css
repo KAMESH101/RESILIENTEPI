@@ -119,6 +119,52 @@
   --sidebar-ring: #2563eb;
 }
 
+.dark {
+  --background: #090a0d;
+  --surface: #131419;
+  --surface-strong: #191a22;
+  --surface-hover: #1f202a;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --line: rgba(255, 255, 255, 0.08);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --accent: #ffffff;
+  --accent-soft: #1e2029;
+
+  --navy-900: #f8fafc;
+  --navy-700: #cbd5e1;
+  --teal-600: #3b82f6;
+  --cyan-50: rgba(30, 58, 138, 0.35);
+  --app-bg: #090a0d;
+  --ink: #f8fafc;
+  --ink-muted: #94a3b8;
+
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: #15161c;
+  --popover-foreground: var(--ink);
+  --primary: #ffffff;
+  --primary-foreground: #090a0d;
+  --secondary: #1a1b22;
+  --secondary-foreground: #f8fafc;
+  --muted: #1a1b22;
+  --muted-foreground: var(--ink-muted);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #3b82f6;
+
+  --sidebar: #0e0f12;
+  --sidebar-foreground: #94a3b8;
+  --sidebar-accent: #20222a;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+}
+
 @theme inline {
   --font-sans: "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Open Sans", "Noto Sans Devanagari", "Noto Sans Tamil", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -200,6 +246,12 @@
     background-image: radial-gradient(circle at 10% 10%, rgba(228, 237, 248, 0.55) 0%, rgba(242, 244, 246, 0.95) 45%, #ecf0f5 100%);
     background-attachment: fixed;
     min-height: 100dvh;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  .dark body,
+  html.dark body {
+    background-color: #090a0d;
+    background-image: radial-gradient(circle at 10% 10%, rgba(25, 38, 65, 0.35) 0%, rgba(9, 10, 13, 0.98) 50%, #060709 100%);
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {

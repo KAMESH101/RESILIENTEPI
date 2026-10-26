@@ -98,7 +98,7 @@ export default function Reports() {
         <SectionCard id="bulletin-form" title={t('reports.generate')} caption="Bulletins use the same data as the rest of the app. Only fixed labels are translated.">
           <div className="flex flex-wrap items-end gap-x-5 gap-y-4 p-4">
             <div className="flex flex-col gap-1">
-              <span id="scope-label" className="text-xs font-medium text-slate-500">
+              <span id="scope-label" className="text-xs font-medium text-slate-500 dark:text-white">
                 Bulletin for
               </span>
               <ToggleGroup
@@ -107,10 +107,10 @@ export default function Reports() {
                 value={scope}
                 onValueChange={(v) => v && setParam({ scope: v, target: null })}
                 aria-labelledby="scope-label"
-                className="rounded-full border border-slate-200/80 bg-white/90 p-1 shadow-2xs gap-1"
+                className="rounded-full border border-slate-200/80 dark:border-white/10 bg-white/90 dark:bg-white/5 p-1 shadow-2xs gap-1"
               >
                 {SCOPES.map((s) => (
-                  <ToggleGroupItem key={s.value} value={s.value} className="h-8.5 px-4 rounded-full text-xs font-medium text-slate-600 hover:text-slate-900 data-[state=on]:bg-slate-900 data-[state=on]:text-white data-[state=on]:shadow-xs data-[state=on]:font-semibold">
+                  <ToggleGroupItem key={s.value} value={s.value} className="h-8.5 px-4 rounded-full text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white data-[state=on]:bg-slate-900 dark:data-[state=on]:bg-white data-[state=on]:text-white dark:data-[state=on]:text-slate-900 data-[state=on]:shadow-xs data-[state=on]:font-semibold">
                     {s.label}
                   </ToggleGroupItem>
                 ))}
@@ -119,11 +119,11 @@ export default function Reports() {
 
             {scope === 'district' && (
               <div className="flex min-w-0 flex-col gap-1">
-                <span className="text-xs font-medium text-slate-500">District</span>
+                <span className="text-xs font-medium text-slate-500 dark:text-white">District</span>
                 {target && districtName ? (
-                  <div className="flex h-9 items-center gap-2 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-md px-3 text-sm shadow-2xs">
-                    <span className="font-semibold text-slate-800">{districtName}</span>
-                    <Button variant="link" size="sm" className="h-auto p-0 text-blue-600 hover:text-blue-800" onClick={() => setParam({ target: null })}>
+                  <div className="flex h-9 items-center gap-2 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/90 dark:bg-[#131418] px-3 text-sm shadow-2xs">
+                    <span className="font-semibold text-slate-800 dark:text-white">{districtName}</span>
+                    <Button variant="link" size="sm" className="h-auto p-0 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" onClick={() => setParam({ target: null })}>
                       Change
                     </Button>
                   </div>
@@ -134,14 +134,14 @@ export default function Reports() {
             )}
             {scope === 'state' && (
               <div className="flex min-w-0 flex-col gap-1">
-                <label htmlFor="bulletin-state" className="text-xs font-medium text-slate-500">
+                <label htmlFor="bulletin-state" className="text-xs font-medium text-slate-500 dark:text-white">
                   State
                 </label>
                 <Select value={target ?? ''} onValueChange={(v) => setParam({ target: v })}>
-                  <SelectTrigger id="bulletin-state" className="h-9 w-56 max-w-full rounded-2xl border border-white/80 bg-white/70 backdrop-blur-md shadow-2xs hover:bg-white text-slate-800">
+                  <SelectTrigger id="bulletin-state" className="h-9 w-56 max-w-full rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/90 dark:bg-[#131418] shadow-2xs hover:bg-white dark:hover:bg-white/10 text-slate-800 dark:text-white px-4">
                     <SelectValue placeholder="Choose a state" />
                   </SelectTrigger>
-                  <SelectContent className="rounded-2xl border border-white/80 bg-white/92 backdrop-blur-2xl shadow-elevated">
+                  <SelectContent className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#191a22] shadow-elevated">
                     {(districts.data?.states ?? []).map((s) => (
                       <SelectItem key={s} value={s}>
                         {s}
@@ -153,14 +153,14 @@ export default function Reports() {
             )}
 
             <div className="flex min-w-0 flex-col gap-1">
-              <Label htmlFor="bulletin-lang" className="text-xs font-medium text-slate-500">
+              <Label htmlFor="bulletin-lang" className="text-xs font-medium text-slate-500 dark:text-white">
                 Language
               </Label>
               <Select value={formLang} onValueChange={(v) => setFormLang(v as Language)}>
-                <SelectTrigger id="bulletin-lang" className="h-9 w-48 max-w-full rounded-2xl border border-white/80 bg-white/70 backdrop-blur-md shadow-2xs hover:bg-white text-slate-800">
+                <SelectTrigger id="bulletin-lang" className="h-9 w-48 max-w-full rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/90 dark:bg-[#131418] shadow-2xs hover:bg-white dark:hover:bg-white/10 text-slate-800 dark:text-white px-4">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="rounded-2xl border border-white/80 bg-white/92 backdrop-blur-2xl shadow-elevated">
+                <SelectContent className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#191a22] shadow-elevated">
                   {BULLETIN_LANGUAGES.map((l) => (
                     <SelectItem key={l.code} value={l.code} lang={l.code}>
                       {l.label}

@@ -4,20 +4,34 @@ import { configureApi } from '@/services/api'
 import type { Role } from '@/types'
 
 export type UiLanguage = 'en' | 'hi'
+export type ThemeMode = 'light' | 'dark'
 
 interface SessionState {
   /** Not persisted: the app always opens as a District Officer. */
   role: Role
   language: UiLanguage
+  theme: ThemeMode
   sidebarCollapsed: boolean
   tourOpen: boolean
   tourStep: number
   setRole: (role: Role) => void
   setLanguage: (language: UiLanguage) => void
+  setTheme: (theme: ThemeMode) => void
+  toggleTheme: () => void
   toggleSidebar: () => void
   openTour: () => void
   closeTour: () => void
   setTourStep: (step: number) => void
+}
+
+function applyThemeClass(theme: ThemeMode) {
+  if (typeof document !== 'undefined') {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }
 }
 
 export const useSession = create<SessionState>()(
@@ -25,11 +39,22 @@ export const useSession = create<SessionState>()(
     (set) => ({
       role: 'district_officer',
       language: 'en',
+      theme: 'light',
       sidebarCollapsed: false,
       tourOpen: false,
       tourStep: 0,
       setRole: (role) => set({ role }),
       setLanguage: (language) => set({ language }),
+      setTheme: (theme) => {
+        applyThemeClass(theme)
+        set({ theme })
+      },
+      toggleTheme: () =>
+        set((s) => {
+          const next = s.theme === 'dark' ? 'light' : 'dark'
+          applyThemeClass(next)
+          return { theme: next }
+        }),
       toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
       openTour: () => set({ tourOpen: true }),
       closeTour: () => set({ tourOpen: false }),
@@ -38,7 +63,12 @@ export const useSession = create<SessionState>()(
     {
       name: 'resilientepi-session',
       storage: createJSONStorage(() => localStorage),
-      partialize: (s) => ({ language: s.language, sidebarCollapsed: s.sidebarCollapsed }),
+      partialize: (s) => ({ language: s.language, theme: s.theme, sidebarCollapsed: s.sidebarCollapsed }),
+      onRehydrateStorage: () => (state) => {
+        if (state?.theme) {
+          applyThemeClass(state.theme)
+        }
+      },
     },
   ),
 )

@@ -59,15 +59,15 @@ export default function Overview() {
 
           {/* 1. What needs attention — always first */}
           <section aria-labelledby="attention-title">
-            <h2 id="attention-title" className="mb-3 flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight">
-              <Megaphone className="size-5 text-orange-600" aria-hidden />
+            <h2 id="attention-title" className="mb-3 flex items-center gap-2 text-xl font-semibold text-slate-900 dark:text-white tracking-tight">
+              <Megaphone className="size-5 text-orange-600 dark:text-orange-400" aria-hidden />
               {t('overview.attention')}
             </h2>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {!data ? (
                 [0, 1, 2].map((i) => <AttentionSkeleton key={i} />)
               ) : data.attention.length === 0 ? (
-                <div className="rounded-2xl border bg-white p-6 shadow-card md:col-span-2 xl:col-span-3">
+                <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418] p-6 shadow-card dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] md:col-span-2 xl:col-span-3">
                   <EmptyState
                     title={t('overview.attentionEmpty')}
                     description="No district in this selection is High risk or a potential blind spot."
@@ -202,16 +202,16 @@ export default function Overview() {
 
 function AttentionCard({ item, summary, viewHref }: { item: AttentionItem; summary?: DistrictSummary; viewHref: string }) {
   return (
-    <article className="flex flex-col gap-3 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/90 hover:border-white hover:shadow-elevated">
+    <article className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418] p-5 shadow-card dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/95 dark:hover:bg-[#191a22] hover:shadow-elevated">
       <div className="flex flex-wrap items-center gap-1.5">
         <RiskBadge category={item.severity} probability={summary?.forecast?.probability} />
         {summary?.blind_spot && <BlindSpotBadge band={summary.blind_spot.band} score={summary.blind_spot.score} />}
       </div>
       <div>
-        <h3 className="text-base font-semibold text-slate-900 tracking-tight">{item.headline}</h3>
+        <h3 className="text-base font-semibold text-slate-900 dark:text-white tracking-tight">{item.headline}</h3>
         {/* The headline already names the district, so drop the sentence's "Name: " prefix. */}
-        {summary && <p className="mt-1 text-sm text-slate-500 leading-relaxed">{summary.summary_sentence.replace(`${item.district.name}: `, '')}</p>}
-        <p className="mt-1.5 text-xs font-semibold text-blue-600">{item.suggestion}</p>
+        {summary && <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{summary.summary_sentence.replace(`${item.district.name}: `, '')}</p>}
+        <p className="mt-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400">{item.suggestion}</p>
       </div>
       <div className="mt-auto flex flex-wrap gap-2 pt-2">
         <Button asChild className="flex-1 sm:flex-none">
@@ -332,14 +332,14 @@ function ActionList({ rows, linkFor }: { rows: ActionTask[]; linkFor: (a: Action
     <ul className="flex flex-col px-2 py-2">
       {rows.map((a) => (
         <li key={a.id}>
-          <Link to={linkFor(a)} className="flex flex-col gap-1 rounded-xl px-3 py-2.5 transition-all duration-150 hover:bg-white/70 hover:shadow-2xs">
+          <Link to={linkFor(a)} className="flex flex-col gap-1 rounded-xl px-3 py-2.5 transition-all duration-150 hover:bg-white/70 dark:hover:bg-white/5 hover:shadow-2xs">
             <span className="flex flex-wrap items-center gap-2">
               <span className={cn('inline-flex h-5 items-center rounded-full px-2 text-xs font-semibold', PRIORITY_TONE[a.priority])}>{PRIORITY_LABELS[a.priority]}</span>
-              <span className="font-semibold text-slate-800">{a.district.name}</span>
-              <span className="ml-auto text-xs text-slate-500">{STATUS_LABELS[a.status]}</span>
+              <span className="font-semibold text-slate-800 dark:text-slate-200">{a.district.name}</span>
+              <span className="ml-auto text-xs text-slate-500 dark:text-slate-400">{STATUS_LABELS[a.status]}</span>
             </span>
-            <span className="line-clamp-2 text-sm text-slate-700">{a.suggested_action}</span>
-            <span className="text-xs text-slate-500">{TEAM_LABELS[a.responsible_team]}</span>
+            <span className="line-clamp-2 text-sm text-slate-700 dark:text-slate-300">{a.suggested_action}</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">{TEAM_LABELS[a.responsible_team]}</span>
           </Link>
         </li>
       ))}

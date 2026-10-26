@@ -85,11 +85,11 @@ function DistrictPanelBody({ summary: s }: { summary: DistrictSummary }) {
   return (
     <>
       {/* 1. Header */}
-      <SheetHeader className="gap-2 border-b border-border px-4 pt-4 pb-3 pr-12">
-        <SheetTitle className="text-xl font-semibold text-ink tracking-tight">{s.district.name}</SheetTitle>
-        <SheetDescription className="text-sm text-ink-muted">{s.district.state}</SheetDescription>
+      <SheetHeader className="gap-2 border-b border-slate-200/60 dark:border-white/10 px-4 pt-4 pb-3 pr-12">
+        <SheetTitle className="text-xl font-semibold text-slate-900 dark:text-white tracking-tight">{s.district.name}</SheetTitle>
+        <SheetDescription className="text-sm text-slate-500 dark:text-slate-400">{s.district.state}</SheetDescription>
         {noBoundary && (
-          <p className="flex items-center gap-1 text-xs text-ink-muted">
+          <p className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
             <MapPinOff className="size-3.5 shrink-0" aria-hidden />
             {noBoundary} — not drawn on the map.
           </p>
@@ -102,8 +102,8 @@ function DistrictPanelBody({ summary: s }: { summary: DistrictSummary }) {
 
       <div className="flex-1 overflow-y-auto">
         {/* 2. Plain-language summary */}
-        <section className="border-b border-border px-4 py-3">
-          <p className="text-base text-ink">{s.summary_sentence}</p>
+        <section className="border-b border-slate-200/60 dark:border-white/10 px-4 py-3">
+          <p className="text-base text-slate-900 dark:text-white">{s.summary_sentence}</p>
           {f && band && (
             <p className="mt-1 flex flex-wrap items-center gap-1 text-sm text-ink-muted">
               <span>
@@ -231,14 +231,14 @@ function DistrictPanelBody({ summary: s }: { summary: DistrictSummary }) {
 
         {/* 6. Recommended action */}
         <section className="px-4 py-3">
-          <h3 className="text-sm font-semibold text-ink">Recommended action</h3>
-          <p className="mt-1 text-sm">{s.recommended_action}</p>
-          <p className="mt-2 text-xs text-ink-muted">{HUMAN_REVIEW_NOTE}</p>
+          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Recommended action</h3>
+          <p className="mt-1 text-sm text-slate-700 dark:text-slate-200">{s.recommended_action}</p>
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{HUMAN_REVIEW_NOTE}</p>
         </section>
       </div>
 
       {/* 7. Buttons — sticky at the bottom so they stay in thumb reach */}
-      <div className="flex flex-wrap gap-2 border-t border-slate-200/60 bg-white/80 backdrop-blur-md p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <div className="flex flex-wrap gap-2 border-t border-slate-200/60 dark:border-white/10 bg-white/80 dark:bg-[#131418]/90 backdrop-blur-md p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <Button asChild className="flex-1">
           <Link to={withFilters(`/district/${s.district.id}`, params)}>
             Open district page

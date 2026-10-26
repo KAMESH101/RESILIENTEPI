@@ -44,11 +44,14 @@ function DistrictPicker() {
             <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {[...byState.entries()].map(([state, list]) => (
                 <div key={state}>
-                  <h2 className="text-sm font-semibold text-ink">{state}</h2>
+                  <h2 className="text-sm font-semibold text-slate-900 dark:text-white">{state}</h2>
                   <ul className="mt-1.5 flex flex-col gap-0.5">
                     {list.map((d) => (
                       <li key={d.id}>
-                        <Link to={withFilters(`/district/${d.id}`, params)} className="block rounded-xl px-2.5 py-1.5 text-sm text-slate-700 transition-all hover:bg-white/80 hover:text-blue-600 hover:shadow-2xs">
+                        <Link
+                          to={withFilters(`/district/${d.id}`, params)}
+                          className="block rounded-xl px-2.5 py-1.5 text-sm text-slate-700 dark:text-white transition-all hover:bg-white/80 dark:hover:bg-white/10 hover:text-blue-600 dark:hover:text-blue-400 hover:shadow-2xs font-medium"
+                        >
                           {d.name}
                         </Link>
                       </li>

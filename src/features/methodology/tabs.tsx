@@ -36,7 +36,7 @@ import type { DataSourceHealth, DataSourceTypeTag, MetricRow, ModelPerformanceRe
 import { HORIZONS } from '@/types'
 
 function Prose({ children }: { children: ReactNode }) {
-  return <div className="flex flex-col gap-2 p-4 text-sm leading-relaxed text-ink [&_ul]:list-disc [&_ul]:pl-5">{children}</div>
+  return <div className="flex flex-col gap-2 p-4 text-sm leading-relaxed text-ink dark:text-slate-200 [&_strong]:text-slate-900 [&_strong]:dark:text-white [&_ul]:list-disc [&_ul]:pl-5">{children}</div>
 }
 
 /* ------------------------------------------------------------------ */
@@ -211,8 +211,8 @@ export function MethodTab() {
         <dl className="grid gap-x-6 gap-y-3 p-4 text-sm md:grid-cols-2">
           {Object.values(GLOSSARY).map((g) => (
             <div key={g.term}>
-              <dt className="font-semibold text-ink">{g.term}</dt>
-              <dd className="text-ink-muted">{g.definition}</dd>
+              <dt className="font-semibold text-slate-900 dark:text-white">{g.term}</dt>
+              <dd className="text-slate-500 dark:text-slate-400 leading-relaxed">{g.definition}</dd>
             </div>
           ))}
         </dl>
@@ -227,19 +227,19 @@ export function MethodTab() {
 
 export function ResultsTab() {
   const q = useQuery({ queryKey: ['model-performance'], queryFn: getModelPerformance })
-  if (q.isError) return <ErrorState error={q.error} onRetry={() => void q.refetch()} className="rounded-xl border bg-surface" />
-  if (!q.data) return <ListSkeleton rows={6} className="rounded-xl border bg-surface" />
+  if (q.isError) return <ErrorState error={q.error} onRetry={() => void q.refetch()} className="rounded-xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418]" />
+  if (!q.data) return <ListSkeleton rows={6} className="rounded-xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418]" />
   return q.data.status === 'pending' ? <ResultsPending message={q.data.message} /> : <ResultsAvailable r={q.data} />
 }
 
 function ResultsPending({ message }: { message: string }) {
   return (
     <div className="flex flex-col gap-4 md:gap-6">
-      <div role="status" className="flex items-start gap-3.5 rounded-2xl border border-dashed border-[#1a73e8]/40 bg-surface p-5.5 shadow-card">
-        <Hourglass className="mt-0.5 size-6 shrink-0 text-[#1a73e8]" aria-hidden />
+      <div role="status" className="flex items-start gap-3.5 rounded-2xl border border-dashed border-[#1a73e8]/40 dark:border-blue-400/30 bg-white dark:bg-[#131418] p-5.5 shadow-card dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)]">
+        <Hourglass className="mt-0.5 size-6 shrink-0 text-[#1a73e8] dark:text-blue-400" aria-hidden />
         <div>
-          <p className="text-lg font-semibold text-ink">{message}</p>
-          <p className="mt-1 text-sm text-ink-muted leading-relaxed">
+          <p className="text-lg font-semibold text-slate-900 dark:text-white">{message}</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
             No accuracy figures are shown until a real walk-forward backtest has been run. The demo never displays example or made-up results.
           </p>
         </div>
@@ -375,32 +375,32 @@ export function SourcesTab() {
       {q.data.items.map((s) => {
         const T = TYPE_STYLE[s.type_tag]
         return (
-          <li key={s.id} className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5 shadow-card transition-all duration-200 hover:shadow-[0_4px_16px_rgba(60,64,67,0.12)]">
+          <li key={s.id} className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418] p-5 shadow-card dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 hover:shadow-[0_4px_16px_rgba(60,64,67,0.12)]">
             <div className="flex flex-wrap items-start justify-between gap-2">
-              <h3 className="text-base font-semibold text-ink">{s.name}</h3>
+              <h3 className="text-base font-semibold text-slate-900 dark:text-white">{s.name}</h3>
               <span className={cn('inline-flex h-6 items-center gap-1 rounded-full border px-2 text-xs font-semibold', T.className)}>
                 <T.icon className="size-3.5" aria-hidden />
                 {SOURCE_TYPE_LABELS[s.type_tag]}
               </span>
             </div>
-            <p className="text-sm text-ink">{s.description}</p>
+            <p className="text-sm text-slate-700 dark:text-slate-200">{s.description}</p>
             <dl className="grid grid-cols-1 gap-x-4 gap-y-2 text-sm sm:grid-cols-3">
               <div>
-                <dt className="text-xs text-ink-muted">Status</dt>
+                <dt className="text-xs text-slate-500 dark:text-slate-400">Status</dt>
                 <dd className={cn('inline-flex items-center gap-1 font-medium', STATUS_STYLE[s.status])}>
                   <CircleDashed className="size-3.5" aria-hidden />
                   {SOURCE_STATUS_LABELS[s.status]}
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-ink-muted">Last successful update</dt>
-                <dd className="font-medium tabular-nums">
+                <dt className="text-xs text-slate-500 dark:text-slate-400">Last successful update</dt>
+                <dd className="font-medium tabular-nums text-slate-900 dark:text-white">
                   {s.last_success_at ? formatDateTime(s.last_success_at) : s.status === 'not_connected' ? 'Never (not connected)' : 'Bundled with the app'}
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-ink-muted">Coverage</dt>
-                <dd className="font-medium">
+                <dt className="text-xs text-slate-500 dark:text-slate-400">Coverage</dt>
+                <dd className="font-medium text-slate-900 dark:text-white">
                   {s.coverage ? `${formatMonth(s.coverage.from)} – ${formatMonth(s.coverage.to)}` : (s.coverage_note ?? 'Not known yet')}
                 </dd>
               </div>
@@ -408,7 +408,7 @@ export function SourcesTab() {
             {s.warnings.length > 0 && (
               <ul className="flex flex-col gap-1.5" aria-label={`Warnings for ${s.name}`}>
                 {s.warnings.map((w) => (
-                  <li key={w} className="flex items-start gap-2 rounded-lg bg-[#fff4e5] px-2.5 py-1.5 text-sm text-[#7a3d00]">
+                  <li key={w} className="flex items-start gap-2 rounded-lg bg-[#fff4e5] dark:bg-amber-950/40 border border-transparent dark:border-amber-500/20 px-2.5 py-1.5 text-sm text-[#7a3d00] dark:text-amber-200">
                     <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden />
                     {w}
                   </li>

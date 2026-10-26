@@ -21,20 +21,20 @@ export function AppLayout() {
   }, [pathname])
 
   return (
-    <div className="flex min-h-dvh bg-background">
+    <div className="flex min-h-dvh flex-col bg-[#f1f3f6] p-2.5 antialiased selection:bg-blue-100 selection:text-blue-900 sm:p-3 md:flex-row md:gap-3.5 md:p-3.5">
       <a
         href="#main"
-        className="sr-only z-[70] rounded-full bg-[#1a73e8] px-4 py-2 text-white shadow-md focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+        className="sr-only z-[70] rounded-full bg-[#2563eb] px-4 py-2 text-white shadow-md focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
       >
         {t('app.skip')}
       </a>
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="sticky top-0 z-30 print:hidden">
+        <div className="sticky top-2 z-30 mb-3 print:hidden">
           <DemoBanner />
           <Topbar />
         </div>
-        <main id="main" tabIndex={-1} className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-6 pb-28 outline-none md:px-6 md:pb-12 xl:px-8 print:max-w-none print:p-0">
+        <main id="main" tabIndex={-1} className="mx-auto w-full max-w-[1440px] flex-1 px-1 sm:px-2 md:px-4 pb-28 outline-none md:pb-12 print:max-w-none print:p-0">
           <Suspense
             fallback={
               <>

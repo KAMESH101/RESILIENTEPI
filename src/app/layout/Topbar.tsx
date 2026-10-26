@@ -37,8 +37,8 @@ export function Topbar() {
   }
 
   return (
-    <div className="border-b border-slate-200/60 bg-white/75 backdrop-blur-xl transition-colors">
-      <div className="flex h-14 items-center gap-1 px-2 sm:gap-2 sm:px-4 md:px-6">
+    <div className="rounded-2xl border border-slate-200/70 bg-white/85 backdrop-blur-xl shadow-xs transition-colors">
+      <div className="flex h-13 items-center gap-1 px-2 sm:gap-2 sm:px-4 md:px-5">
         <MobileNav />
         <div className="flex shrink-0 items-center gap-1.5 md:hidden">
           <LogoMark className="size-7" />

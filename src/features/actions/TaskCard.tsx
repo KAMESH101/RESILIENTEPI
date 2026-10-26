@@ -50,7 +50,7 @@ export function TaskCard({ task: t, onOpenDistrict, highlighted = false }: { tas
       id={t.id}
       aria-labelledby={`${t.id}-title`}
       className={cn(
-        'flex flex-col gap-3.5 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/90 hover:border-white hover:shadow-elevated',
+        'flex flex-col gap-3.5 rounded-[26px] border border-slate-200/80 bg-white p-5.5 shadow-[0_4px_24px_rgba(20,30,45,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_12px_32px_rgba(20,30,45,0.08)]',
         t.status === 'completed' && 'opacity-85',
         highlighted && 'ring-2 ring-blue-500/80 ring-offset-2',
       )}

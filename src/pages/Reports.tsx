@@ -107,10 +107,10 @@ export default function Reports() {
                 value={scope}
                 onValueChange={(v) => v && setParam({ scope: v, target: null })}
                 aria-labelledby="scope-label"
-                className="rounded-2xl border border-white/80 bg-slate-200/50 backdrop-blur-md p-1 shadow-2xs"
+                className="rounded-full border border-slate-200/80 bg-white/90 p-1 shadow-2xs gap-1"
               >
                 {SCOPES.map((s) => (
-                  <ToggleGroupItem key={s.value} value={s.value} className="h-8.5 px-3 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 data-[state=on]:bg-white data-[state=on]:text-slate-900 data-[state=on]:shadow-sm data-[state=on]:font-semibold">
+                  <ToggleGroupItem key={s.value} value={s.value} className="h-8.5 px-4 rounded-full text-xs font-medium text-slate-600 hover:text-slate-900 data-[state=on]:bg-slate-900 data-[state=on]:text-white data-[state=on]:shadow-xs data-[state=on]:font-semibold">
                     {s.label}
                   </ToggleGroupItem>
                 ))}

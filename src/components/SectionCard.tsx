@@ -26,7 +26,7 @@ export function SectionCard({
   return (
     <section
       aria-labelledby={id ? `${id}-title` : undefined}
-      className={cn('flex min-w-0 flex-col rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl shadow-card transition-all duration-200', className)}
+      className={cn('flex min-w-0 flex-col rounded-[26px] border border-slate-200/80 bg-white shadow-[0_4px_24px_rgba(20,30,45,0.04)] transition-all duration-200 overflow-hidden', className)}
     >
       <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 border-b border-slate-200/50 px-5 py-3.5">
         <div className="min-w-0">

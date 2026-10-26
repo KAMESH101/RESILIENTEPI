@@ -58,16 +58,16 @@ export function FilterBar({
               value={String(horizon)}
               onValueChange={(v) => v && setHorizon(Number(v) as Horizon)}
               aria-labelledby="horizon-label"
-              className="rounded-2xl border border-white/80 bg-slate-200/50 backdrop-blur-md p-1 shadow-2xs"
+              className="rounded-full border border-slate-200/80 bg-white/90 p-1 shadow-2xs gap-1"
             >
               {HORIZONS.map((h) => (
                 <ToggleGroupItem
                   key={h}
                   value={String(h)}
                   aria-label={`${h} month${h > 1 ? 's' : ''} ahead`}
-                  className="h-8 min-w-12 rounded-xl px-3 text-xs font-medium tabular-nums transition-all text-slate-600 hover:text-slate-900 data-[state=on]:bg-white data-[state=on]:text-slate-900 data-[state=on]:shadow-sm data-[state=on]:font-semibold"
+                  className="h-8 min-w-14 rounded-full px-3.5 text-xs font-medium tabular-nums transition-all text-slate-600 hover:text-slate-900 hover:bg-slate-100/60 data-[state=on]:bg-slate-900 data-[state=on]:text-white data-[state=on]:shadow-xs data-[state=on]:font-semibold"
                 >
-                  {h}M
+                  {h}M Ahead
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
@@ -79,10 +79,10 @@ export function FilterBar({
               {t('filters.state')}
             </label>
             <Select value={state ?? ALL} onValueChange={(v) => setState(v === ALL ? null : v)}>
-              <SelectTrigger id="state-filter" className="h-9 w-52 max-w-full rounded-2xl border border-white/80 bg-white/70 backdrop-blur-md shadow-2xs text-slate-800 hover:bg-white transition-all">
+              <SelectTrigger id="state-filter" className="h-10 w-52 max-w-full rounded-full border border-slate-200/80 bg-white/90 shadow-2xs text-slate-800 hover:bg-white transition-all px-4">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="rounded-2xl border border-white/80 bg-white/92 backdrop-blur-2xl shadow-elevated">
+              <SelectContent className="rounded-2xl border border-slate-200/80 bg-white shadow-elevated">
                 <SelectItem value={ALL}>{t('filters.allStates')}</SelectItem>
                 {(data?.states ?? []).map((s) => (
                   <SelectItem key={s} value={s}>
@@ -100,13 +100,13 @@ export function FilterBar({
           {chips.map((c) => (
             <span
               key={c.key}
-              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-blue-200/60 bg-blue-50/80 backdrop-blur-sm pr-1.5 pl-3 text-xs font-medium text-blue-700 shadow-2xs"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-orange-200/80 bg-orange-50/90 pr-2 pl-3.5 text-xs font-medium text-orange-900 shadow-2xs"
             >
               {c.label}
               <button
                 type="button"
                 onClick={c.onRemove}
-                className="inline-flex size-4.5 items-center justify-center rounded-full text-blue-600 transition-colors hover:bg-blue-100/70"
+                className="inline-flex size-4.5 items-center justify-center rounded-full text-orange-700 transition-colors hover:bg-orange-200/60"
                 aria-label={`Remove filter ${c.label}`}
               >
                 <X className="size-3" aria-hidden />
@@ -114,9 +114,9 @@ export function FilterBar({
             </span>
           ))}
           <Button
-            variant="link"
+            variant="ghost"
             size="sm"
-            className="h-7 px-1.5 text-xs font-medium text-blue-600 hover:text-blue-800"
+            className="h-8 rounded-full px-3 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-white/80"
             onClick={() => {
               const clear: Record<string, null> = { h: null, state: null }
               for (const c of extraChips) clear[c.key] = null

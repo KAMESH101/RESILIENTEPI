@@ -70,14 +70,14 @@ export default function ActionCentre() {
         filters={
           <FilterBar showHorizon={false} extraChips={chips}>
             <div className="flex min-w-0 flex-col gap-1">
-              <label htmlFor="priority-filter" className="text-xs font-medium text-ink-muted">
+              <label htmlFor="priority-filter" className="text-xs font-medium text-slate-500">
                 Priority
               </label>
               <Select value={priority ?? ALL} onValueChange={(v) => setParam({ priority: v === ALL ? null : v })}>
-                <SelectTrigger id="priority-filter" className="h-9 w-40 max-w-full bg-surface">
+                <SelectTrigger id="priority-filter" className="h-10 w-44 max-w-full rounded-full border border-slate-200/80 bg-white/90 shadow-2xs text-slate-800 px-4">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-2xl border border-slate-200/80 bg-white shadow-elevated">
                   <SelectItem value={ALL}>All priorities</SelectItem>
                   {(Object.keys(PRIORITY_LABELS) as ActionPriority[]).map((k) => (
                     <SelectItem key={k} value={k}>
@@ -88,14 +88,14 @@ export default function ActionCentre() {
               </Select>
             </div>
             <div className="flex min-w-0 flex-col gap-1">
-              <label htmlFor="status-filter" className="text-xs font-medium text-ink-muted">
+              <label htmlFor="status-filter" className="text-xs font-medium text-slate-500">
                 Status
               </label>
               <Select value={status ?? ALL} onValueChange={(v) => setParam({ status: v === ALL ? null : v })}>
-                <SelectTrigger id="status-filter" className="h-9 w-40 max-w-full bg-surface">
+                <SelectTrigger id="status-filter" className="h-10 w-44 max-w-full rounded-full border border-slate-200/80 bg-white/90 shadow-2xs text-slate-800 px-4">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-2xl border border-slate-200/80 bg-white shadow-elevated">
                   <SelectItem value={ALL}>All statuses</SelectItem>
                   {(Object.keys(STATUS_LABELS) as ActionStatus[]).map((k) => (
                     <SelectItem key={k} value={k}>

@@ -15,7 +15,7 @@ export function DecisionMatrixCard({ tasks }: { tasks: ActionTask[] }) {
   const { t } = useTranslation()
   const open = (q: DecisionQuadrant) => tasks.filter((x) => x.origin === 'decision_matrix' && x.quadrant === q && x.status !== 'completed').length
   return (
-    <details className="group rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl shadow-card transition-all duration-200" open>
+    <details className="group rounded-[26px] border border-slate-200/80 bg-white shadow-[0_4px_24px_rgba(20,30,45,0.04)] transition-all duration-200 overflow-hidden" open>
       <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-5 py-4">
         <span>
           <h2 className="text-base font-semibold text-slate-900 tracking-tight">{t('actions.matrix')}</h2>

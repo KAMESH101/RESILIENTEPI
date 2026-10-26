@@ -66,14 +66,14 @@ export default function BlindSpots() {
         filters={
           <FilterBar extraChips={chips}>
             <div className="flex min-w-0 flex-col gap-1">
-              <label htmlFor="band-filter" className="text-xs font-medium text-ink-muted">
+              <label htmlFor="band-filter" className="text-xs font-medium text-slate-500">
                 Show
               </label>
               <Select value={band} onValueChange={(v) => setParam({ band: v === 'signals' ? null : v })}>
-                <SelectTrigger id="band-filter" className="h-9 w-64 max-w-full bg-surface">
+                <SelectTrigger id="band-filter" className="h-10 w-64 max-w-full rounded-full border border-slate-200/80 bg-white/90 shadow-2xs text-slate-800 px-4">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-2xl border border-slate-200/80 bg-white shadow-elevated">
                   {(Object.keys(BAND_LABELS) as (keyof typeof BAND_LABELS)[]).map((k) => (
                     <SelectItem key={k} value={k}>
                       {BAND_LABELS[k]}
@@ -183,7 +183,7 @@ export default function BlindSpots() {
 /** Core message, the experimental label and how the score is built. */
 function Explainer() {
   return (
-    <section aria-label="About the blind-spot indicator" className="flex flex-col gap-3 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-5 shadow-card md:p-6 transition-all duration-200">
+    <section aria-label="About the blind-spot indicator" className="flex flex-col gap-3 rounded-[26px] border border-slate-200/80 bg-white p-6 shadow-[0_4px_24px_rgba(20,30,45,0.04)] md:p-7 transition-all duration-200">
       <blockquote className="flex gap-2.5 text-lg font-semibold text-slate-800 md:text-xl">
         <Quote className="mt-1 size-5 shrink-0 text-blue-600" aria-hidden />
         <p>{CORE_MESSAGE}</p>
@@ -237,16 +237,16 @@ function AttentionStrip({ items, state, onFocus }: { items: BlindSpotAssessment[
   const unreviewed = flagged.filter((a) => a.reviews.length === 0).length
   const top = [...flagged, ...watch].slice(0, 3)
   return (
-    <section aria-label="Needs review" className="flex flex-col gap-3 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-4.5 shadow-card lg:flex-row lg:items-center lg:justify-between transition-all duration-200">
+    <section aria-label="Needs review" className="flex flex-col gap-3 rounded-[26px] border border-orange-200/90 bg-gradient-to-r from-orange-50/90 via-white to-amber-50/60 p-5 shadow-[0_4px_24px_rgba(20,30,45,0.04)] lg:flex-row lg:items-center lg:justify-between transition-all duration-200">
       <p className="flex items-start gap-2 text-base text-slate-800">
-        <EyeOff className="mt-0.5 size-5 shrink-0 text-blue-600" aria-hidden />
+        <EyeOff className="mt-0.5 size-5 shrink-0 text-orange-600" aria-hidden />
         <span>
-          <strong className="tabular-nums text-slate-900">{flagged.length}</strong> potential blind spot{flagged.length === 1 ? '' : 's'} and{' '}
-          <strong className="tabular-nums text-slate-900">{watch.length}</strong> on watch{state ? ` in ${state}` : ''}
+          <strong className="tabular-nums text-slate-900 font-bold">{flagged.length}</strong> potential blind spot{flagged.length === 1 ? '' : 's'} and{' '}
+          <strong className="tabular-nums text-slate-900 font-bold">{watch.length}</strong> on watch{state ? ` in ${state}` : ''}
           {flagged.length > 0 && (
             <>
               {' '}
-              · <strong className="tabular-nums text-slate-900">{unreviewed}</strong> not yet reviewed
+              · <strong className="tabular-nums text-slate-900 font-bold">{unreviewed}</strong> not yet reviewed
             </>
           )}
           .
@@ -254,13 +254,13 @@ function AttentionStrip({ items, state, onFocus }: { items: BlindSpotAssessment[
       </p>
       {top.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-medium text-slate-500">Review first:</span>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Review first:</span>
           {top.map((a) => (
             <button
               key={a.id}
               type="button"
               onClick={() => onFocus(a.district.id)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/90 bg-white/80 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-slate-800 shadow-2xs transition-all duration-150 hover:bg-white hover:border-blue-200 hover:shadow-xs"
+              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white py-1 pr-3 pl-1 text-xs font-semibold text-slate-800 shadow-2xs transition-all duration-150 hover:bg-white hover:border-blue-400 hover:shadow-xs"
             >
               <span className="font-semibold text-slate-800">{a.district.name}</span>
               <span className="text-slate-500 tabular-nums">{a.score}</span>

@@ -44,7 +44,7 @@ export function ChartCard({
   const id = useId()
   const Heading = compact ? 'h3' : 'h2'
   return (
-    <figure className={cn('flex min-w-0 flex-col', !compact && 'rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-5 shadow-card transition-all duration-200', className)} aria-labelledby={`${id}-t`}>
+    <figure className={cn('flex min-w-0 flex-col', !compact && 'rounded-[26px] border border-slate-200/80 bg-white p-5.5 shadow-[0_4px_24px_rgba(20,30,45,0.04)] transition-all duration-200', className)} aria-labelledby={`${id}-t`}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <Heading id={`${id}-t`} className={cn('flex flex-wrap items-center gap-2 font-semibold text-slate-900 tracking-tight', compact ? 'text-sm' : 'text-base')}>

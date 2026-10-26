@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { ArrowRight, Megaphone, Quote } from 'lucide-react'
+import { AlertTriangle, ArrowRight, EyeOff, Flame, Megaphone, Quote, ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { useDistrictPanel, useFilters, withFilters } from '@/app/filters'
@@ -50,7 +50,7 @@ export default function Overview() {
       />
 
       {q.isError && !data ? (
-        <div className="rounded-xl border bg-surface shadow-card">
+        <div className="rounded-2xl border bg-white p-6 shadow-card">
           <ErrorState error={q.error} onRetry={() => void q.refetch()} />
         </div>
       ) : (
@@ -60,14 +60,14 @@ export default function Overview() {
           {/* 1. What needs attention — always first */}
           <section aria-labelledby="attention-title">
             <h2 id="attention-title" className="mb-3 flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight">
-              <Megaphone className="size-5 text-risk-high" aria-hidden />
+              <Megaphone className="size-5 text-orange-600" aria-hidden />
               {t('overview.attention')}
             </h2>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {!data ? (
                 [0, 1, 2].map((i) => <AttentionSkeleton key={i} />)
               ) : data.attention.length === 0 ? (
-                <div className="rounded-xl border bg-surface shadow-card md:col-span-2 xl:col-span-3">
+                <div className="rounded-2xl border bg-white p-6 shadow-card md:col-span-2 xl:col-span-3">
                   <EmptyState
                     title={t('overview.attentionEmpty')}
                     description="No district in this selection is High risk or a potential blind spot."
@@ -90,20 +90,37 @@ export default function Overview() {
                 [0, 1, 2, 3].map((i) => <KpiSkeleton key={i} />)
               ) : (
                 <>
-                  <KpiCard label={t('kpi.monitored')} kpi={data.kpis.districts_monitored} meaning="Demo districts with a forecast this month." to={link('/map')} />
+                  <KpiCard
+                    label={t('kpi.monitored')}
+                    kpi={data.kpis.districts_monitored}
+                    meaning="Demo districts with a forecast this month."
+                    to={link('/map')}
+                    icon={ShieldCheck}
+                    variant="blue"
+                  />
                   <KpiCard
                     label={t('kpi.highRisk')}
                     kpi={data.kpis.high_or_very_high}
                     meaning={`Forecast High or Very High ${horizon} month${horizon > 1 ? 's' : ''} ahead.`}
                     to={link('/map', { risk: 'high' })}
+                    icon={AlertTriangle}
+                    variant="default"
                   />
-                  <KpiCard label={t('kpi.blindSpots')} kpi={data.kpis.potential_blind_spots} meaning="Experimental flag: low reports may reflect low testing." to={link('/blind-spots')} />
+                  <KpiCard
+                    label={t('kpi.blindSpots')}
+                    kpi={data.kpis.potential_blind_spots}
+                    meaning="Experimental flag: low reports may reflect low testing."
+                    to={link('/blind-spots')}
+                    icon={EyeOff}
+                    variant="orange"
+                  />
                   <KpiCard
                     label={t('kpi.immediate')}
                     kpi={data.kpis.needing_immediate_attention}
                     meaning="High risk and a potential blind spot."
                     to={link('/actions', { priority: 'p1' })}
-                    emphasis={data.kpis.needing_immediate_attention.value > 0}
+                    icon={Flame}
+                    variant={data.kpis.needing_immediate_attention.value > 0 ? 'orange' : 'default'}
                   />
                 </>
               )}
@@ -334,14 +351,36 @@ function ContextStat({ data }: { data: OverviewResponse | undefined }) {
   const { t } = useTranslation()
   const [num, ...rest] = CONTEXT_STAT.text.split(' ')
   return (
-    <section aria-labelledby="ctx-title" className={cn('rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-5 shadow-card md:p-6 transition-all duration-200', !data && 'opacity-90')}>
-      <h2 id="ctx-title" className="text-xs font-semibold tracking-wider text-slate-500 uppercase">
-        {t('overview.context')}
-      </h2>
-      <p className="mt-2 text-base text-slate-700">
-        <span className="mr-1 text-3xl font-semibold text-slate-900 tabular-nums">{num}</span> {rest.join(' ')}
-      </p>
-      <p className="mt-2 text-xs text-slate-500">Source: {CONTEXT_STAT.source}. National reported figure — not part of the synthetic demo data.</p>
+    <section
+      aria-labelledby="ctx-title"
+      className={cn(
+        'relative overflow-hidden rounded-[26px] bg-gradient-to-br from-slate-900 via-[#16171d] to-slate-900 p-6 sm:p-7 text-white shadow-xl border border-white/10 transition-all duration-200',
+        !data && 'opacity-90',
+      )}
+    >
+      <div className="pointer-events-none absolute -top-12 -right-12 size-56 rounded-full bg-blue-600/15 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-12 -left-12 size-56 rounded-full bg-orange-500/15 blur-3xl" />
+      <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 border border-white/10 px-3 py-1 text-xs font-semibold text-orange-400">
+            <span className="size-2 rounded-full bg-orange-500" />
+            {t('overview.context')}
+          </span>
+          <p className="mt-3 text-base sm:text-lg text-slate-200 max-w-2xl leading-relaxed">
+            <span className="mr-1.5 text-3xl sm:text-4xl font-bold text-white tabular-nums tracking-tight">{num}</span> {rest.join(' ')}
+          </p>
+          <p className="mt-2 text-xs text-slate-400">Source: {CONTEXT_STAT.source}. National reported figure — baseline evidence context.</p>
+        </div>
+        <div className="shrink-0">
+          <Link
+            to="/methodology"
+            className="inline-flex items-center gap-2 rounded-full bg-white text-slate-900 px-5 py-2.5 text-sm font-semibold hover:bg-slate-100 shadow-sm transition-all"
+          >
+            Explore Data & Sources
+            <ArrowRight className="size-4 text-slate-900" aria-hidden />
+          </Link>
+        </div>
+      </div>
     </section>
   )
 }

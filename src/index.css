@@ -47,36 +47,42 @@
  * refined rounded geometry, and subtle layered depth.
  */
 :root {
-  /* Brand accents */
+  /* Brand accents: Sophisticated Blue & Vibrant Orange */
   --brand-blue: #2563eb;
   --brand-blue-hover: #1d4ed8;
   --brand-blue-soft: #eff6ff;
   --brand-blue-border: #bfdbfe;
 
-  /* ResilientEpi glassmorphism design tokens */
-  --background: #f2f4f6;
-  --surface: rgba(255, 255, 255, 0.72);
-  --surface-strong: rgba(255, 255, 255, 0.90);
-  --surface-hover: rgba(255, 255, 255, 0.82);
+  --brand-orange: #f97316;
+  --brand-orange-hover: #ea580c;
+  --brand-orange-soft: #fff7ed;
+  --brand-orange-border: #fed7aa;
+  --brand-orange-card: #fff8f0;
 
-  --border: rgba(255, 255, 255, 0.82);
-  --border-subtle: rgba(35, 45, 60, 0.08);
-  --line: rgba(35, 45, 60, 0.08);
+  /* ResilientEpi Canvas & Surfaces */
+  --background: #f1f3f6;
+  --surface: #ffffff;
+  --surface-strong: #ffffff;
+  --surface-hover: #f8fafc;
 
-  --text-primary: #1e2530;
-  --text-secondary: #647082;
-  --text-muted: #8e9aa8;
+  --border: rgba(226, 232, 240, 0.85);
+  --border-subtle: rgba(226, 232, 240, 0.6);
+  --line: rgba(226, 232, 240, 0.7);
 
-  --accent: #2c3340;
-  --accent-soft: #e8ecf2;
+  --text-primary: #121318;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
 
-  --navy-900: #18202c;
-  --navy-700: #2d3748;
+  --accent: #121318;
+  --accent-soft: #e2e8f0;
+
+  --navy-900: #121318;
+  --navy-700: #1e293b;
   --teal-600: #2563eb;
-  --cyan-50: rgba(239, 246, 255, 0.75);
-  --app-bg: #f2f4f6;
-  --ink: #1e2530;
-  --ink-muted: #647082;
+  --cyan-50: rgba(239, 246, 255, 0.85);
+  --app-bg: #f1f3f6;
+  --ink: #121318;
+  --ink-muted: #64748b;
 
   /* Semantic risk tokens */
   --risk-low: #16a34a;        /* Balanced emerald */
@@ -85,31 +91,31 @@
   --risk-veryhigh: #dc2626;   /* Crimson red */
   --nodata: #94a3b8;
 
-  /* shadcn semantic mapping to Glass Theme */
+  /* shadcn semantic mapping */
   --foreground: var(--ink);
   --card: var(--surface);
   --card-foreground: var(--ink);
-  --popover: rgba(255, 255, 255, 0.92);
+  --popover: #ffffff;
   --popover-foreground: var(--ink);
-  --primary: #1e2530;
+  --primary: #121318;
   --primary-foreground: #ffffff;
-  --secondary: rgba(239, 246, 255, 0.85);
-  --secondary-foreground: #1d4ed8;
-  --muted: rgba(241, 244, 248, 0.75);
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
   --muted-foreground: var(--ink-muted);
   --destructive: var(--risk-veryhigh);
-  --input: rgba(35, 45, 60, 0.1);
+  --input: rgba(35, 45, 60, 0.12);
   --ring: #2563eb;
-  --radius: 1rem;             /* 16px default rounded style */
+  --radius: 1.25rem;          /* 20px default rounded style */
 
-  /* Refined Glass Sidebar Navigation */
-  --sidebar: rgba(246, 248, 251, 0.78);
-  --sidebar-foreground: #5a6679;
-  --sidebar-primary: #1e2530;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ffffff;
-  --sidebar-accent-foreground: #18202c;
-  --sidebar-border: rgba(35, 45, 60, 0.08);
+  /* Detached Dark Sidebar Navigation */
+  --sidebar: #121318;
+  --sidebar-foreground: #94a3b8;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #121318;
+  --sidebar-accent: #272832;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.10);
   --sidebar-ring: #2563eb;
 }
 
@@ -226,6 +232,57 @@
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.85);
     border-radius: 9999px;
+  }
+
+  /* Detached navigation capsule */
+  .detached-sidebar {
+    background-color: #121318;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    border-radius: 28px;
+  }
+
+  /* Inline title graphic badges (no emojis, outline SVGs) */
+  .inline-badge-blue {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #2563eb;
+    box-shadow: 0 1px 4px rgba(37, 99, 235, 0.12);
+    margin: 0 0.4rem;
+    vertical-align: middle;
+  }
+  @media (min-width: 768px) {
+    .inline-badge-blue {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+  }
+
+  .inline-badge-orange {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background-color: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #ea580c;
+    box-shadow: 0 1px 4px rgba(234, 88, 12, 0.12);
+    margin: 0 0.4rem;
+    vertical-align: middle;
+  }
+  @media (min-width: 768px) {
+    .inline-badge-orange {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
   }
 
   /* Experimental / blind-spot: navy diagonal hatch. */

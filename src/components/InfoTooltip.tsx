@@ -13,15 +13,15 @@ export function InfoTooltip({ term, className, extra }: { term: GlossaryKey; cla
     <Popover>
       <PopoverTrigger
         className={cn(
-          'inline-flex size-6 shrink-0 items-center justify-center rounded-full text-ink-muted transition-colors duration-150 hover:bg-muted hover:text-navy-900',
+          'inline-flex size-6 shrink-0 items-center justify-center rounded-full text-ink-muted transition-colors duration-150 hover:bg-[#e8f0fe] hover:text-[#1a73e8]',
           className,
         )}
         aria-label={`What is ${g.term.toLowerCase()}?`}
       >
         <Info className="size-4" aria-hidden />
       </PopoverTrigger>
-      <PopoverContent className="w-72 text-sm" side="top">
-        <p className="font-semibold text-navy-900">{g.term}</p>
+      <PopoverContent className="w-72 rounded-2xl border border-border bg-surface p-4 text-sm shadow-[0_4px_16px_rgba(60,64,67,0.16)]" side="top">
+        <p className="font-semibold text-ink">{g.term}</p>
         <p className="mt-1 text-ink-muted">{g.definition}</p>
         {extra && <p className="mt-2 text-ink-muted">{extra}</p>}
       </PopoverContent>

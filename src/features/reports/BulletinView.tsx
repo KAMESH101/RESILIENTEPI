@@ -30,8 +30,8 @@ export function BulletinView({ b }: { b: Bulletin }) {
                 <div className="flex min-w-0 items-start gap-3">
                   <LogoMark className="size-9" />
                   <div>
-                    <p className="text-xs font-semibold tracking-wide text-teal-600 uppercase">ResilientEpi · {t.scopeKind[b.scope]}</p>
-                    <h2 className="text-xl font-semibold text-navy-900">{t.title(b.scope_label)}</h2>
+                    <p className="text-xs font-semibold tracking-wide text-[#1a73e8] uppercase">ResilientEpi · {t.scopeKind[b.scope]}</p>
+                    <h2 className="text-xl font-semibold text-ink">{t.title(b.scope_label)}</h2>
                     <p className="text-sm text-ink-muted">{t.horizonLine(month, b.horizon)}</p>
                   </div>
                 </div>

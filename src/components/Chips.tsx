@@ -6,11 +6,11 @@ export function ForecastChip({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        'inline-flex h-5 shrink-0 items-center gap-1 rounded-full border border-dashed border-navy-700 bg-white px-1.5 text-xs leading-none font-medium text-navy-900',
+        'inline-flex h-5 shrink-0 items-center gap-1 rounded-full border border-dashed border-[#1a73e8]/70 bg-[#e8f0fe]/80 px-2 text-xs leading-none font-medium text-[#1967d2]',
         className,
       )}
     >
-      <TrendingUp className="size-3" aria-hidden />
+      <TrendingUp className="size-3 text-[#1a73e8]" aria-hidden />
       Forecast
     </span>
   )
@@ -21,11 +21,11 @@ export function ExperimentalChip({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        'inline-flex h-5 shrink-0 items-center gap-1 rounded-full border border-navy-900 bg-white px-1.5 text-xs leading-none font-medium text-navy-900',
+        'inline-flex h-5 shrink-0 items-center gap-1.5 rounded-full border border-[#dadce0] bg-surface px-2 text-xs leading-none font-medium text-ink shadow-2xs',
         className,
       )}
     >
-      <span className="pattern-hatch size-2.5 rounded-sm border border-navy-900" aria-hidden />
+      <span className="pattern-hatch size-2.5 rounded-xs border border-ink/40" aria-hidden />
       Experimental
     </span>
   )

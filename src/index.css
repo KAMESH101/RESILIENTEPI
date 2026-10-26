@@ -1,3 +1,4 @@
+@import url('https://fonts.cdnfonts.com/css/google-sans');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -10,62 +11,163 @@
 @import "@fontsource/noto-sans-tamil/600.css";
 @import "@fontsource/noto-sans-tamil/700.css";
 
+/* Explicit Google Sans font-face definitions with CDN fallback */
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Google Sans Regular'), local('Google Sans'), local('Product Sans'), url('https://fonts.cdnfonts.com/s/14955/ProductSans-Regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Google Sans Italic'), local('Product Sans Italic'), url('https://fonts.cdnfonts.com/s/14955/ProductSans-Italic.woff') format('woff');
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local('Google Sans Medium'), local('Product Sans Medium'), url('https://fonts.cdnfonts.com/s/14955/ProductSans-Medium.woff') format('woff');
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Google Sans Bold'), local('Product Sans Bold'), url('https://fonts.cdnfonts.com/s/14955/ProductSans-Bold.woff') format('woff');
+}
+
 /*
- * ResilientEpi design tokens (prompt §5.2). Light theme only — no dark mode.
- * Raw brand tokens live on :root; shadcn semantic variables are mapped onto them.
+ * ResilientEpi — Premium Glassmorphism Design System.
+ * Soft translucent glass surfaces, cool off-white / pale slate canvas,
+ * refined rounded geometry, and subtle layered depth.
  */
 :root {
-  --navy-900: #0f2a4a;
-  --navy-700: #1f4470;
-  --teal-600: #0e8a8a;
-  --cyan-50: #ecf8fa;
-  --app-bg: #f6f8fb;
-  --surface: #ffffff;
-  --line: #e2e8f0;
-  --ink: #0f172a;
-  --ink-muted: #475569;
+  /* Brand accents: Sophisticated Blue & Vibrant Orange */
+  --brand-blue: #2563eb;
+  --brand-blue-hover: #1d4ed8;
+  --brand-blue-soft: #eff6ff;
+  --brand-blue-border: #bfdbfe;
 
-  --risk-low: #2e7d32;
-  --risk-moderate: #f2b705;
-  --risk-high: #e8710a;
-  --risk-veryhigh: #c62828;
+  --brand-orange: #f97316;
+  --brand-orange-hover: #ea580c;
+  --brand-orange-soft: #fff7ed;
+  --brand-orange-border: #fed7aa;
+  --brand-orange-card: #fff8f0;
+
+  /* ResilientEpi Canvas & Surfaces */
+  --background: #f1f3f6;
+  --surface: #ffffff;
+  --surface-strong: #ffffff;
+  --surface-hover: #f8fafc;
+
+  --border: rgba(226, 232, 240, 0.85);
+  --border-subtle: rgba(226, 232, 240, 0.6);
+  --line: rgba(226, 232, 240, 0.7);
+
+  --text-primary: #121318;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+
+  --accent: #121318;
+  --accent-soft: #e2e8f0;
+
+  --navy-900: #121318;
+  --navy-700: #1e293b;
+  --teal-600: #2563eb;
+  --cyan-50: rgba(239, 246, 255, 0.85);
+  --app-bg: #f1f3f6;
+  --ink: #121318;
+  --ink-muted: #64748b;
+
+  /* Semantic risk tokens */
+  --risk-low: #16a34a;        /* Balanced emerald */
+  --risk-moderate: #d97706;   /* Amber */
+  --risk-high: #ea580c;       /* Vibrant orange */
+  --risk-veryhigh: #dc2626;   /* Crimson red */
   --nodata: #94a3b8;
 
   /* shadcn semantic mapping */
-  --background: var(--app-bg);
   --foreground: var(--ink);
   --card: var(--surface);
   --card-foreground: var(--ink);
-  --popover: var(--surface);
+  --popover: #ffffff;
   --popover-foreground: var(--ink);
-  --primary: var(--navy-900);
+  --primary: #121318;
   --primary-foreground: #ffffff;
-  --secondary: #eef2f7;
-  --secondary-foreground: var(--navy-900);
-  --muted: #eef2f7;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
   --muted-foreground: var(--ink-muted);
-  --accent: var(--cyan-50);
-  --accent-foreground: var(--navy-900);
   --destructive: var(--risk-veryhigh);
-  --border: var(--line);
-  --input: var(--line);
-  --ring: var(--teal-600);
-  --radius: 0.5rem;
+  --input: rgba(35, 45, 60, 0.12);
+  --ring: #2563eb;
+  --radius: 1.25rem;          /* 20px default rounded style */
 
-  --sidebar: var(--navy-900);
-  --sidebar-foreground: #e2e8f0;
-  --sidebar-primary: var(--teal-600);
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--navy-700);
+  /* Detached Dark Sidebar Navigation */
+  --sidebar: #121318;
+  --sidebar-foreground: #94a3b8;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #121318;
+  --sidebar-accent: #272832;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgb(255 255 255 / 0.1);
-  --sidebar-ring: var(--teal-600);
+  --sidebar-border: rgba(255, 255, 255, 0.10);
+  --sidebar-ring: #2563eb;
+}
+
+.dark {
+  --background: #090a0d;
+  --surface: #131419;
+  --surface-strong: #191a22;
+  --surface-hover: #1f202a;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --line: rgba(255, 255, 255, 0.08);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --accent: #ffffff;
+  --accent-soft: #1e2029;
+
+  --navy-900: #f8fafc;
+  --navy-700: #cbd5e1;
+  --teal-600: #3b82f6;
+  --cyan-50: rgba(30, 58, 138, 0.35);
+  --app-bg: #090a0d;
+  --ink: #f8fafc;
+  --ink-muted: #94a3b8;
+
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: #15161c;
+  --popover-foreground: var(--ink);
+  --primary: #ffffff;
+  --primary-foreground: #090a0d;
+  --secondary: #1a1b22;
+  --secondary-foreground: #f8fafc;
+  --muted: #1a1b22;
+  --muted-foreground: var(--ink-muted);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #3b82f6;
+
+  --sidebar: #0e0f12;
+  --sidebar-foreground: #94a3b8;
+  --sidebar-accent: #20222a;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
 }
 
 @theme inline {
-  /* Inter for Latin; the browser falls back per glyph to Noto for Devanagari / Tamil. */
-  --font-sans: "Inter Variable", "Noto Sans Devanagari", "Noto Sans Tamil", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-sans);
+  --font-sans: "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Open Sans", "Noto Sans Devanagari", "Noto Sans Tamil", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --color-navy-900: var(--navy-900);
   --color-navy-700: var(--navy-700);
@@ -107,15 +209,21 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 
-  /* Buttons 8px (rounded-lg), cards 12px (rounded-xl). */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
-  --radius-2xl: 16px;
+  /* Glassmorphism Radii */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
+  --radius-full: 9999px;
 
-  /* Single soft shadow level. */
-  --shadow-card: 0 1px 2px rgb(15 42 74 / 0.06), 0 2px 8px rgb(15 42 74 / 0.06);
+  /* Layered Glass Shadows */
+  --shadow-soft: 0 4px 18px rgba(25, 35, 50, 0.035);
+  --shadow-card: 0 4px 20px -2px rgba(25, 35, 50, 0.035), 0 1px 3px 0 rgba(25, 35, 50, 0.02);
+  --shadow-hover: 0 12px 32px -4px rgba(25, 35, 50, 0.07), 0 4px 12px -2px rgba(25, 35, 50, 0.03);
+  --shadow-elevated: 0 10px 35px rgba(25, 35, 50, 0.065);
+  --shadow-dropdown: 0 12px 36px 0 rgba(20, 32, 50, 0.09), 0 4px 12px 0 rgba(20, 32, 50, 0.04);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.06);
 
   --ease-ui: cubic-bezier(0.2, 0, 0, 1);
 }
@@ -127,20 +235,108 @@
   html {
     @apply font-sans;
     -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
   body {
     @apply bg-background text-foreground text-sm antialiased md:text-base;
+    font-family: var(--font-sans);
+    background-color: var(--background);
+    background-image: radial-gradient(circle at 10% 10%, rgba(228, 237, 248, 0.55) 0%, rgba(242, 244, 246, 0.95) 45%, #ecf0f5 100%);
+    background-attachment: fixed;
+    min-height: 100dvh;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  .dark body,
+  html.dark body {
+    background-color: #090a0d;
+    background-image: radial-gradient(circle at 10% 10%, rgba(25, 38, 65, 0.35) 0%, rgba(9, 10, 13, 0.98) 50%, #060709 100%);
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-teal-600;
+    @apply outline-2 outline-offset-2 outline-[#2563eb];
   }
 }
 
 @layer utilities {
+  /* Translucent glass surfaces */
+  .glass-surface {
+    background-color: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 20px -2px rgba(25, 35, 50, 0.035);
+  }
+  .glass-surface-strong {
+    background-color: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.92);
+    box-shadow: 0 10px 32px -4px rgba(25, 35, 50, 0.06);
+  }
+  .glass-pill {
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 9999px;
+  }
+
+  /* Detached navigation capsule */
+  .detached-sidebar {
+    background-color: #121318;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    border-radius: 28px;
+  }
+
+  /* Inline title graphic badges (no emojis, outline SVGs) */
+  .inline-badge-blue {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #2563eb;
+    box-shadow: 0 1px 4px rgba(37, 99, 235, 0.12);
+    margin: 0 0.4rem;
+    vertical-align: middle;
+  }
+  @media (min-width: 768px) {
+    .inline-badge-blue {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+  }
+
+  .inline-badge-orange {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background-color: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #ea580c;
+    box-shadow: 0 1px 4px rgba(234, 88, 12, 0.12);
+    margin: 0 0.4rem;
+    vertical-align: middle;
+  }
+  @media (min-width: 768px) {
+    .inline-badge-orange {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+  }
+
   /* Experimental / blind-spot: navy diagonal hatch. */
   .pattern-hatch {
     background-image: repeating-linear-gradient(

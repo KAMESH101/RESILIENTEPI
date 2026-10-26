@@ -26,20 +26,20 @@ export function SectionCard({
   return (
     <section
       aria-labelledby={id ? `${id}-title` : undefined}
-      className={cn('flex min-w-0 flex-col rounded-xl border bg-surface shadow-card', className)}
+      className={cn('flex min-w-0 flex-col rounded-[26px] border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418] shadow-[0_4px_24px_rgba(20,30,45,0.04)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-200 overflow-hidden', className)}
     >
-      <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 border-b px-4 py-3">
+      <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 border-b border-slate-200/50 dark:border-white/10 px-5 py-3.5">
         <div className="min-w-0">
-          <H id={id ? `${id}-title` : undefined} className="flex flex-wrap items-center gap-2 text-base font-semibold text-navy-900">
+          <H id={id ? `${id}-title` : undefined} className="flex flex-wrap items-center gap-2 text-base font-semibold text-slate-900 dark:text-white tracking-tight">
             {title}
           </H>
           {/* A div, not a <p>: captions may contain block content (avoids invalid <p> nesting). */}
-          {caption && <div className="mt-0.5 text-sm text-ink-muted">{caption}</div>}
+          {caption && <div className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{caption}</div>}
         </div>
         {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
       </header>
       <div className={cn('min-w-0 flex-1', bodyClassName)}>{children}</div>
-      {footer && <footer className="border-t px-4 py-3">{footer}</footer>}
+      {footer && <footer className="border-t border-slate-200/50 dark:border-white/10 px-5 py-3.5">{footer}</footer>}
     </section>
   )
 }

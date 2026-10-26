@@ -14,9 +14,9 @@ import { PriorityPill } from './PriorityPill'
 import { TaskChangeDialog, type TaskChange } from './TaskChangeDialog'
 
 const STATUS_TONE: Record<ActionStatus, string> = {
-  pending: 'border-slate-300 bg-surface text-ink',
-  in_progress: 'border-teal-600 bg-cyan-50 text-navy-900',
-  completed: 'border-risk-low bg-[#e8f5e9] text-[#1b5e20]',
+  pending: 'border-slate-200/80 bg-white/70 text-slate-600',
+  in_progress: 'border-blue-200/60 bg-blue-50/80 text-blue-700',
+  completed: 'border-emerald-200/60 bg-emerald-50/80 text-emerald-700',
 }
 
 const HISTORY_PREVIEW = 3
@@ -50,20 +50,19 @@ export function TaskCard({ task: t, onOpenDistrict, highlighted = false }: { tas
       id={t.id}
       aria-labelledby={`${t.id}-title`}
       className={cn(
-        'flex flex-col gap-3 rounded-xl border bg-surface p-4 shadow-card',
-        t.priority === 'p1' && 'border-l-4 border-l-risk-veryhigh',
-        t.status === 'completed' && 'opacity-80',
-        highlighted && 'ring-2 ring-teal-600 ring-offset-2',
+        'flex flex-col gap-3.5 rounded-[26px] border border-slate-200/80 bg-white p-5.5 shadow-[0_4px_24px_rgba(20,30,45,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_12px_32px_rgba(20,30,45,0.08)]',
+        t.status === 'completed' && 'opacity-85',
+        highlighted && 'ring-2 ring-blue-500/80 ring-offset-2',
       )}
     >
       <header className="flex flex-wrap items-start gap-x-3 gap-y-2">
         <PriorityPill priority={t.priority} className="mt-0.5" />
         <div className="min-w-0 flex-1">
-          <h3 id={`${t.id}-title`} className="text-base font-semibold text-navy-900">
+          <h3 id={`${t.id}-title`} className="text-base font-semibold text-ink">
             {t.suggested_action}
           </h3>
           <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-sm">
-            <button type="button" onClick={onOpenDistrict} className="font-medium text-teal-600 hover:underline">
+            <button type="button" onClick={onOpenDistrict} className="font-medium text-[#1a73e8] hover:underline">
               {t.district.name}
             </button>
             <span className="text-ink-muted">{t.district.state}</span>
@@ -71,23 +70,23 @@ export function TaskCard({ task: t, onOpenDistrict, highlighted = false }: { tas
             {t.blind_spot_status === 'flagged' && <BlindSpotBadge size="sm" band="flagged" />}
             {t.blind_spot_status === 'watch' && <BlindSpotBadge size="sm" band="watch" />}
             {t.blind_spot_status === 'dismissed' && (
-              <span className="inline-flex h-5 items-center gap-1 rounded-full border border-dashed border-slate-400 px-1.5 text-xs text-ink-muted">
+              <span className="inline-flex h-5 items-center gap-1 rounded-full border border-dashed border-border px-2 text-xs text-ink-muted">
                 <EyeOff className="size-3" aria-hidden /> Blind spot dismissed
               </span>
             )}
-            <span className="inline-flex h-5 items-center rounded-full bg-muted px-1.5 text-xs text-ink-muted">{ORIGIN_LABELS[t.origin]}</span>
+            <span className="inline-flex h-5 items-center rounded-full bg-muted px-2 text-xs font-medium text-ink-muted">{ORIGIN_LABELS[t.origin]}</span>
             <SyntheticTag source={t.source} />
           </div>
         </div>
-        <span className={cn('inline-flex h-7 shrink-0 items-center rounded-full border px-2.5 text-sm font-medium', STATUS_TONE[t.status])}>
+        <span className={cn('inline-flex h-7 shrink-0 items-center rounded-full border px-3 text-xs font-medium shadow-2xs', STATUS_TONE[t.status])}>
           {STATUS_LABELS[t.status]}
         </span>
       </header>
 
-      <p className="text-sm text-ink">{t.reason}</p>
+      <p className="text-sm text-ink leading-relaxed">{t.reason}</p>
       {t.context_note && (
-        <p className="flex items-start gap-2 rounded-lg bg-cyan-50 px-3 py-2 text-sm text-navy-900">
-          <EyeOff className="mt-0.5 size-4 shrink-0" aria-hidden />
+        <p className="flex items-start gap-2 rounded-xl border border-[#1a73e8]/20 bg-[#e8f0fe] px-3.5 py-2.5 text-sm text-[#1967d2]">
+          <EyeOff className="mt-0.5 size-4 shrink-0 text-[#1a73e8]" aria-hidden />
           {t.context_note}
         </p>
       )}

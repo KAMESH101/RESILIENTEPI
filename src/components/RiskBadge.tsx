@@ -7,8 +7,8 @@ import { RISK_STYLE } from './riskStyle'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 const SIZE = {
-  sm: 'h-5 gap-1 px-1.5 text-xs [&_svg]:size-3',
-  md: 'h-7 gap-1.5 px-2.5 text-sm [&_svg]:size-4',
+  sm: 'h-5 gap-1 px-2 text-xs [&_svg]:size-3 shadow-2xs',
+  md: 'h-7 gap-1.5 px-3 text-sm [&_svg]:size-4 shadow-xs',
 }
 
 /** Risk is never colour alone: fill + icon + text. Probability on hover. */

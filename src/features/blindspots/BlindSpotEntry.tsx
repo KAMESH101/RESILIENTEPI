@@ -50,14 +50,13 @@ export function BlindSpotEntry({
       id={a.id}
       aria-labelledby={`${a.id}-title`}
       className={cn(
-        'scroll-mt-32 rounded-xl border bg-surface shadow-card',
-        a.band === 'flagged' && 'border-l-4 border-l-navy-900',
-        focused && 'ring-2 ring-teal-600 ring-offset-2',
+        'scroll-mt-32 rounded-2xl border border-border bg-surface shadow-card transition-all duration-200 hover:shadow-[0_4px_16px_rgba(60,64,67,0.12)] hover:border-[#1a73e8]/40',
+        focused && 'ring-2 ring-[#1a73e8] ring-offset-2',
       )}
     >
-      <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 p-4 pb-2">
+      <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 p-5 pb-3">
         <div className="min-w-0">
-          <h3 id={`${a.id}-title`} className="flex flex-wrap items-baseline gap-x-2 text-lg font-semibold text-navy-900">
+          <h3 id={`${a.id}-title`} className="flex flex-wrap items-baseline gap-x-2 text-lg font-semibold text-ink">
             <span className="text-sm font-medium text-ink-muted tabular-nums">#{rank}</span>
             {a.district.name}
             <span className="text-sm font-normal text-ink-muted">{a.district.state}</span>

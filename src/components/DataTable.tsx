@@ -96,7 +96,7 @@ export function DataTable<T>({
                     scope="col"
                     aria-sort={c.sortValue ? ariaSort : undefined}
                     className={cn(
-                      'sticky top-0 z-10 border-b bg-[#f8fafc] px-3 py-2 font-medium whitespace-nowrap text-ink-muted',
+                      'sticky top-0 z-10 border-b border-slate-200/70 dark:border-white/10 bg-slate-50/80 dark:bg-[#131418]/90 backdrop-blur-md px-3.5 py-2.5 font-semibold whitespace-nowrap text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400',
                       c.align === 'right' ? 'text-right' : 'text-left',
                     )}
                   >
@@ -104,13 +104,13 @@ export function DataTable<T>({
                       <button
                         type="button"
                         onClick={() => toggleSort(c.key)}
-                        className={cn('inline-flex items-center gap-1 rounded hover:text-navy-900', c.align === 'right' && 'flex-row-reverse')}
+                        className={cn('inline-flex items-center gap-1.5 rounded-lg hover:text-slate-900 dark:hover:text-white transition-colors', active && 'text-blue-600 dark:text-blue-400 font-semibold', c.align === 'right' && 'flex-row-reverse')}
                       >
                         {c.header}
                         {active ? (
-                          sort!.dir === 'asc' ? <ArrowUp className="size-3.5" aria-hidden /> : <ArrowDown className="size-3.5" aria-hidden />
+                          sort!.dir === 'asc' ? <ArrowUp className="size-3.5 text-blue-600 dark:text-blue-400" aria-hidden /> : <ArrowDown className="size-3.5 text-blue-600 dark:text-blue-400" aria-hidden />
                         ) : (
-                          <ArrowUpDown className="size-3.5 opacity-50" aria-hidden />
+                          <ArrowUpDown className="size-3.5 opacity-40 hover:opacity-75" aria-hidden />
                         )}
                       </button>
                     ) : (
@@ -126,10 +126,10 @@ export function DataTable<T>({
               <tr
                 key={rowKey(r)}
                 onClick={onRowClick ? () => onRowClick(r) : undefined}
-                className={cn('border-b last:border-b-0', onRowClick && 'cursor-pointer transition-colors duration-150 hover:bg-cyan-50')}
+                className={cn('border-b border-slate-200/40 dark:border-white/5 last:border-b-0 transition-colors duration-150', onRowClick && 'cursor-pointer hover:bg-white/80 dark:hover:bg-white/5')}
               >
                 {columns.map((c, i) => (
-                  <td key={c.key} className={cn('px-3 py-2 align-middle', c.align === 'right' && 'text-right tabular-nums', c.className)}>
+                  <td key={c.key} className={cn('px-3.5 py-2.5 align-middle', c.align === 'right' && 'text-right tabular-nums', c.className)}>
                     {i === 0 && onRowClick ? (
                       <button
                         type="button"
@@ -138,7 +138,7 @@ export function DataTable<T>({
                           onRowClick(r)
                         }}
                         aria-label={rowLabel?.(r)}
-                        className="text-left font-medium text-navy-900 hover:underline"
+                        className="text-left font-medium text-slate-900 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:underline transition-colors"
                       >
                         {c.cell(r)}
                       </button>
@@ -162,13 +162,13 @@ export function DataTable<T>({
               disabled={!onRowClick}
               onClick={onRowClick ? () => onRowClick(r) : undefined}
               aria-label={rowLabel?.(r)}
-              className="flex w-full flex-col gap-2 rounded-lg border bg-surface p-3 text-left transition-colors duration-150 hover:bg-cyan-50 disabled:cursor-default"
+              className="flex w-full flex-col gap-2 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418] backdrop-blur-md p-3.5 text-left shadow-card dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-150 hover:bg-white/95 dark:hover:bg-[#191a22] disabled:cursor-default"
             >
-              <span className="font-medium text-navy-900">{first.cell(r)}</span>
+              <span className="font-medium text-slate-900 dark:text-white">{first.cell(r)}</span>
               <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-sm">
                 {columns.slice(1).filter((c) => !c.hideInCard).map((c) => (
                   <div key={c.key} className="contents">
-                    <dt className="text-ink-muted">{c.header}</dt>
+                    <dt className="text-slate-500 dark:text-slate-400">{c.header}</dt>
                     <dd className="min-w-0 tabular-nums">{c.cell(r)}</dd>
                   </div>
                 ))}
@@ -179,7 +179,7 @@ export function DataTable<T>({
       </ul>
 
       {pages > 1 && (
-        <div className="flex items-center justify-between gap-2 border-t px-3 py-2 text-sm text-ink-muted">
+        <div className="flex items-center justify-between gap-2 border-t border-slate-200/50 dark:border-white/10 px-3 py-2 text-sm text-ink-muted dark:text-slate-400">
           <span className="tabular-nums">
             {current * pageSize + 1}–{Math.min(sorted.length, (current + 1) * pageSize)} of {sorted.length}
           </span>

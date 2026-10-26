@@ -44,19 +44,19 @@ export function ChartCard({
   const id = useId()
   const Heading = compact ? 'h3' : 'h2'
   return (
-    <figure className={cn('flex min-w-0 flex-col', !compact && 'rounded-xl border bg-surface p-4 shadow-card', className)} aria-labelledby={`${id}-t`}>
+    <figure className={cn('flex min-w-0 flex-col', !compact && 'rounded-[26px] border border-slate-200/80 bg-white p-5.5 shadow-[0_4px_24px_rgba(20,30,45,0.04)] transition-all duration-200', className)} aria-labelledby={`${id}-t`}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
-          <Heading id={`${id}-t`} className={cn('flex flex-wrap items-center gap-2 font-semibold text-navy-900', compact ? 'text-sm' : 'text-base')}>
+          <Heading id={`${id}-t`} className={cn('flex flex-wrap items-center gap-2 font-semibold text-slate-900 tracking-tight', compact ? 'text-sm' : 'text-base')}>
             {title}
             {synthetic && <SyntheticTag />}
             {chips}
           </Heading>
-          {caption && <p className="mt-0.5 text-xs text-ink-muted">{caption}</p>}
+          {caption && <p className="mt-0.5 text-xs text-slate-500">{caption}</p>}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {actions}
-          <Button variant="ghost" size="sm" onClick={() => setAsTable((v) => !v)} aria-pressed={asTable} className="text-teal-600">
+          <Button variant="ghost" size="sm" onClick={() => setAsTable((v) => !v)} aria-pressed={asTable} className="rounded-xl text-xs font-medium text-blue-600 hover:bg-blue-50/70 hover:text-blue-700 transition-colors">
             <Table2 aria-hidden />
             {asTable ? 'View as chart' : 'View as table'}
           </Button>
@@ -64,10 +64,10 @@ export function ChartCard({
       </div>
       <figcaption className="sr-only">{summary}</figcaption>
       {asTable ? (
-        <div className="mt-2 max-h-72 overflow-auto rounded-lg border">
+        <div className="mt-2 max-h-72 overflow-auto rounded-xl border border-slate-200/60 bg-white/60 backdrop-blur-sm">
           <table className="w-full text-sm">
             <caption className="sr-only">{title}</caption>
-            <thead className="sticky top-0 bg-muted">
+            <thead className="sticky top-0 bg-slate-100/70 backdrop-blur-xs">
               <tr>
                 {table.columns.map((c) => (
                   <th key={c} scope="col" className="px-3 py-2 text-left font-medium text-ink-muted">

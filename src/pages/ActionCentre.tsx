@@ -70,14 +70,14 @@ export default function ActionCentre() {
         filters={
           <FilterBar showHorizon={false} extraChips={chips}>
             <div className="flex min-w-0 flex-col gap-1">
-              <label htmlFor="priority-filter" className="text-xs font-medium text-ink-muted">
+              <label htmlFor="priority-filter" className="text-xs font-medium text-slate-500 dark:text-white">
                 Priority
               </label>
               <Select value={priority ?? ALL} onValueChange={(v) => setParam({ priority: v === ALL ? null : v })}>
-                <SelectTrigger id="priority-filter" className="h-9 w-40 max-w-full bg-surface">
+                <SelectTrigger id="priority-filter" className="h-10 w-44 max-w-full rounded-full border border-slate-200/80 dark:border-white/10 bg-white/90 dark:bg-white/5 shadow-2xs text-slate-800 dark:text-white px-4">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#191a22] shadow-elevated">
                   <SelectItem value={ALL}>All priorities</SelectItem>
                   {(Object.keys(PRIORITY_LABELS) as ActionPriority[]).map((k) => (
                     <SelectItem key={k} value={k}>
@@ -88,14 +88,14 @@ export default function ActionCentre() {
               </Select>
             </div>
             <div className="flex min-w-0 flex-col gap-1">
-              <label htmlFor="status-filter" className="text-xs font-medium text-ink-muted">
+              <label htmlFor="status-filter" className="text-xs font-medium text-slate-500 dark:text-white">
                 Status
               </label>
               <Select value={status ?? ALL} onValueChange={(v) => setParam({ status: v === ALL ? null : v })}>
-                <SelectTrigger id="status-filter" className="h-9 w-40 max-w-full bg-surface">
+                <SelectTrigger id="status-filter" className="h-10 w-44 max-w-full rounded-full border border-slate-200/80 dark:border-white/10 bg-white/90 dark:bg-white/5 shadow-2xs text-slate-800 dark:text-white px-4">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#191a22] shadow-elevated">
                   <SelectItem value={ALL}>All statuses</SelectItem>
                   {(Object.keys(STATUS_LABELS) as ActionStatus[]).map((k) => (
                     <SelectItem key={k} value={k}>
@@ -106,7 +106,7 @@ export default function ActionCentre() {
               </Select>
             </div>
             <div className="flex min-w-0 flex-col gap-1">
-              <span className="text-xs font-medium text-ink-muted">District</span>
+              <span className="text-xs font-medium text-slate-500 dark:text-white">District</span>
               <DistrictSearch className="w-56 max-w-full" label="Filter by district" placeholder="Filter by district…" onSelect={(d) => setParam({ dist: d.id })} />
             </div>
           </FilterBar>
@@ -114,40 +114,40 @@ export default function ActionCentre() {
       />
 
       {/* Permanent: never dismissible. */}
-      <p role="note" className="flex items-start gap-2 rounded-xl border border-teal-600 bg-cyan-50 px-4 py-3 text-sm font-medium text-navy-900">
-        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-teal-600" aria-hidden />
+      <p role="note" className="flex items-start gap-2.5 rounded-2xl border border-blue-200/50 dark:border-blue-500/30 bg-blue-50/70 dark:bg-blue-950/30 backdrop-blur-sm px-4.5 py-3.5 text-sm font-medium text-blue-800 dark:text-blue-300 shadow-2xs">
+        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-blue-600 dark:text-blue-400" aria-hidden />
         {HUMAN_REVIEW_NOTE}
       </p>
       {!canEdit && (
-        <p className="flex items-center gap-2 text-sm text-ink-muted">
+        <p className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
           <Eye className="size-4 shrink-0" aria-hidden />
           Read-only view (Evaluator): tasks can be viewed but not changed.
         </p>
       )}
 
       {q.isError && !q.data ? (
-        <div className="rounded-xl border bg-surface shadow-card">
+        <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418] shadow-card">
           <ErrorState error={q.error} onRetry={() => void q.refetch()} />
         </div>
       ) : !q.data ? (
         <>
           <AttentionSkeleton />
-          <ListSkeleton rows={6} className="rounded-xl border bg-surface" />
+          <ListSkeleton rows={6} className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#131418]" />
         </>
       ) : (
         <>
           <AttentionStrip tasks={all} onFilter={(u) => setParam(u)} />
           <DecisionMatrixCard tasks={all} />
           <section aria-labelledby="tasks-title" className="flex flex-col gap-3">
-            <h2 id="tasks-title" className="flex flex-wrap items-baseline gap-x-2 text-xl font-semibold text-navy-900">
+            <h2 id="tasks-title" className="flex flex-wrap items-baseline gap-x-2 text-xl font-semibold text-slate-900 dark:text-white tracking-tight">
               {t('actions.tasks')}
-              <span className="text-sm font-normal text-ink-muted tabular-nums" role="status">
+              <span className="text-sm font-normal text-slate-500 dark:text-slate-400 tabular-nums" role="status">
                 Showing {Math.min(visible.length, limit)} of {visible.length}
                 {visible.length !== all.length && ` (${all.length} in total)`}
               </span>
             </h2>
             {visible.length === 0 ? (
-              <div className="rounded-xl border bg-surface shadow-card">
+              <div className="rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl shadow-card">
                 <EmptyState
                   icon={ClipboardList}
                   title="No tasks match these filters"
@@ -190,16 +190,16 @@ function AttentionStrip({ tasks, onFilter }: { tasks: ActionTask[]; onFilter: (u
     { label: 'in progress', value: inProgress, filter: { status: 'in_progress', priority: null, unassigned: null } },
   ]
   return (
-    <section aria-label="Needs attention" className="flex flex-wrap items-center gap-2 rounded-xl border border-l-4 border-l-risk-veryhigh bg-surface p-4 shadow-card">
+    <section aria-label="Needs attention" className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-4.5 shadow-card transition-all duration-200">
       {items.map((i) => (
         <button
           key={i.label}
           type="button"
           onClick={() => onFilter(i.filter)}
-          className="inline-flex items-baseline gap-1.5 rounded-full border bg-surface px-3 py-1.5 text-sm transition-colors duration-150 hover:border-teal-600 hover:bg-cyan-50"
+          className="inline-flex items-baseline gap-1.5 rounded-full border border-white/90 bg-white/80 backdrop-blur-sm px-3.5 py-1.5 text-xs font-semibold text-slate-700 shadow-2xs transition-all duration-150 hover:bg-white hover:border-blue-200 hover:text-slate-900 hover:shadow-xs"
         >
-          <strong className="text-base text-navy-900 tabular-nums">{i.value}</strong>
-          <span className="text-ink">{i.label}</span>
+          <strong className="text-sm font-bold text-slate-900 tabular-nums">{i.value}</strong>
+          <span>{i.label}</span>
         </button>
       ))}
     </section>

@@ -9,11 +9,11 @@ const ICONS: Record<ToastVariant, typeof Info> = {
   info: Info,
 }
 
-const TONES: Record<ToastVariant, string> = {
-  success: 'border-l-risk-low',
-  demo: 'border-l-[#9a6b00]',
-  error: 'border-l-risk-veryhigh',
-  info: 'border-l-teal-600',
+const ICON_TONES: Record<ToastVariant, string> = {
+  success: 'text-[#1e8e3e]',
+  demo: 'text-[#f9ab00]',
+  error: 'text-[#d93025]',
+  info: 'text-[#1a73e8]',
 }
 
 /** Toasts are announced through an aria-live region. */
@@ -31,14 +31,14 @@ export function Toaster() {
           <div
             key={t.id}
             role={t.variant === 'error' ? 'alert' : 'status'}
-            className={cn('pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-lg border border-l-4 bg-surface p-3 shadow-lg', TONES[t.variant])}
+            className="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-2xl border border-border bg-surface p-3.5 shadow-[0_4px_20px_rgba(60,64,67,0.18)] transition-all"
           >
-            <Icon className="mt-0.5 size-5 shrink-0 text-navy-900" aria-hidden />
+            <Icon className={cn('mt-0.5 size-5 shrink-0', ICON_TONES[t.variant])} aria-hidden />
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-navy-900">{t.title}</p>
+              <p className="text-sm font-semibold text-ink">{t.title}</p>
               {t.description && <p className="mt-0.5 text-sm text-ink-muted">{t.description}</p>}
             </div>
-            <button type="button" onClick={() => dismiss(t.id)} className="rounded p-0.5 text-ink-muted hover:text-ink" aria-label="Dismiss notification">
+            <button type="button" onClick={() => dismiss(t.id)} className="rounded-full p-1 text-ink-muted hover:bg-[#f1f3f4] hover:text-ink transition-colors" aria-label="Dismiss notification">
               <X className="size-4" aria-hidden />
             </button>
           </div>

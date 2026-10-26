@@ -32,3 +32,8 @@ dist-ssr
 test-results
 playwright-report
 qa/screenshots
+node_modules/
+dist/
+.env
+.env.*
+!.env.example

@@ -49,7 +49,7 @@ export function DistrictView({ id }: { id: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <Link to={withFilters('/district', params)} className="inline-flex w-fit items-center gap-1 text-sm font-medium text-teal-600 hover:underline">
+      <Link to={withFilters('/district', params)} className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-[#1a73e8] hover:text-[#174ea6] hover:underline transition-colors">
         <ArrowLeft className="size-4" aria-hidden /> All districts
       </Link>
 
@@ -112,18 +112,18 @@ export function DistrictView({ id }: { id: string }) {
           >
             <ul className="grid gap-3 p-4 sm:grid-cols-3">
               {d.forecasts.map((x) => (
-                <li key={x.horizon} className={cn('rounded-lg border p-3', x.horizon === horizon && 'border-teal-600 bg-cyan-50/60')}>
-                  <p className="text-sm text-ink-muted">
+                <li key={x.horizon} className={cn('rounded-2xl border p-4 transition-all', x.horizon === horizon ? 'border-blue-400 bg-blue-50/70 shadow-2xs' : 'border-slate-200/80 bg-white')}>
+                  <p className="text-xs font-medium text-slate-500">
                     {x.horizon} month{x.horizon > 1 ? 's' : ''} ahead · {formatMonth(x.target_month)}
                   </p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <RiskBadge category={x.category} probability={x.probability} />
-                    <span className="text-sm tabular-nums">
+                    <span className="text-sm font-semibold tabular-nums text-slate-800">
                       {riskBand(x.category).word} ({formatPct(x.probability)})
                     </span>
                   </div>
-                  <p className="mt-1 text-xs text-ink-muted">
-                    Expected cases: {x.expected_cases == null ? 'No data' : x.expected_cases.toLocaleString('en-IN')}
+                  <p className="mt-1.5 text-xs text-slate-500">
+                    Expected cases: <span className="font-medium text-slate-800">{x.expected_cases == null ? 'No data' : x.expected_cases.toLocaleString('en-IN')}</span>
                     {x.expected_cases_interval && ` (${x.expected_cases_interval.lower}–${x.expected_cases_interval.upper})`}
                   </p>
                 </li>

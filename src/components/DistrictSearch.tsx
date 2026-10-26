@@ -116,7 +116,7 @@ export function DistrictSearch({
           }
         }}
         className={cn(
-          'h-9 w-full rounded-lg border bg-surface pr-3 pl-9 text-sm text-ink placeholder:text-ink-muted focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-teal-600',
+          'h-9.5 w-full rounded-full border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-md pr-3 pl-9 text-sm text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-2xs transition-all duration-150 hover:bg-white/80 dark:hover:bg-white/10 hover:border-slate-300/70 dark:hover:border-white/20 focus:bg-white dark:focus:bg-[#191a22] focus:border-blue-500/80 focus:shadow-[0_4px_20px_rgba(37,99,235,0.08)] focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-blue-500',
           inputClassName,
         )}
       />
@@ -125,11 +125,11 @@ export function DistrictSearch({
           id={listId}
           role="listbox"
           aria-label="Matching districts"
-          className="absolute top-full right-0 left-0 z-50 mt-1 max-h-80 overflow-auto rounded-lg border bg-surface p-1 shadow-lg"
+          className="absolute top-full right-0 left-0 z-50 mt-1.5 max-h-80 overflow-auto rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/95 dark:bg-[#191a22]/95 backdrop-blur-2xl p-1.5 shadow-[0_12px_36px_rgba(20,32,50,0.12)] dark:shadow-[0_12px_36px_rgba(0,0,0,0.4)]"
         >
-          {isLoading && <li className="px-3 py-2 text-sm text-ink-muted">Loading districts…</li>}
+          {isLoading && <li className="px-3.5 py-2 text-sm text-ink-muted dark:text-slate-400">Loading districts…</li>}
           {!isLoading && results.length === 0 && (
-            <li className="px-3 py-2 text-sm text-ink-muted">No district matches “{query}”. Try a state name.</li>
+            <li className="px-3.5 py-2 text-sm text-ink-muted dark:text-slate-400">No district matches “{query}”. Try a state name.</li>
           )}
           {results.map((d, i) => (
             <li
@@ -141,13 +141,15 @@ export function DistrictSearch({
               onClick={() => choose(d)}
               onMouseEnter={() => setActive(i)}
               className={cn(
-                'flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm',
-                i === active ? 'bg-cyan-50 text-navy-900' : 'text-ink',
+                'flex cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2 text-sm transition-colors duration-100',
+                i === active
+                  ? 'bg-blue-50/80 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-white/5',
               )}
             >
-              <MapPin className="size-4 shrink-0 text-ink-muted" aria-hidden />
+              <MapPin className={cn('size-4 shrink-0', i === active ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400')} aria-hidden />
               <span className="font-medium">{d.name}</span>
-              <span className="truncate text-ink-muted">{d.state}</span>
+              <span className={cn('truncate text-xs', i === active ? 'text-blue-600/80 dark:text-blue-400/80' : 'text-slate-400')}>{d.state}</span>
             </li>
           ))}
         </ul>

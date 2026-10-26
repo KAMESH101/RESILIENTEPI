@@ -74,10 +74,10 @@ export default function RiskMap() {
                 Risk level
               </label>
               <Select value={f.risk ?? ALL} onValueChange={(v) => f.setParam({ risk: v === ALL ? null : v })}>
-                <SelectTrigger id="risk-filter" className="h-9 w-48 max-w-full bg-surface">
+                <SelectTrigger id="risk-filter" className="h-10 w-48 max-w-full rounded-full border border-slate-200/80 bg-white/90 shadow-2xs text-slate-800 px-4">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-2xl border border-slate-200/80 bg-white shadow-elevated">
                   <SelectItem value={ALL}>All risk levels</SelectItem>
                   {(Object.keys(RISK_FILTER_LABELS) as RiskFilter[]).map((k) => (
                     <SelectItem key={k} value={k}>
@@ -88,14 +88,14 @@ export default function RiskMap() {
               </Select>
             </div>
             <div className="flex min-w-0 flex-col gap-1">
-              <label htmlFor="bs-filter" className="text-xs font-medium text-ink-muted">
+              <label htmlFor="bs-filter" className="text-xs font-medium text-slate-500">
                 Blind spot (experimental)
               </label>
               <Select value={f.bs ?? ALL} onValueChange={(v) => f.setParam({ bs: v === ALL ? null : v })}>
-                <SelectTrigger id="bs-filter" className="h-9 w-52 max-w-full bg-surface">
+                <SelectTrigger id="bs-filter" className="h-10 w-52 max-w-full rounded-full border border-slate-200/80 bg-white/90 shadow-2xs text-slate-800 px-4">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-2xl border border-slate-200/80 bg-white shadow-elevated">
                   <SelectItem value={ALL}>All districts</SelectItem>
                   {(Object.keys(BS_FILTER_LABELS) as BlindSpotFilter[]).map((k) => (
                     <SelectItem key={k} value={k}>
@@ -110,7 +110,7 @@ export default function RiskMap() {
       />
 
       {q.isError && !q.data ? (
-        <div className="rounded-xl border bg-surface shadow-card">
+        <div className="rounded-2xl border bg-white p-6 shadow-card">
           <ErrorState error={q.error} onRetry={() => void q.refetch()} />
         </div>
       ) : (
@@ -126,17 +126,17 @@ export default function RiskMap() {
                 value={view}
                 onValueChange={(v) => v && f.setParam({ view: v })}
                 aria-label="Map or table view"
-                className="bg-surface"
+                className="rounded-full border border-slate-200/80 bg-white/90 p-1 shadow-2xs gap-1"
               >
-                <ToggleGroupItem value="map" className="h-9 gap-1.5 px-3 data-[state=on]:bg-navy-900 data-[state=on]:text-white">
+                <ToggleGroupItem value="map" className="h-8 gap-1.5 rounded-full px-4 text-xs font-medium text-slate-600 hover:text-slate-900 data-[state=on]:bg-slate-900 data-[state=on]:text-white data-[state=on]:shadow-xs data-[state=on]:font-semibold">
                   <MapIcon className="size-4" aria-hidden /> Map
                 </ToggleGroupItem>
-                <ToggleGroupItem value="table" className="h-9 gap-1.5 px-3 data-[state=on]:bg-navy-900 data-[state=on]:text-white">
+                <ToggleGroupItem value="table" className="h-8 gap-1.5 rounded-full px-4 text-xs font-medium text-slate-600 hover:text-slate-900 data-[state=on]:bg-slate-900 data-[state=on]:text-white data-[state=on]:shadow-xs data-[state=on]:font-semibold">
                   <Table2 className="size-4" aria-hidden /> Table
                 </ToggleGroupItem>
               </ToggleGroup>
             ) : (
-              <Button variant="outline" className="w-full" onClick={() => f.setParam({ view: view === 'map' ? 'table' : 'map' })}>
+              <Button variant="outline" className="w-full rounded-full" onClick={() => f.setParam({ view: view === 'map' ? 'table' : 'map' })}>
                 {view === 'map' ? <List aria-hidden /> : <MapIcon aria-hidden />}
                 {view === 'map' ? 'Show list' : 'Show map'}
               </Button>
@@ -221,14 +221,14 @@ function AttentionStrip({
   const flagged = districts.filter((s) => s.blind_spot?.flagged).length
   const top = [...districts].sort((a, b) => (b.forecast?.probability ?? 0) - (a.forecast?.probability ?? 0)).slice(0, 3)
   return (
-    <section aria-label="Needs attention" className="flex flex-col gap-3 rounded-xl border border-l-4 border-l-risk-high bg-surface p-4 shadow-card lg:flex-row lg:items-center lg:justify-between">
-      <p className="flex items-start gap-2 text-base text-ink">
-        <AlertTriangle className="mt-0.5 size-5 shrink-0 text-risk-high" aria-hidden />
+    <section aria-label="Needs attention" className="flex flex-col gap-3 rounded-[26px] border border-orange-200/90 bg-gradient-to-r from-orange-50/90 via-white to-amber-50/60 p-5 shadow-[0_4px_24px_rgba(20,30,45,0.04)] lg:flex-row lg:items-center lg:justify-between transition-all duration-200">
+      <p className="flex items-start gap-2 text-base text-slate-800">
+        <AlertTriangle className="mt-0.5 size-5 shrink-0 text-orange-600" aria-hidden />
         <span>
-          <strong className="tabular-nums">{high}</strong> district{high === 1 ? ' is' : 's are'} forecast High or Very High in {horizon} month{horizon > 1 ? 's' : ''}
+          <strong className="tabular-nums text-slate-900 font-bold">{high}</strong> district{high === 1 ? ' is' : 's are'} forecast High or Very High in {horizon} month{horizon > 1 ? 's' : ''}
           {flagged > 0 && (
             <>
-              ; <strong className="tabular-nums">{flagged}</strong> potential blind spot{flagged === 1 ? '' : 's'} (experimental)
+              ; <strong className="tabular-nums text-slate-900 font-bold">{flagged}</strong> potential blind spot{flagged === 1 ? '' : 's'} (experimental)
             </>
           )}
           .
@@ -236,18 +236,18 @@ function AttentionStrip({
       </p>
       {top.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-ink-muted">Highest:</span>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Highest:</span>
           {top.map((s) => (
             <button
               key={s.district.id}
               type="button"
               onClick={() => onSelect(s.district.id)}
-              className="inline-flex items-center gap-1.5 rounded-full border bg-surface py-1 pr-3 pl-1 text-sm transition-colors duration-150 hover:border-teal-600 hover:bg-cyan-50"
+              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white py-1 pr-3 pl-1 text-xs font-medium text-slate-800 shadow-2xs transition-all duration-150 hover:bg-white hover:border-blue-400 hover:shadow-xs"
               aria-label={`${s.district.name}: ${s.forecast ? `${riskBand(s.forecast.category).label} risk, ${formatPct(s.forecast.probability)}` : 'No data'}`}
             >
               <RiskBadge size="sm" category={s.forecast?.category ?? null} />
-              <span className="font-medium text-navy-900">{s.district.name}</span>
-              <span className="text-ink-muted tabular-nums">{formatPct(s.forecast?.probability)}</span>
+              <span className="font-semibold text-slate-800">{s.district.name}</span>
+              <span className="text-slate-500 tabular-nums">{formatPct(s.forecast?.probability)}</span>
             </button>
           ))}
         </div>

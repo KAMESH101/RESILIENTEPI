@@ -29,15 +29,15 @@ export function SyntheticTag({
       <TooltipTrigger asChild>
         <span
           className={cn(
-            'inline-flex h-5 shrink-0 items-center gap-1 rounded-full px-1.5 text-xs leading-none font-medium whitespace-nowrap',
+            'inline-flex h-5 shrink-0 items-center gap-1 rounded-full px-2 text-xs leading-none font-medium whitespace-nowrap transition-colors',
             synthetic
-              ? 'border border-dashed border-[#9a6b00] bg-[#fff8e1] text-[#6b4a00]'
-              : 'border border-teal-600 bg-cyan-50 text-[#0b6b6b]',
+              ? 'border border-dashed border-[#f9ab00]/70 bg-[#fef7e0] text-[#b06000]'
+              : 'border border-[#1a73e8]/40 bg-[#e8f0fe] text-[#1967d2]',
             className,
           )}
           aria-label={synthetic ? 'Synthetic demo data' : label}
         >
-          {synthetic ? <FlaskConical className="size-3" aria-hidden /> : <Radio className="size-3" aria-hidden />}
+          {synthetic ? <FlaskConical className="size-3 text-[#b06000]" aria-hidden /> : <Radio className="size-3 text-[#1967d2]" aria-hidden />}
           {label}
         </span>
       </TooltipTrigger>

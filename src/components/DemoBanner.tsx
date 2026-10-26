@@ -9,9 +9,9 @@ export function DemoBanner() {
   return (
     <div
       role="note"
-      className="flex min-h-7 items-center justify-center gap-1.5 border-b border-[#e8d9a8] bg-[#fff8e1] px-4 py-1 text-center text-xs font-medium text-[#5c4300] print:hidden"
+      className="mb-2 flex min-h-7 items-center justify-center gap-2 rounded-2xl border border-amber-200/60 bg-amber-50/85 backdrop-blur-md px-4 py-1 text-center text-xs font-medium text-amber-900 shadow-2xs print:hidden"
     >
-      <FlaskConical className="size-3.5 shrink-0" aria-hidden />
+      <FlaskConical className="size-3.5 shrink-0 text-amber-700" aria-hidden />
       {t('app.demoBanner')}
     </div>
   )

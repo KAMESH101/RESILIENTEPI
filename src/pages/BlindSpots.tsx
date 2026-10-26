@@ -183,24 +183,24 @@ export default function BlindSpots() {
 /** Core message, the experimental label and how the score is built. */
 function Explainer() {
   return (
-    <section aria-label="About the blind-spot indicator" className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5 shadow-card md:p-6">
-      <blockquote className="flex gap-2.5 text-lg font-semibold text-ink md:text-xl">
-        <Quote className="mt-1 size-5 shrink-0 text-[#1a73e8]" aria-hidden />
+    <section aria-label="About the blind-spot indicator" className="flex flex-col gap-3 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-5 shadow-card md:p-6 transition-all duration-200">
+      <blockquote className="flex gap-2.5 text-lg font-semibold text-slate-800 md:text-xl">
+        <Quote className="mt-1 size-5 shrink-0 text-blue-600" aria-hidden />
         <p>{CORE_MESSAGE}</p>
       </blockquote>
       <ExperimentalNotice />
-      <p className="text-sm text-ink-muted leading-relaxed">
+      <p className="text-sm text-slate-500 leading-relaxed">
         The score (0–100) adds up five transparent signals from surveillance data. A high score means the data pattern looks like missed cases — a
         person must check the evidence before acting. {BLIND_SPOT_THRESHOLD_NOTE}
       </p>
       <details className="group text-sm">
-        <summary className="flex w-fit cursor-pointer list-none items-center gap-1 font-medium text-[#1a73e8] hover:text-[#174ea6]">
+        <summary className="flex w-fit cursor-pointer list-none items-center gap-1 font-medium text-blue-600 hover:text-blue-800">
           <ChevronDown className="size-4 transition-transform duration-150 group-open:rotate-180" aria-hidden />
           How is this calculated?
         </summary>
         <table className="mt-3 w-full max-w-3xl text-sm">
           <thead>
-            <tr className="border-b border-border text-left text-ink-muted">
+            <tr className="border-b border-slate-200/60 text-left text-slate-500">
               <th scope="col" className="py-1.5 pr-3 font-medium">
                 Part
               </th>
@@ -214,15 +214,15 @@ function Explainer() {
           </thead>
           <tbody>
             {BLIND_SPOT_COMPONENT_ORDER.map((k) => (
-              <tr key={k} className="border-b border-border/80 last:border-b-0">
-                <td className="py-1.5 pr-3 font-medium text-ink">{BLIND_SPOT_COMPONENT_LABELS[k]}</td>
-                <td className="py-1.5 pr-3 text-ink-muted">{BLIND_SPOT_COMPONENT_SIGNALS[k]}</td>
-                <td className="py-1.5 text-right tabular-nums text-ink">{Math.round(BLIND_SPOT_WEIGHTS[k] * 100)}%</td>
+              <tr key={k} className="border-b border-slate-100/80 last:border-b-0">
+                <td className="py-1.5 pr-3 font-medium text-slate-800">{BLIND_SPOT_COMPONENT_LABELS[k]}</td>
+                <td className="py-1.5 pr-3 text-slate-500">{BLIND_SPOT_COMPONENT_SIGNALS[k]}</td>
+                <td className="py-1.5 text-right tabular-nums text-slate-800">{Math.round(BLIND_SPOT_WEIGHTS[k] * 100)}%</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <p className="mt-3 max-w-3xl text-ink-muted leading-relaxed">
+        <p className="mt-3 max-w-3xl text-slate-500 leading-relaxed">
           Each part scores 0 to its weight, using the last 3 reported months. Validation plan: three independent tests, including a synthetic test
           that hides real reports and checks whether the indicator flags the gap. Until then, treat every flag as a prompt to look, not a finding.
         </p>
@@ -237,16 +237,16 @@ function AttentionStrip({ items, state, onFocus }: { items: BlindSpotAssessment[
   const unreviewed = flagged.filter((a) => a.reviews.length === 0).length
   const top = [...flagged, ...watch].slice(0, 3)
   return (
-    <section aria-label="Needs review" className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4.5 shadow-card lg:flex-row lg:items-center lg:justify-between">
-      <p className="flex items-start gap-2 text-base text-ink">
-        <EyeOff className="mt-0.5 size-5 shrink-0 text-[#1a73e8]" aria-hidden />
+    <section aria-label="Needs review" className="flex flex-col gap-3 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-4.5 shadow-card lg:flex-row lg:items-center lg:justify-between transition-all duration-200">
+      <p className="flex items-start gap-2 text-base text-slate-800">
+        <EyeOff className="mt-0.5 size-5 shrink-0 text-blue-600" aria-hidden />
         <span>
-          <strong className="tabular-nums text-ink">{flagged.length}</strong> potential blind spot{flagged.length === 1 ? '' : 's'} and{' '}
-          <strong className="tabular-nums text-ink">{watch.length}</strong> on watch{state ? ` in ${state}` : ''}
+          <strong className="tabular-nums text-slate-900">{flagged.length}</strong> potential blind spot{flagged.length === 1 ? '' : 's'} and{' '}
+          <strong className="tabular-nums text-slate-900">{watch.length}</strong> on watch{state ? ` in ${state}` : ''}
           {flagged.length > 0 && (
             <>
               {' '}
-              · <strong className="tabular-nums text-ink">{unreviewed}</strong> not yet reviewed
+              · <strong className="tabular-nums text-slate-900">{unreviewed}</strong> not yet reviewed
             </>
           )}
           .
@@ -254,16 +254,16 @@ function AttentionStrip({ items, state, onFocus }: { items: BlindSpotAssessment[
       </p>
       {top.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-ink-muted">Review first:</span>
+          <span className="text-xs font-medium text-slate-500">Review first:</span>
           {top.map((a) => (
             <button
               key={a.id}
               type="button"
               onClick={() => onFocus(a.district.id)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1 text-sm transition-colors duration-150 hover:border-[#1a73e8]/50 hover:bg-[#e8f0fe]"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/90 bg-white/80 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-slate-800 shadow-2xs transition-all duration-150 hover:bg-white hover:border-blue-200 hover:shadow-xs"
             >
-              <span className="font-medium text-ink">{a.district.name}</span>
-              <span className="text-ink-muted tabular-nums">{a.score}</span>
+              <span className="font-semibold text-slate-800">{a.district.name}</span>
+              <span className="text-slate-500 tabular-nums">{a.score}</span>
             </button>
           ))}
         </div>

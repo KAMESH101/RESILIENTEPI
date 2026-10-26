@@ -15,24 +15,24 @@ export function DecisionMatrixCard({ tasks }: { tasks: ActionTask[] }) {
   const { t } = useTranslation()
   const open = (q: DecisionQuadrant) => tasks.filter((x) => x.origin === 'decision_matrix' && x.quadrant === q && x.status !== 'completed').length
   return (
-    <details className="group rounded-2xl border border-border bg-surface shadow-card" open>
+    <details className="group rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl shadow-card transition-all duration-200" open>
       <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-5 py-4">
         <span>
-          <h2 className="text-base font-semibold text-ink">{t('actions.matrix')}</h2>
-          <span className="block text-sm text-ink-muted">How each district’s recommendation and priority are chosen.</span>
+          <h2 className="text-base font-semibold text-slate-900 tracking-tight">{t('actions.matrix')}</h2>
+          <span className="block text-sm text-slate-500">How each district’s recommendation and priority are chosen.</span>
         </span>
-        <ChevronDown className="size-5 shrink-0 text-ink-muted transition-transform duration-150 group-open:rotate-180" aria-hidden />
+        <ChevronDown className="size-5 shrink-0 text-slate-400 transition-transform duration-150 group-open:rotate-180" aria-hidden />
       </summary>
-      <div className="border-t border-border p-4 sm:p-5">
+      <div className="border-t border-slate-200/50 p-4 sm:p-5">
         <table className="w-full table-fixed border-separate border-spacing-2 text-sm max-md:block">
           <caption className="sr-only">Decision matrix: risk by blind-spot status</caption>
           <thead className="max-md:hidden">
             <tr>
               <td className="w-28" />
               {MATRIX_COLUMNS.map((c) => (
-                <th key={c.key} scope="col" className="text-left font-semibold text-ink">
+                <th key={c.key} scope="col" className="text-left font-semibold text-slate-800">
                   {c.label}
-                  <span className="block text-xs font-normal text-ink-muted">{c.hint}</span>
+                  <span className="block text-xs font-normal text-slate-500">{c.hint}</span>
                 </th>
               ))}
             </tr>
@@ -40,27 +40,27 @@ export function DecisionMatrixCard({ tasks }: { tasks: ActionTask[] }) {
           <tbody className="max-md:flex max-md:flex-col max-md:gap-2">
             {MATRIX_ROWS.map((r) => (
               <tr key={r.key} className="max-md:flex max-md:flex-col max-md:gap-2">
-                <th scope="row" className="text-left align-top font-semibold text-ink">
+                <th scope="row" className="text-left align-top font-semibold text-slate-800">
                   {r.label}
-                  <span className="block text-xs font-normal text-ink-muted">{r.hint}</span>
+                  <span className="block text-xs font-normal text-slate-500">{r.hint}</span>
                 </th>
                 {MATRIX_COLUMNS.map((c) => {
                   const q = CELLS[r.key][c.key]
                   const rule = DECISION_MATRIX[q]
                   const n = open(q)
                   return (
-                    <td key={c.key} className="rounded-xl border border-border bg-[#f8fafd] p-3 align-top transition-colors hover:border-[#1a73e8]/30 hover:bg-[#e8f0fe]/50">
-                      <span className="mb-1 block text-xs font-medium text-ink-muted md:hidden">
+                    <td key={c.key} className="rounded-xl border border-white/80 bg-white/60 backdrop-blur-sm p-3.5 align-top transition-all hover:border-blue-200 hover:bg-white/90 hover:shadow-2xs">
+                      <span className="mb-1 block text-xs font-medium text-slate-500 md:hidden">
                         {r.label} · {c.label}
                       </span>
                       <span className="flex items-center justify-between gap-2">
                         <PriorityPill priority={rule.priority} />
-                        <span className="text-xs text-ink-muted tabular-nums">
+                        <span className="text-xs text-slate-500 tabular-nums">
                           {q === 'low_risk_no_blind_spot' ? 'No task created' : `${n} open`}
                         </span>
                       </span>
-                      <span className="mt-1.5 block text-ink">{rule.action}</span>
-                      <span className="mt-1 block text-xs text-ink-muted">{TEAM_LABELS[rule.team]}</span>
+                      <span className="mt-1.5 block text-slate-800">{rule.action}</span>
+                      <span className="mt-1 block text-xs text-slate-500">{TEAM_LABELS[rule.team]}</span>
                     </td>
                   )
                 })}

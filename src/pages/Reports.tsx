@@ -98,7 +98,7 @@ export default function Reports() {
         <SectionCard id="bulletin-form" title={t('reports.generate')} caption="Bulletins use the same data as the rest of the app. Only fixed labels are translated.">
           <div className="flex flex-wrap items-end gap-x-5 gap-y-4 p-4">
             <div className="flex flex-col gap-1">
-              <span id="scope-label" className="text-xs font-medium text-ink-muted">
+              <span id="scope-label" className="text-xs font-medium text-slate-500">
                 Bulletin for
               </span>
               <ToggleGroup
@@ -107,10 +107,10 @@ export default function Reports() {
                 value={scope}
                 onValueChange={(v) => v && setParam({ scope: v, target: null })}
                 aria-labelledby="scope-label"
-                className="bg-surface"
+                className="rounded-2xl border border-white/80 bg-slate-200/50 backdrop-blur-md p-1 shadow-2xs"
               >
                 {SCOPES.map((s) => (
-                  <ToggleGroupItem key={s.value} value={s.value} className="h-9 px-3 data-[state=on]:bg-navy-900 data-[state=on]:text-white">
+                  <ToggleGroupItem key={s.value} value={s.value} className="h-8.5 px-3 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 data-[state=on]:bg-white data-[state=on]:text-slate-900 data-[state=on]:shadow-sm data-[state=on]:font-semibold">
                     {s.label}
                   </ToggleGroupItem>
                 ))}
@@ -119,11 +119,11 @@ export default function Reports() {
 
             {scope === 'district' && (
               <div className="flex min-w-0 flex-col gap-1">
-                <span className="text-xs font-medium text-ink-muted">District</span>
+                <span className="text-xs font-medium text-slate-500">District</span>
                 {target && districtName ? (
-                  <div className="flex h-9 items-center gap-2 rounded-lg border bg-muted px-3 text-sm">
-                    <span className="font-medium">{districtName}</span>
-                    <Button variant="link" size="sm" className="h-auto p-0" onClick={() => setParam({ target: null })}>
+                  <div className="flex h-9 items-center gap-2 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-md px-3 text-sm shadow-2xs">
+                    <span className="font-semibold text-slate-800">{districtName}</span>
+                    <Button variant="link" size="sm" className="h-auto p-0 text-blue-600 hover:text-blue-800" onClick={() => setParam({ target: null })}>
                       Change
                     </Button>
                   </div>
@@ -134,14 +134,14 @@ export default function Reports() {
             )}
             {scope === 'state' && (
               <div className="flex min-w-0 flex-col gap-1">
-                <label htmlFor="bulletin-state" className="text-xs font-medium text-ink-muted">
+                <label htmlFor="bulletin-state" className="text-xs font-medium text-slate-500">
                   State
                 </label>
                 <Select value={target ?? ''} onValueChange={(v) => setParam({ target: v })}>
-                  <SelectTrigger id="bulletin-state" className="h-9 w-56 max-w-full bg-surface">
+                  <SelectTrigger id="bulletin-state" className="h-9 w-56 max-w-full rounded-2xl border border-white/80 bg-white/70 backdrop-blur-md shadow-2xs hover:bg-white text-slate-800">
                     <SelectValue placeholder="Choose a state" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-2xl border border-white/80 bg-white/92 backdrop-blur-2xl shadow-elevated">
                     {(districts.data?.states ?? []).map((s) => (
                       <SelectItem key={s} value={s}>
                         {s}
@@ -153,14 +153,14 @@ export default function Reports() {
             )}
 
             <div className="flex min-w-0 flex-col gap-1">
-              <Label htmlFor="bulletin-lang" className="text-xs font-medium text-ink-muted">
+              <Label htmlFor="bulletin-lang" className="text-xs font-medium text-slate-500">
                 Language
               </Label>
               <Select value={formLang} onValueChange={(v) => setFormLang(v as Language)}>
-                <SelectTrigger id="bulletin-lang" className="h-9 w-48 max-w-full bg-surface">
+                <SelectTrigger id="bulletin-lang" className="h-9 w-48 max-w-full rounded-2xl border border-white/80 bg-white/70 backdrop-blur-md shadow-2xs hover:bg-white text-slate-800">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-2xl border border-white/80 bg-white/92 backdrop-blur-2xl shadow-elevated">
                   {BULLETIN_LANGUAGES.map((l) => (
                     <SelectItem key={l.code} value={l.code} lang={l.code}>
                       {l.label}

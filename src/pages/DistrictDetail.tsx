@@ -48,7 +48,7 @@ function DistrictPicker() {
                   <ul className="mt-1.5 flex flex-col gap-0.5">
                     {list.map((d) => (
                       <li key={d.id}>
-                        <Link to={withFilters(`/district/${d.id}`, params)} className="block rounded-lg px-2.5 py-1.5 text-sm text-ink transition-colors hover:bg-[#e8f0fe] hover:text-[#1a73e8]">
+                        <Link to={withFilters(`/district/${d.id}`, params)} className="block rounded-xl px-2.5 py-1.5 text-sm text-slate-700 transition-all hover:bg-white/80 hover:text-blue-600 hover:shadow-2xs">
                           {d.name}
                         </Link>
                       </li>

@@ -21,20 +21,20 @@ export function KpiCard({
   return (
     <Link
       to={to}
-      className="group flex min-w-0 flex-col rounded-2xl border border-border bg-surface p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-[#1a73e8]/40 hover:bg-surface hover:shadow-[0_4px_16px_rgba(60,64,67,0.12)]"
+      className="group flex min-w-0 flex-col rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/90 hover:border-white hover:shadow-elevated"
     >
-      <span className="flex items-start justify-between gap-2 text-sm font-medium text-ink-muted">
+      <span className="flex items-start justify-between gap-2 text-sm font-medium text-slate-500">
         <span>{label}</span>
         <SyntheticTag source={kpi.source} />
       </span>
       <span className="mt-2.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <span className="text-3xl font-semibold tracking-tight text-ink tabular-nums">{formatInt(kpi.value)}</span>
+        <span className="text-3xl font-semibold tracking-tight text-slate-900 tabular-nums">{formatInt(kpi.value)}</span>
         {delta != null && <Trend delta={delta} />}
       </span>
-      <span className="mt-1 text-sm text-ink-muted leading-relaxed">{meaning}</span>
-      <span className="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-[#1a73e8] group-hover:text-[#174ea6]">
+      <span className="mt-1 text-sm text-slate-500 leading-relaxed">{meaning}</span>
+      <span className="mt-auto flex items-center gap-1.5 pt-4 text-xs font-semibold text-blue-600 group-hover:text-blue-700">
         View
-        <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
+        <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
       </span>
     </Link>
   )

@@ -4,20 +4,20 @@ import { cn } from "cn"
 import { Slot } from "radix-ui"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all duration-150 outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: "bg-[#1a73e8] text-white shadow-xs hover:bg-[#174ea6] hover:shadow-sm transition-all font-medium",
+        default: "bg-slate-900 text-white shadow-2xs hover:bg-slate-800 hover:shadow-xs transition-all font-medium",
         outline:
-          "border-border bg-surface text-[#1a73e8] hover:bg-[#e8f0fe] hover:border-[#1a73e8]/40 aria-expanded:bg-[#e8f0fe] transition-colors",
+          "border border-white/80 bg-white/70 backdrop-blur-sm text-slate-700 hover:bg-white hover:text-slate-900 hover:border-slate-300/80 shadow-2xs aria-expanded:bg-white transition-all",
         secondary:
-          "bg-[#e8f0fe] text-[#1967d2] hover:bg-[#d2e3fc] aria-expanded:bg-[#d2e3fc] transition-colors",
+          "bg-blue-50/80 text-blue-700 hover:bg-blue-100/80 border border-blue-200/50 aria-expanded:bg-blue-100/80 shadow-2xs transition-colors",
         ghost:
-          "text-ink-muted hover:bg-[#f1f3f4] hover:text-ink aria-expanded:bg-[#f1f3f4] aria-expanded:text-ink transition-colors",
+          "text-slate-600 hover:bg-white/70 hover:text-slate-900 aria-expanded:bg-white/70 aria-expanded:text-slate-900 transition-colors",
         destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
-        link: "text-[#1a73e8] hover:text-[#174ea6] underline-offset-4 hover:underline",
+          "bg-red-50 text-red-600 border border-red-200/60 hover:bg-red-100/80 focus-visible:border-red-400 focus-visible:ring-red-200",
+        link: "text-blue-600 hover:text-blue-800 underline-offset-4 hover:underline",
       },
       size: {
         default:

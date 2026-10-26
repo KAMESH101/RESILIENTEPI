@@ -116,7 +116,7 @@ export function DistrictSearch({
           }
         }}
         className={cn(
-          'h-10 w-full rounded-full border border-border bg-[#f1f3f4] pr-3 pl-9 text-sm text-ink placeholder:text-ink-muted transition-all duration-150 hover:bg-[#eef2f7] hover:border-border/80 focus:bg-surface focus:shadow-[0_1px_6px_rgba(32,33,36,0.25)] focus:border-[#1a73e8] focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-[#1a73e8]',
+          'h-9.5 w-full rounded-full border border-white/80 bg-white/60 backdrop-blur-md pr-3 pl-9 text-sm text-slate-800 placeholder:text-slate-400 shadow-2xs transition-all duration-150 hover:bg-white/80 hover:border-slate-300/70 focus:bg-white focus:border-blue-500/80 focus:shadow-[0_4px_20px_rgba(37,99,235,0.08)] focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-blue-500',
           inputClassName,
         )}
       />
@@ -125,7 +125,7 @@ export function DistrictSearch({
           id={listId}
           role="listbox"
           aria-label="Matching districts"
-          className="absolute top-full right-0 left-0 z-50 mt-1.5 max-h-80 overflow-auto rounded-2xl border border-border bg-surface p-1.5 shadow-[0_4px_16px_rgba(60,64,67,0.18)]"
+          className="absolute top-full right-0 left-0 z-50 mt-1.5 max-h-80 overflow-auto rounded-2xl border border-white/80 bg-white/92 backdrop-blur-2xl p-1.5 shadow-[0_12px_36px_rgba(20,32,50,0.12)]"
         >
           {isLoading && <li className="px-3.5 py-2 text-sm text-ink-muted">Loading districts…</li>}
           {!isLoading && results.length === 0 && (
@@ -142,12 +142,12 @@ export function DistrictSearch({
               onMouseEnter={() => setActive(i)}
               className={cn(
                 'flex cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2 text-sm transition-colors duration-100',
-                i === active ? 'bg-[#e8f0fe] text-[#1967d2] font-medium' : 'text-ink hover:bg-[#f1f3f4]',
+                i === active ? 'bg-blue-50/80 text-blue-700 font-medium' : 'text-slate-700 hover:bg-slate-100/70',
               )}
             >
-              <MapPin className={cn('size-4 shrink-0', i === active ? 'text-[#1a73e8]' : 'text-ink-muted')} aria-hidden />
+              <MapPin className={cn('size-4 shrink-0', i === active ? 'text-blue-600' : 'text-slate-400')} aria-hidden />
               <span className="font-medium">{d.name}</span>
-              <span className={cn('truncate text-xs', i === active ? 'text-[#1a73e8]/80' : 'text-ink-muted')}>{d.state}</span>
+              <span className={cn('truncate text-xs', i === active ? 'text-blue-600/80' : 'text-slate-400')}>{d.state}</span>
             </li>
           ))}
         </ul>

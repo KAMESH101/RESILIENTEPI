@@ -42,78 +42,78 @@
 }
 
 /*
- * ResilientEpi — Google Material Theme design tokens.
- * Clean, modern Google aesthetics with Google Sans typography and iconic Google palette.
+ * ResilientEpi — Premium Glassmorphism Design System.
+ * Soft translucent glass surfaces, cool off-white / pale slate canvas,
+ * refined rounded geometry, and subtle layered depth.
  */
 :root {
-  /* Google Design Palette */
-  --google-blue: #1a73e8;
-  --google-blue-hover: #174ea6;
-  --google-blue-surface: #e8f0fe;
-  --google-blue-border: #d2e3fc;
-  --google-red: #d93025;
-  --google-yellow: #f9ab00;
-  --google-green: #1e8e3e;
-  --google-grey-50: #f8fafd;
-  --google-grey-100: #f1f3f4;
-  --google-grey-200: #e8eaed;
-  --google-grey-300: #dadce0;
-  --google-grey-500: #9aa0a6;
-  --google-grey-700: #5f6368;
-  --google-grey-900: #202124;
+  /* Brand accents */
+  --brand-blue: #2563eb;
+  --brand-blue-hover: #1d4ed8;
+  --brand-blue-soft: #eff6ff;
+  --brand-blue-border: #bfdbfe;
 
-  /* ResilientEpi brand tokens mapped to Google Theme */
-  --navy-900: #202124;        /* Google charcoal for primary headings and high-contrast text */
-  --navy-700: #174ea6;        /* Google deep blue for accents */
-  --teal-600: #1a73e8;        /* Google brand blue for primary interactive elements, links & focus rings */
-  --cyan-50: #e8f0fe;         /* Google signature light blue container for active states, chips & highlights */
-  --app-bg: #f8fafd;          /* Google Workspace/Cloud canvas background */
-  --surface: #ffffff;         /* Crisp pure white for cards and dialogs */
-  --line: #dadce0;            /* Google signature hairline border */
-  --ink: #202124;             /* Google primary charcoal text */
-  --ink-muted: #5f6368;       /* Google secondary grey text */
+  /* ResilientEpi glassmorphism design tokens */
+  --background: #f2f4f6;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-strong: rgba(255, 255, 255, 0.90);
+  --surface-hover: rgba(255, 255, 255, 0.82);
 
-  /* Google Material status/risk tokens */
-  --risk-low: #1e8e3e;        /* Google Green */
-  --risk-moderate: #f9ab00;   /* Google Amber */
-  --risk-high: #e37400;       /* Google Orange */
-  --risk-veryhigh: #d93025;   /* Google Red */
-  --nodata: #9aa0a6;          /* Google neutral grey */
+  --border: rgba(255, 255, 255, 0.82);
+  --border-subtle: rgba(35, 45, 60, 0.08);
+  --line: rgba(35, 45, 60, 0.08);
 
-  /* shadcn semantic mapping to Google Theme */
-  --background: var(--app-bg);
+  --text-primary: #1e2530;
+  --text-secondary: #647082;
+  --text-muted: #8e9aa8;
+
+  --accent: #2c3340;
+  --accent-soft: #e8ecf2;
+
+  --navy-900: #18202c;
+  --navy-700: #2d3748;
+  --teal-600: #2563eb;
+  --cyan-50: rgba(239, 246, 255, 0.75);
+  --app-bg: #f2f4f6;
+  --ink: #1e2530;
+  --ink-muted: #647082;
+
+  /* Semantic risk tokens */
+  --risk-low: #16a34a;        /* Balanced emerald */
+  --risk-moderate: #d97706;   /* Amber */
+  --risk-high: #ea580c;       /* Vibrant orange */
+  --risk-veryhigh: #dc2626;   /* Crimson red */
+  --nodata: #94a3b8;
+
+  /* shadcn semantic mapping to Glass Theme */
   --foreground: var(--ink);
   --card: var(--surface);
   --card-foreground: var(--ink);
-  --popover: var(--surface);
+  --popover: rgba(255, 255, 255, 0.92);
   --popover-foreground: var(--ink);
-  --primary: #1a73e8;         /* Google Blue */
+  --primary: #1e2530;
   --primary-foreground: #ffffff;
-  --secondary: #e8f0fe;       /* Google Blue pill container */
-  --secondary-foreground: #1967d2;
-  --muted: #f1f3f4;           /* Google neutral light grey */
+  --secondary: rgba(239, 246, 255, 0.85);
+  --secondary-foreground: #1d4ed8;
+  --muted: rgba(241, 244, 248, 0.75);
   --muted-foreground: var(--ink-muted);
-  --accent: #e8f0fe;          /* Google Blue container */
-  --accent-foreground: #1967d2;
   --destructive: var(--risk-veryhigh);
-  --border: var(--line);
-  --input: var(--line);
-  --ring: #1a73e8;            /* Google focus ring */
-  --radius: 0.625rem;         /* 10px Google rounded style */
+  --input: rgba(35, 45, 60, 0.1);
+  --ring: #2563eb;
+  --radius: 1rem;             /* 16px default rounded style */
 
-  /* Google Cloud Console navigation sidebar */
-  --sidebar: #101c30;
-  --sidebar-foreground: #bdc1c6;
-  --sidebar-primary: #1a73e8;
+  /* Refined Glass Sidebar Navigation */
+  --sidebar: rgba(246, 248, 251, 0.78);
+  --sidebar-foreground: #5a6679;
+  --sidebar-primary: #1e2530;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #1e3a6a;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-ring: #1a73e8;
+  --sidebar-accent: #ffffff;
+  --sidebar-accent-foreground: #18202c;
+  --sidebar-border: rgba(35, 45, 60, 0.08);
+  --sidebar-ring: #2563eb;
 }
 
 @theme inline {
-  /* Google Sans for Latin; fallback to Product Sans, system, then Noto for Devanagari / Tamil. */
   --font-sans: "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Open Sans", "Noto Sans Devanagari", "Noto Sans Tamil", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
@@ -157,18 +157,21 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 
-  /* Google Material Radius tokens */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 10px;
-  --radius-xl: 16px;
-  --radius-2xl: 20px;
+  /* Glassmorphism Radii */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
   --radius-full: 9999px;
 
-  /* Google Material Elevation Shadows */
-  --shadow-card: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-  --shadow-hover: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
-  --shadow-dropdown: 0 2px 6px 2px rgba(60, 64, 67, 0.15), 0 1px 2px 0 rgba(60, 64, 67, 0.3);
+  /* Layered Glass Shadows */
+  --shadow-soft: 0 4px 18px rgba(25, 35, 50, 0.035);
+  --shadow-card: 0 4px 20px -2px rgba(25, 35, 50, 0.035), 0 1px 3px 0 rgba(25, 35, 50, 0.02);
+  --shadow-hover: 0 12px 32px -4px rgba(25, 35, 50, 0.07), 0 4px 12px -2px rgba(25, 35, 50, 0.03);
+  --shadow-elevated: 0 10px 35px rgba(25, 35, 50, 0.065);
+  --shadow-dropdown: 0 12px 36px 0 rgba(20, 32, 50, 0.09), 0 4px 12px 0 rgba(20, 32, 50, 0.04);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.06);
 
   --ease-ui: cubic-bezier(0.2, 0, 0, 1);
 }
@@ -187,17 +190,44 @@
   body {
     @apply bg-background text-foreground text-sm antialiased md:text-base;
     font-family: var(--font-sans);
+    background-color: var(--background);
+    background-image: radial-gradient(circle at 10% 10%, rgba(228, 237, 248, 0.55) 0%, rgba(242, 244, 246, 0.95) 45%, #ecf0f5 100%);
+    background-attachment: fixed;
+    min-height: 100dvh;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-[#1a73e8];
+    @apply outline-2 outline-offset-2 outline-[#2563eb];
   }
 }
 
 @layer utilities {
+  /* Translucent glass surfaces */
+  .glass-surface {
+    background-color: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 20px -2px rgba(25, 35, 50, 0.035);
+  }
+  .glass-surface-strong {
+    background-color: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.92);
+    box-shadow: 0 10px 32px -4px rgba(25, 35, 50, 0.06);
+  }
+  .glass-pill {
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 9999px;
+  }
+
   /* Experimental / blind-spot: navy diagonal hatch. */
   .pattern-hatch {
     background-image: repeating-linear-gradient(

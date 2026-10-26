@@ -16,30 +16,29 @@ export function Sidebar() {
   const { t } = useTranslation()
   const collapsed = useSession((s) => s.sidebarCollapsed)
   const toggle = useSession((s) => s.toggleSidebar)
-  // The outer column stretches with the page (full-height navy); the inner one stays pinned.
   return (
     <div
       className={cn(
-        'hidden shrink-0 bg-sidebar transition-[width] duration-200 ease-ui md:block print:hidden',
+        'hidden shrink-0 border-r border-slate-200/60 bg-sidebar/85 backdrop-blur-xl transition-[width] duration-200 ease-ui md:block print:hidden shadow-[1px_0_16px_rgba(25,35,50,0.02)]',
         'w-[72px]',
         !collapsed && 'xl:w-60',
       )}
     >
     <aside className="sticky top-0 flex h-dvh flex-col text-sidebar-foreground">
-      <div className={cn('flex h-14 items-center gap-2 border-b border-sidebar-border px-5', !collapsed && 'xl:px-4')}>
+      <div className={cn('flex h-14 items-center gap-2.5 border-b border-slate-200/50 px-5', !collapsed && 'xl:px-4')}>
         <LogoMark />
-        <span className={cn('hidden truncate text-base font-semibold text-white', !collapsed && 'xl:inline')}>{t('app.name')}</span>
+        <span className={cn('hidden truncate text-base font-semibold text-slate-800 tracking-tight', !collapsed && 'xl:inline')}>{t('app.name')}</span>
       </div>
       <NavList collapsedAlways={collapsed} />
-      <div className="mt-auto hidden border-t border-sidebar-border p-3 xl:block">
+      <div className="mt-auto hidden border-t border-slate-200/50 p-3 xl:block">
         <button
           type="button"
           onClick={toggle}
-          className="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm text-sidebar-foreground transition-colors duration-150 hover:bg-sidebar-accent hover:text-white"
+          className="flex h-10 w-full items-center gap-3 rounded-xl px-3 text-sm text-slate-600 transition-all duration-150 hover:bg-white/70 hover:text-slate-900 hover:shadow-xs"
           aria-label={collapsed ? t('nav.expand') : t('nav.collapse')}
         >
           {collapsed ? <PanelLeftOpen className="size-5 shrink-0" aria-hidden /> : <PanelLeftClose className="size-5 shrink-0" aria-hidden />}
-          {!collapsed && <span>{t('nav.collapse')}</span>}
+          {!collapsed && <span className="font-medium">{t('nav.collapse')}</span>}
         </button>
       </div>
     </aside>
@@ -64,12 +63,14 @@ export function NavList({ collapsedAlways = false, expanded = false, onNavigate 
             onClick={onNavigate}
             className={({ isActive }) =>
               cn(
-                'relative flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-all duration-150',
-                isActive ? 'bg-sidebar-accent text-white shadow-sm before:absolute before:inset-y-2 before:left-0 before:w-1.5 before:rounded-r-full before:bg-[#1a73e8]' : 'text-sidebar-foreground hover:bg-sidebar-accent/60 hover:text-white',
+                'relative flex h-10.5 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-all duration-150',
+                isActive
+                  ? 'bg-white text-slate-900 shadow-[0_2px_10px_rgba(25,35,50,0.06)] border border-white/90 font-semibold before:absolute before:inset-y-2 before:left-0 before:w-1 before:rounded-r-full before:bg-blue-600'
+                  : 'text-slate-600 hover:bg-white/60 hover:text-slate-900 hover:shadow-2xs',
               )
             }
           >
-            <item.icon className="size-5 shrink-0" aria-hidden />
+            <item.icon className="size-4.5 shrink-0" aria-hidden />
             <span className={cn('truncate', labelClass)}>{label}</span>
             {!expanded && <span className={cn('sr-only', !collapsedAlways && 'xl:hidden')}>{label}</span>}
           </NavLink>

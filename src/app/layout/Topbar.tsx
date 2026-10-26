@@ -37,12 +37,12 @@ export function Topbar() {
   }
 
   return (
-    <div className="border-b bg-surface">
+    <div className="border-b border-slate-200/60 bg-white/75 backdrop-blur-xl transition-colors">
       <div className="flex h-14 items-center gap-1 px-2 sm:gap-2 sm:px-4 md:px-6">
         <MobileNav />
         <div className="flex shrink-0 items-center gap-1.5 md:hidden">
           <LogoMark className="size-7" />
-          <span className="text-sm font-semibold text-navy-900 min-[400px]:text-base">{t('app.name')}</span>
+          <span className="text-sm font-semibold text-slate-800 tracking-tight min-[400px]:text-base">{t('app.name')}</span>
         </div>
         <DistrictSearch
           shortcut
@@ -51,12 +51,17 @@ export function Topbar() {
           label={t('topbar.searchShort')}
           className="hidden w-full max-w-md md:block"
         />
-        <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileSearch((v) => !v)} aria-label={t('topbar.searchShort')} aria-expanded={mobileSearch}>
+        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+          <Button variant="ghost" size="icon" className="md:hidden rounded-xl text-slate-600 hover:bg-white/80" onClick={() => setMobileSearch((v) => !v)} aria-label={t('topbar.searchShort')} aria-expanded={mobileSearch}>
             {mobileSearch ? <X className="size-5" aria-hidden /> : <Search className="size-5" aria-hidden />}
           </Button>
-          <Button variant="outline" onClick={openTour} className="gap-1.5 rounded-full px-2.5 text-xs font-medium sm:px-3 sm:text-sm hover:border-[#1a73e8]/40 hover:bg-[#e8f0fe] hover:text-[#1a73e8] transition-colors" aria-label={t('topbar.tour')}>
-            <Compass className="size-4 text-[#1a73e8]" aria-hidden />
+          <Button
+            variant="outline"
+            onClick={openTour}
+            className="gap-1.5 rounded-full px-2.5 text-xs font-medium sm:px-3 sm:text-sm bg-white/70 border-slate-200/80 text-slate-700 hover:bg-white hover:text-blue-600 hover:border-blue-200 shadow-2xs transition-all"
+            aria-label={t('topbar.tour')}
+          >
+            <Compass className="size-3.5 text-blue-600" aria-hidden />
             <span className="hidden sm:inline">{t('topbar.tour')}</span>
           </Button>
           <LanguageMenu />
@@ -79,9 +84,9 @@ function LanguageMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="gap-1 px-2" aria-label={`${t('topbar.language')}: ${language === 'hi' ? 'हिन्दी' : 'English'}`}>
-          <Languages className="hidden sm:block" aria-hidden />
-          <span className="text-sm">{language === 'hi' ? 'हि' : 'EN'}</span>
+        <Button variant="ghost" className="gap-1 px-2.5 rounded-full hover:bg-white/80 text-slate-700" aria-label={`${t('topbar.language')}: ${language === 'hi' ? 'हिन्दी' : 'English'}`}>
+          <Languages className="hidden size-4 sm:block text-slate-500" aria-hidden />
+          <span className="text-xs font-semibold">{language === 'hi' ? 'हि' : 'EN'}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -108,11 +113,11 @@ function ProfileMenu() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="gap-2 px-1.5 lg:px-2" aria-label={`${t('topbar.profile')}: ${ROLE_LABELS[role]}`}>
-            <span className="inline-flex size-7 items-center justify-center rounded-full bg-[#1a73e8] text-white shadow-sm">
-              <UserRound className="size-4" aria-hidden />
+          <Button variant="ghost" className="gap-2 px-1.5 lg:px-2 rounded-full hover:bg-white/80 text-slate-800" aria-label={`${t('topbar.profile')}: ${ROLE_LABELS[role]}`}>
+            <span className="inline-flex size-7 items-center justify-center rounded-full bg-slate-900 text-white shadow-xs">
+              <UserRound className="size-3.5" aria-hidden />
             </span>
-            <span className="hidden text-sm lg:inline">{ROLE_LABELS[role]}</span>
+            <span className="hidden text-xs font-medium lg:inline">{ROLE_LABELS[role]}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-60">

@@ -96,7 +96,7 @@ export function DataTable<T>({
                     scope="col"
                     aria-sort={c.sortValue ? ariaSort : undefined}
                     className={cn(
-                      'sticky top-0 z-10 border-b border-border bg-[#f8fafd] px-3.5 py-2.5 font-medium whitespace-nowrap text-xs uppercase tracking-wider text-ink-muted',
+                      'sticky top-0 z-10 border-b border-slate-200/70 bg-slate-50/75 backdrop-blur-md px-3.5 py-2.5 font-semibold whitespace-nowrap text-xs uppercase tracking-wider text-slate-500',
                       c.align === 'right' ? 'text-right' : 'text-left',
                     )}
                   >
@@ -104,11 +104,11 @@ export function DataTable<T>({
                       <button
                         type="button"
                         onClick={() => toggleSort(c.key)}
-                        className={cn('inline-flex items-center gap-1.5 rounded hover:text-ink transition-colors', active && 'text-[#1a73e8] font-semibold', c.align === 'right' && 'flex-row-reverse')}
+                        className={cn('inline-flex items-center gap-1.5 rounded-lg hover:text-slate-900 transition-colors', active && 'text-blue-600 font-semibold', c.align === 'right' && 'flex-row-reverse')}
                       >
                         {c.header}
                         {active ? (
-                          sort!.dir === 'asc' ? <ArrowUp className="size-3.5 text-[#1a73e8]" aria-hidden /> : <ArrowDown className="size-3.5 text-[#1a73e8]" aria-hidden />
+                          sort!.dir === 'asc' ? <ArrowUp className="size-3.5 text-blue-600" aria-hidden /> : <ArrowDown className="size-3.5 text-blue-600" aria-hidden />
                         ) : (
                           <ArrowUpDown className="size-3.5 opacity-40 hover:opacity-75" aria-hidden />
                         )}
@@ -126,7 +126,7 @@ export function DataTable<T>({
               <tr
                 key={rowKey(r)}
                 onClick={onRowClick ? () => onRowClick(r) : undefined}
-                className={cn('border-b border-border/80 last:border-b-0 transition-colors duration-150', onRowClick && 'cursor-pointer hover:bg-[#e8f0fe]/70')}
+                className={cn('border-b border-slate-200/40 last:border-b-0 transition-colors duration-150', onRowClick && 'cursor-pointer hover:bg-white/80')}
               >
                 {columns.map((c, i) => (
                   <td key={c.key} className={cn('px-3.5 py-2.5 align-middle', c.align === 'right' && 'text-right tabular-nums', c.className)}>
@@ -138,7 +138,7 @@ export function DataTable<T>({
                           onRowClick(r)
                         }}
                         aria-label={rowLabel?.(r)}
-                        className="text-left font-medium text-ink hover:text-[#1a73e8] hover:underline transition-colors"
+                        className="text-left font-medium text-slate-900 hover:text-blue-600 hover:underline transition-colors"
                       >
                         {c.cell(r)}
                       </button>
@@ -162,13 +162,13 @@ export function DataTable<T>({
               disabled={!onRowClick}
               onClick={onRowClick ? () => onRowClick(r) : undefined}
               aria-label={rowLabel?.(r)}
-              className="flex w-full flex-col gap-2 rounded-2xl border border-border bg-surface p-3.5 text-left shadow-card transition-all duration-150 hover:bg-[#e8f0fe]/60 hover:border-[#1a73e8]/30 disabled:cursor-default"
+              className="flex w-full flex-col gap-2 rounded-2xl border border-white/80 bg-surface/80 backdrop-blur-md p-3.5 text-left shadow-card transition-all duration-150 hover:bg-white hover:border-blue-200/60 hover:shadow-elevated disabled:cursor-default"
             >
-              <span className="font-medium text-ink">{first.cell(r)}</span>
+              <span className="font-medium text-slate-900">{first.cell(r)}</span>
               <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-sm">
                 {columns.slice(1).filter((c) => !c.hideInCard).map((c) => (
                   <div key={c.key} className="contents">
-                    <dt className="text-ink-muted">{c.header}</dt>
+                    <dt className="text-slate-500">{c.header}</dt>
                     <dd className="min-w-0 tabular-nums">{c.cell(r)}</dd>
                   </div>
                 ))}

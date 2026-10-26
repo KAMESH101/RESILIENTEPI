@@ -59,7 +59,7 @@ export default function Overview() {
 
           {/* 1. What needs attention — always first */}
           <section aria-labelledby="attention-title">
-            <h2 id="attention-title" className="mb-3 flex items-center gap-2 text-xl font-semibold text-navy-900">
+            <h2 id="attention-title" className="mb-3 flex items-center gap-2 text-xl font-semibold text-slate-900 tracking-tight">
               <Megaphone className="size-5 text-risk-high" aria-hidden />
               {t('overview.attention')}
             </h2>
@@ -185,16 +185,16 @@ export default function Overview() {
 
 function AttentionCard({ item, summary, viewHref }: { item: AttentionItem; summary?: DistrictSummary; viewHref: string }) {
   return (
-    <article className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(60,64,67,0.14)] hover:border-[#1a73e8]/40">
+    <article className="flex flex-col gap-3 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/90 hover:border-white hover:shadow-elevated">
       <div className="flex flex-wrap items-center gap-1.5">
         <RiskBadge category={item.severity} probability={summary?.forecast?.probability} />
         {summary?.blind_spot && <BlindSpotBadge band={summary.blind_spot.band} score={summary.blind_spot.score} />}
       </div>
       <div>
-        <h3 className="text-base font-semibold text-ink">{item.headline}</h3>
+        <h3 className="text-base font-semibold text-slate-900 tracking-tight">{item.headline}</h3>
         {/* The headline already names the district, so drop the sentence's "Name: " prefix. */}
-        {summary && <p className="mt-1 text-sm text-ink-muted leading-relaxed">{summary.summary_sentence.replace(`${item.district.name}: `, '')}</p>}
-        <p className="mt-1.5 text-sm font-medium text-[#1a73e8]">{item.suggestion}</p>
+        {summary && <p className="mt-1 text-sm text-slate-500 leading-relaxed">{summary.summary_sentence.replace(`${item.district.name}: `, '')}</p>}
+        <p className="mt-1.5 text-xs font-semibold text-blue-600">{item.suggestion}</p>
       </div>
       <div className="mt-auto flex flex-wrap gap-2 pt-2">
         <Button asChild className="flex-1 sm:flex-none">
@@ -223,8 +223,8 @@ function TopRiskTable({ rows, onSelect }: { rows: DistrictSummary[]; onSelect: (
           sortValue: (r) => r.district.name,
           cell: (r) => (
             <span className="flex flex-col">
-              <span className="font-medium text-ink">{r.district.name}</span>
-              <span className="text-xs font-normal text-ink-muted">{r.district.state}</span>
+              <span className="font-medium text-slate-900">{r.district.name}</span>
+              <span className="text-xs font-normal text-slate-500">{r.district.state}</span>
             </span>
           ),
         },
@@ -240,7 +240,7 @@ function TopRiskTable({ rows, onSelect }: { rows: DistrictSummary[]; onSelect: (
         {
           key: 'bs',
           header: 'Blind spot',
-          cell: (r) => (r.blind_spot && r.blind_spot.band !== 'none' ? <BlindSpotBadge size="sm" band={r.blind_spot.band} showChip={false} /> : <span className="text-ink-muted">—</span>),
+          cell: (r) => (r.blind_spot && r.blind_spot.band !== 'none' ? <BlindSpotBadge size="sm" band={r.blind_spot.band} showChip={false} /> : <span className="text-slate-400">—</span>),
         },
       ]}
     />
@@ -249,8 +249,8 @@ function TopRiskTable({ rows, onSelect }: { rows: DistrictSummary[]; onSelect: (
 
 function CoreMessage() {
   return (
-    <blockquote className="m-4 mb-2 flex gap-2.5 rounded-xl border border-[#1a73e8]/25 bg-[#e8f0fe] p-3.5 text-sm font-medium text-[#1967d2]">
-      <Quote className="size-4 shrink-0 text-[#1a73e8]" aria-hidden />
+    <blockquote className="m-4 mb-2 flex gap-2.5 rounded-2xl border border-blue-200/50 bg-blue-50/70 backdrop-blur-sm p-4 text-sm font-medium text-blue-800 shadow-2xs">
+      <Quote className="size-4 shrink-0 text-blue-600" aria-hidden />
       <p>{CORE_MESSAGE}</p>
     </blockquote>
   )
@@ -273,11 +273,11 @@ function BlindSpotList({ rows, onSelect, onClearState }: { rows: DistrictSummary
           <button
             type="button"
             onClick={() => onSelect(r.district.id)}
-            className="flex w-full flex-col gap-1.5 rounded-lg px-2 py-2.5 text-left transition-colors duration-150 hover:bg-cyan-50"
+            className="flex w-full flex-col gap-1.5 rounded-xl px-3 py-2.5 text-left transition-all duration-150 hover:bg-white/70 hover:shadow-2xs"
           >
             <span className="flex flex-wrap items-baseline justify-between gap-x-2">
-              <span className="font-medium text-navy-900">{r.district.name}</span>
-              <span className="text-sm text-ink-muted">{r.district.state}</span>
+              <span className="font-semibold text-slate-800">{r.district.name}</span>
+              <span className="text-xs text-slate-500">{r.district.state}</span>
             </span>
             <span className="flex flex-wrap items-center gap-1.5">
               <BlindSpotBadge size="sm" band={r.blind_spot!.band} score={r.blind_spot!.score} showChip={false} />
@@ -295,10 +295,10 @@ function BlindSpotList({ rows, onSelect, onClearState }: { rows: DistrictSummary
 function ScoreBar({ score }: { score: number }) {
   return (
     <span className="flex items-center gap-2" aria-hidden>
-      <span className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
-        <span className="pattern-hatch block h-full rounded-full border border-navy-900" style={{ width: `${score}%` }} />
+      <span className="h-2 flex-1 overflow-hidden rounded-full bg-slate-200/60">
+        <span className="pattern-hatch block h-full rounded-full border border-slate-700" style={{ width: `${score}%` }} />
       </span>
-      <span className="w-14 text-right text-xs text-ink-muted tabular-nums">{score} / 100</span>
+      <span className="w-14 text-right text-xs text-slate-500 tabular-nums">{score} / 100</span>
     </span>
   )
 }
@@ -315,14 +315,14 @@ function ActionList({ rows, linkFor }: { rows: ActionTask[]; linkFor: (a: Action
     <ul className="flex flex-col px-2 py-2">
       {rows.map((a) => (
         <li key={a.id}>
-          <Link to={linkFor(a)} className="flex flex-col gap-1 rounded-lg px-2 py-2.5 transition-colors duration-150 hover:bg-cyan-50">
+          <Link to={linkFor(a)} className="flex flex-col gap-1 rounded-xl px-3 py-2.5 transition-all duration-150 hover:bg-white/70 hover:shadow-2xs">
             <span className="flex flex-wrap items-center gap-2">
               <span className={cn('inline-flex h-5 items-center rounded-full px-2 text-xs font-semibold', PRIORITY_TONE[a.priority])}>{PRIORITY_LABELS[a.priority]}</span>
-              <span className="font-medium text-navy-900">{a.district.name}</span>
-              <span className="ml-auto text-xs text-ink-muted">{STATUS_LABELS[a.status]}</span>
+              <span className="font-semibold text-slate-800">{a.district.name}</span>
+              <span className="ml-auto text-xs text-slate-500">{STATUS_LABELS[a.status]}</span>
             </span>
-            <span className="line-clamp-2 text-sm text-ink">{a.suggested_action}</span>
-            <span className="text-xs text-ink-muted">{TEAM_LABELS[a.responsible_team]}</span>
+            <span className="line-clamp-2 text-sm text-slate-700">{a.suggested_action}</span>
+            <span className="text-xs text-slate-500">{TEAM_LABELS[a.responsible_team]}</span>
           </Link>
         </li>
       ))}
@@ -334,14 +334,14 @@ function ContextStat({ data }: { data: OverviewResponse | undefined }) {
   const { t } = useTranslation()
   const [num, ...rest] = CONTEXT_STAT.text.split(' ')
   return (
-    <section aria-labelledby="ctx-title" className={cn('rounded-xl border bg-surface p-4 shadow-card md:p-6', !data && 'opacity-90')}>
-      <h2 id="ctx-title" className="text-sm font-semibold tracking-wide text-ink-muted uppercase">
+    <section aria-labelledby="ctx-title" className={cn('rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-5 shadow-card md:p-6 transition-all duration-200', !data && 'opacity-90')}>
+      <h2 id="ctx-title" className="text-xs font-semibold tracking-wider text-slate-500 uppercase">
         {t('overview.context')}
       </h2>
-      <p className="mt-2 text-base text-ink">
-        <span className="mr-1 text-3xl font-semibold text-navy-900 tabular-nums">{num}</span> {rest.join(' ')}
+      <p className="mt-2 text-base text-slate-700">
+        <span className="mr-1 text-3xl font-semibold text-slate-900 tabular-nums">{num}</span> {rest.join(' ')}
       </p>
-      <p className="mt-2 text-xs text-ink-muted">Source: {CONTEXT_STAT.source}. National reported figure — not part of the synthetic demo data.</p>
+      <p className="mt-2 text-xs text-slate-500">Source: {CONTEXT_STAT.source}. National reported figure — not part of the synthetic demo data.</p>
     </section>
   )
 }

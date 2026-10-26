@@ -16,10 +16,10 @@ export function MobileNav() {
         <Menu className="size-5" aria-hidden />
       </Button>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="w-72 gap-0 border-sidebar-border bg-sidebar p-0 text-sidebar-foreground [&>button]:text-white">
-          <SheetHeader className="flex-row items-center gap-2 border-b border-sidebar-border p-4">
+        <SheetContent side="left" className="w-72 gap-0 border-r border-slate-200/80 bg-white/95 backdrop-blur-2xl p-0 text-slate-800 shadow-elevated [&>button]:text-slate-600">
+          <SheetHeader className="flex-row items-center gap-2.5 border-b border-slate-200/60 p-4">
             <LogoMark />
-            <SheetTitle className="text-base text-white">{t('app.name')}</SheetTitle>
+            <SheetTitle className="text-base font-semibold text-slate-800">{t('app.name')}</SheetTitle>
             <SheetDescription className="sr-only">{t('nav.label')}</SheetDescription>
           </SheetHeader>
           <NavList expanded onNavigate={() => setOpen(false)} />

@@ -26,20 +26,20 @@ export function SectionCard({
   return (
     <section
       aria-labelledby={id ? `${id}-title` : undefined}
-      className={cn('flex min-w-0 flex-col rounded-2xl border border-border bg-surface shadow-card', className)}
+      className={cn('flex min-w-0 flex-col rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl shadow-card transition-all duration-200', className)}
     >
-      <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 border-b px-4 py-3">
+      <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 border-b border-slate-200/50 px-5 py-3.5">
         <div className="min-w-0">
-          <H id={id ? `${id}-title` : undefined} className="flex flex-wrap items-center gap-2 text-base font-semibold text-navy-900">
+          <H id={id ? `${id}-title` : undefined} className="flex flex-wrap items-center gap-2 text-base font-semibold text-slate-900 tracking-tight">
             {title}
           </H>
           {/* A div, not a <p>: captions may contain block content (avoids invalid <p> nesting). */}
-          {caption && <div className="mt-0.5 text-sm text-ink-muted">{caption}</div>}
+          {caption && <div className="mt-0.5 text-sm text-slate-500">{caption}</div>}
         </div>
         {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
       </header>
       <div className={cn('min-w-0 flex-1', bodyClassName)}>{children}</div>
-      {footer && <footer className="border-t px-4 py-3">{footer}</footer>}
+      {footer && <footer className="border-t border-slate-200/50 px-5 py-3.5">{footer}</footer>}
     </section>
   )
 }

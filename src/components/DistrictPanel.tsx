@@ -238,7 +238,7 @@ function DistrictPanelBody({ summary: s }: { summary: DistrictSummary }) {
       </div>
 
       {/* 7. Buttons — sticky at the bottom so they stay in thumb reach */}
-      <div className="flex flex-wrap gap-2 border-t bg-surface p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <div className="flex flex-wrap gap-2 border-t border-slate-200/60 bg-white/80 backdrop-blur-md p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <Button asChild className="flex-1">
           <Link to={withFilters(`/district/${s.district.id}`, params)}>
             Open district page

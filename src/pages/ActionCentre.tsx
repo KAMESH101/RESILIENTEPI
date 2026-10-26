@@ -114,40 +114,41 @@ export default function ActionCentre() {
       />
 
       {/* Permanent: never dismissible. */}
-      <p role="note" className="flex items-start gap-2.5 rounded-2xl border border-[#1a73e8]/30 bg-[#e8f0fe] px-4.5 py-3.5 text-sm font-medium text-[#1967d2]">
-        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-[#1a73e8]" aria-hidden />
+      {/* Permanent: never dismissible. */}
+      <p role="note" className="flex items-start gap-2.5 rounded-2xl border border-blue-200/50 bg-blue-50/70 backdrop-blur-sm px-4.5 py-3.5 text-sm font-medium text-blue-800 shadow-2xs">
+        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-blue-600" aria-hidden />
         {HUMAN_REVIEW_NOTE}
       </p>
       {!canEdit && (
-        <p className="flex items-center gap-2 text-sm text-ink-muted">
+        <p className="flex items-center gap-2 text-sm text-slate-500">
           <Eye className="size-4 shrink-0" aria-hidden />
           Read-only view (Evaluator): tasks can be viewed but not changed.
         </p>
       )}
 
       {q.isError && !q.data ? (
-        <div className="rounded-2xl border border-border bg-surface shadow-card">
+        <div className="rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl shadow-card">
           <ErrorState error={q.error} onRetry={() => void q.refetch()} />
         </div>
       ) : !q.data ? (
         <>
           <AttentionSkeleton />
-          <ListSkeleton rows={6} className="rounded-2xl border border-border bg-surface" />
+          <ListSkeleton rows={6} className="rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl" />
         </>
       ) : (
         <>
           <AttentionStrip tasks={all} onFilter={(u) => setParam(u)} />
           <DecisionMatrixCard tasks={all} />
           <section aria-labelledby="tasks-title" className="flex flex-col gap-3">
-            <h2 id="tasks-title" className="flex flex-wrap items-baseline gap-x-2 text-xl font-semibold text-ink">
+            <h2 id="tasks-title" className="flex flex-wrap items-baseline gap-x-2 text-xl font-semibold text-slate-900 tracking-tight">
               {t('actions.tasks')}
-              <span className="text-sm font-normal text-ink-muted tabular-nums" role="status">
+              <span className="text-sm font-normal text-slate-500 tabular-nums" role="status">
                 Showing {Math.min(visible.length, limit)} of {visible.length}
                 {visible.length !== all.length && ` (${all.length} in total)`}
               </span>
             </h2>
             {visible.length === 0 ? (
-              <div className="rounded-xl border bg-surface shadow-card">
+              <div className="rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl shadow-card">
                 <EmptyState
                   icon={ClipboardList}
                   title="No tasks match these filters"
@@ -190,16 +191,16 @@ function AttentionStrip({ tasks, onFilter }: { tasks: ActionTask[]; onFilter: (u
     { label: 'in progress', value: inProgress, filter: { status: 'in_progress', priority: null, unassigned: null } },
   ]
   return (
-    <section aria-label="Needs attention" className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-border bg-surface p-4.5 shadow-card">
+    <section aria-label="Needs attention" className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-4.5 shadow-card transition-all duration-200">
       {items.map((i) => (
         <button
           key={i.label}
           type="button"
           onClick={() => onFilter(i.filter)}
-          className="inline-flex items-baseline gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-sm transition-colors duration-150 hover:border-[#1a73e8]/50 hover:bg-[#e8f0fe]"
+          className="inline-flex items-baseline gap-1.5 rounded-full border border-white/90 bg-white/80 backdrop-blur-sm px-3.5 py-1.5 text-xs font-semibold text-slate-700 shadow-2xs transition-all duration-150 hover:bg-white hover:border-blue-200 hover:text-slate-900 hover:shadow-xs"
         >
-          <strong className="text-base text-ink tabular-nums">{i.value}</strong>
-          <span className="text-ink">{i.label}</span>
+          <strong className="text-sm font-bold text-slate-900 tabular-nums">{i.value}</strong>
+          <span>{i.label}</span>
         </button>
       ))}
     </section>

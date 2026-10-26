@@ -126,12 +126,12 @@ export default function RiskMap() {
                 value={view}
                 onValueChange={(v) => v && f.setParam({ view: v })}
                 aria-label="Map or table view"
-                className="bg-surface"
+                className="rounded-2xl border border-white/80 bg-slate-200/50 backdrop-blur-md p-1 shadow-2xs"
               >
-                <ToggleGroupItem value="map" className="h-9 gap-1.5 px-3 data-[state=on]:bg-navy-900 data-[state=on]:text-white">
+                <ToggleGroupItem value="map" className="h-8.5 gap-1.5 rounded-xl px-3 text-xs font-medium text-slate-600 hover:text-slate-900 data-[state=on]:bg-white data-[state=on]:text-slate-900 data-[state=on]:shadow-sm data-[state=on]:font-semibold">
                   <MapIcon className="size-4" aria-hidden /> Map
                 </ToggleGroupItem>
-                <ToggleGroupItem value="table" className="h-9 gap-1.5 px-3 data-[state=on]:bg-navy-900 data-[state=on]:text-white">
+                <ToggleGroupItem value="table" className="h-8.5 gap-1.5 rounded-xl px-3 text-xs font-medium text-slate-600 hover:text-slate-900 data-[state=on]:bg-white data-[state=on]:text-slate-900 data-[state=on]:shadow-sm data-[state=on]:font-semibold">
                   <Table2 className="size-4" aria-hidden /> Table
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -221,14 +221,14 @@ function AttentionStrip({
   const flagged = districts.filter((s) => s.blind_spot?.flagged).length
   const top = [...districts].sort((a, b) => (b.forecast?.probability ?? 0) - (a.forecast?.probability ?? 0)).slice(0, 3)
   return (
-    <section aria-label="Needs attention" className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4.5 shadow-card lg:flex-row lg:items-center lg:justify-between">
-      <p className="flex items-start gap-2 text-base text-ink">
+    <section aria-label="Needs attention" className="flex flex-col gap-3 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-4.5 shadow-card lg:flex-row lg:items-center lg:justify-between transition-all duration-200">
+      <p className="flex items-start gap-2 text-base text-slate-800">
         <AlertTriangle className="mt-0.5 size-5 shrink-0 text-risk-high" aria-hidden />
         <span>
-          <strong className="tabular-nums text-ink">{high}</strong> district{high === 1 ? ' is' : 's are'} forecast High or Very High in {horizon} month{horizon > 1 ? 's' : ''}
+          <strong className="tabular-nums text-slate-900">{high}</strong> district{high === 1 ? ' is' : 's are'} forecast High or Very High in {horizon} month{horizon > 1 ? 's' : ''}
           {flagged > 0 && (
             <>
-              ; <strong className="tabular-nums text-ink">{flagged}</strong> potential blind spot{flagged === 1 ? '' : 's'} (experimental)
+              ; <strong className="tabular-nums text-slate-900">{flagged}</strong> potential blind spot{flagged === 1 ? '' : 's'} (experimental)
             </>
           )}
           .
@@ -236,18 +236,18 @@ function AttentionStrip({
       </p>
       {top.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-ink-muted">Highest:</span>
+          <span className="text-xs font-medium text-slate-500">Highest:</span>
           {top.map((s) => (
             <button
               key={s.district.id}
               type="button"
               onClick={() => onSelect(s.district.id)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface py-1 pr-3 pl-1 text-sm transition-colors duration-150 hover:border-[#1a73e8]/50 hover:bg-[#e8f0fe]"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/90 bg-white/80 backdrop-blur-sm py-1 pr-3 pl-1 text-xs font-medium text-slate-800 shadow-2xs transition-all duration-150 hover:bg-white hover:border-blue-200 hover:shadow-xs"
               aria-label={`${s.district.name}: ${s.forecast ? `${riskBand(s.forecast.category).label} risk, ${formatPct(s.forecast.probability)}` : 'No data'}`}
             >
               <RiskBadge size="sm" category={s.forecast?.category ?? null} />
-              <span className="font-medium text-ink">{s.district.name}</span>
-              <span className="text-ink-muted tabular-nums">{formatPct(s.forecast?.probability)}</span>
+              <span className="font-semibold text-slate-800">{s.district.name}</span>
+              <span className="text-slate-500 tabular-nums">{formatPct(s.forecast?.probability)}</span>
             </button>
           ))}
         </div>

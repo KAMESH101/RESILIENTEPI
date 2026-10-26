@@ -14,9 +14,9 @@ import { PriorityPill } from './PriorityPill'
 import { TaskChangeDialog, type TaskChange } from './TaskChangeDialog'
 
 const STATUS_TONE: Record<ActionStatus, string> = {
-  pending: 'border-border bg-surface text-ink-muted',
-  in_progress: 'border-[#1a73e8]/40 bg-[#e8f0fe] text-[#1967d2]',
-  completed: 'border-[#1e8e3e]/40 bg-[#e6f4ea] text-[#1e8e3e]',
+  pending: 'border-slate-200/80 bg-white/70 text-slate-600',
+  in_progress: 'border-blue-200/60 bg-blue-50/80 text-blue-700',
+  completed: 'border-emerald-200/60 bg-emerald-50/80 text-emerald-700',
 }
 
 const HISTORY_PREVIEW = 3
@@ -50,9 +50,9 @@ export function TaskCard({ task: t, onOpenDistrict, highlighted = false }: { tas
       id={t.id}
       aria-labelledby={`${t.id}-title`}
       className={cn(
-        'flex flex-col gap-3.5 rounded-2xl border border-border bg-surface p-5 shadow-card transition-all duration-200 hover:shadow-[0_4px_16px_rgba(60,64,67,0.12)] hover:border-[#1a73e8]/40',
+        'flex flex-col gap-3.5 rounded-2xl border border-white/80 bg-surface/75 backdrop-blur-xl p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/90 hover:border-white hover:shadow-elevated',
         t.status === 'completed' && 'opacity-85',
-        highlighted && 'ring-2 ring-[#1a73e8] ring-offset-2',
+        highlighted && 'ring-2 ring-blue-500/80 ring-offset-2',
       )}
     >
       <header className="flex flex-wrap items-start gap-x-3 gap-y-2">
